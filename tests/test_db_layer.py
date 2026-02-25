@@ -72,7 +72,9 @@ def test_insert_and_fetch_latest_snapshot_counts(tmp_path: Path) -> None:
         assert latest[1].following_count == 50
 
 
-def test_fetch_latest_prefers_newest_snapshot_on_duplicate_timestamps(tmp_path: Path) -> None:
+def test_fetch_latest_prefers_newest_snapshot_on_duplicate_timestamps(
+    tmp_path: Path,
+) -> None:
     with connect(tmp_path / "duplicate.db") as client:
         init_schema(client)
         first_snapshot_id = insert_snapshot(client, timestamp="2025-02-25T10:00:00")
