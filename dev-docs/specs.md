@@ -167,7 +167,7 @@ strict = true
 
 ## Project Structure
 
-```
+```text
 src/sm_tracker/
 ├── __main__.py      # Entry point: python -m sm_tracker
 ├── cli/             # Typer commands

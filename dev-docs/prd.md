@@ -1,6 +1,6 @@
 # Social Media Tracker CLI (sm-tracker)
 
-### TL;DR
+## TL;DR
 
 A command-line tool (`sm-tracker`) for technical users to monitor follower and following counts across multiple major social media platforms: Twitter/X, Bluesky, Farcaster, Mastodon, and Threads. Built for developers, automation engineers, power users, and LLM agents, it offers plain-text reporting, historical delta comparisons, and robust local persistence. It is open-source, CLI-first, and engineered for workflow and automation integration, with a focus on extensibility and transparency.
 
@@ -173,13 +173,13 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
 
 - Running `sm-tracker help` displays full CLI usage patterns, including:
 
-    ```
+    ```bash
     sm-tracker track -p twitter -p threads
     sm-tracker show -p mastodon
     sm-tracker history -p bluesky --limit 5
     ```
 
-* All logs are written to both the console and to `logs/`, showing command results and any onboarding or config issues.
+- All logs are written to both the console and to `logs/`, showing command results and any onboarding or config issues.
 
 ### Core Flows
 
@@ -195,7 +195,7 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
 
     - Reads latest and previous records, outputs a plain-text delta display, e.g.:
 
-        ```
+        ```text
         Mastodon (@user@instance)
         Followers: 1,050 (+10)
         Following: 178 (0)
@@ -204,12 +204,12 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
 
     - Delta format: first snapshot `(N/A)`, positive `(+n)`, negative `(-n)`, zero `(0)`. Platforms with no following metric show `Following: N/A`.
 
-* **Viewing History:**
+- **Viewing History:**
     - `sm-tracker history -p <platform> --limit 15`
 
     - Prints plain-text table: `Date | Platform | Followers | Following | Delta` (up to limit). Same delta rules as `show` (N/A, +n, -n, 0). Platform with no following shows `N/A`.
 
-* **Automation & Scripting:**
+- **Automation & Scripting:**
     - All features designed for non-interactive, batch, and LLM/automation use; all outputs are machine/LLM-readable.
 
 ### Error/Edge Cases
@@ -232,14 +232,14 @@ Jordan, a developer managing multiple online identities, wants to keep track of 
 
 They schedule a daily cron job:
 
-```
+```bash
 sm-tracker track -p twitter -p mastodon -p threads
 
 ```
 
 Results and logs are saved to both the console and a daily log file. Each day, Jordan checks recent trends with:
 
-```
+```bash
 sm-tracker show -p twitter -p threads
 sm-tracker history -p mastodon --limit 10
 
@@ -336,36 +336,31 @@ Source Layout
 ### Delivery Phases
 
 1. **MVP Development (1 week)**
+    - CLI commands: track, show, history (with `--platform` and `--limit`), config (guided), and help.
+    - Platform adapters: Twitter/X, Bluesky, Farcaster, Mastodon, Threads.
 
-- CLI commands: track, show, history (with `--platform` and `--limit`), config (guided), and help.
+    - Database integration via libSQL.
 
-- Platform adapters: Twitter/X, Bluesky, Farcaster, Mastodon, Threads.
+    - Env-based/guided config onboarding.
 
-- Database integration via libSQL.
+    - Command-line flag parsing and help output.
 
-- Env-based/guided config onboarding.
-
-- Command-line flag parsing and help output.
-
-- Unified logging to both file and console.
+    - Unified logging to both file and console.
 
 2. **Testing & Documentation (2–3 days)**
+    - Automated test suite (pytest), lint (ruff), type check (mypy); CI via GitHub Actions.
 
-- Automated test suite (pytest), lint (ruff), type check (mypy); CI via GitHub Actions.
+    - Full README, onboarding instructions, and config setup guides.
 
-- Full README, onboarding instructions, and config setup guides.
-
-- Working usage scenarios/examples for all platforms.
+    - Working usage scenarios/examples for all platforms.
 
 3. **Public Release & Feedback (2–3 days)**
+    - Launch on GitHub (with issues/PRs active).
 
-- Launch on GitHub (with issues/PRs active).
-
-- Rapid iteration on early feedback/bugs.
+    - Rapid iteration on early feedback/bugs.
 
 4. **Roadmap & Enhancements (1–2 days)**
-
-- Design for multi-account support, structured data output, additional platform adapters.
+    - Design for multi-account support, structured data output, additional platform adapters.
 
 **Total Estimate:** 2 Weeks
 
