@@ -13,25 +13,25 @@ Plan: [20250225-PLANS-sm-tracker-mvp.md](../20250225-PLANS-sm-tracker-mvp.md)
 
 ## Phase 2: Config & Logging
 
-- [ ] `.env` loading (`python-dotenv`)
-- [ ] `config.toml` parsing (`tomllib`) with profile support
-- [ ] Config validation and defensive error handling
-- [ ] Logging: file + console, daily rotation, retention
-- [ ] Tests: config loading, profile resolution, log output
+- [x] `.env` loading (`python-dotenv`)
+- [x] `config.toml` parsing (`tomllib`) with profile support
+- [x] Config validation and defensive error handling
+- [x] Logging: file + console, daily rotation, retention
+- [x] Tests: config loading, profile resolution, log output
 
 ## Phase 3: Database Layer
 
-- [ ] libSQL connection management
-- [ ] Schema init (`snapshots`, `counts`)
-- [ ] Query functions (insert, fetch latest, fetch history)
-- [ ] Tests: CRUD, edge cases
+- [x] libSQL connection management
+- [x] Schema init (`snapshots`, `counts`)
+- [x] Query functions (insert, fetch latest, fetch history)
+- [x] Tests: CRUD, edge cases
 
 ## Phase 4: CLI Skeleton
 
-- [ ] Typer app with command stubs
-- [ ] Platform flag parsing (`-p`, repeatable)
-- [ ] Entry point wiring (`[project.scripts]`)
-- [ ] Tests: CLI invocation, flags, help, empty-state messages
+- [x] Typer app with command stubs
+- [x] Platform flag parsing (`-p`, repeatable)
+- [x] Entry point wiring (`[project.scripts]`)
+- [x] Tests: CLI invocation, flags, help, empty-state messages
 
 ## Phase 5: First Platform Adapter (Bluesky)
 
