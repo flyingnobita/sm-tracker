@@ -1,0 +1,11 @@
+# mise: package and tool management (this machine only)
+# Python deps and tasks use uv
+
+[tools]
+uv = "latest"
+
+[tasks]
+test = "uv run pytest"
+lint = "uv run ruff check ."
+typecheck = "uv run mypy src/"
+check = "mise run lint && mise run typecheck && mise run test"
