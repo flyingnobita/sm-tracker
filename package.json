@@ -2,6 +2,7 @@
   "name": "sm-tracker",
   "private": true,
   "devDependencies": {
+    "markdownlint-cli2": "v0.21.0",
     "prettier": "^3.4.2"
   }
 }
