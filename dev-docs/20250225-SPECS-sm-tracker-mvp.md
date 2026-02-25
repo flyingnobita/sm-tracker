@@ -37,7 +37,7 @@ Sensitive values only. Loaded via `python-dotenv`.
 | `TWITTER_HANDLE`        | Twitter   | Yes      | Account to track (e.g. `yourhandle`)                                  |
 | `BLUESKY_HANDLE`        | Bluesky   | Yes      | Account to track; public profile needs no auth                        |
 | `BLUESKY_APP_PASSWORD`  | Bluesky   | No       | Only if handle is private                                             |
-| `FARCASTER_MNEMONIC`    | Farcaster | Yes      | Or private key for auth                                               |
+| `FARCASTER_API_KEY`     | Farcaster | Yes      | Warpcast API key/bearer token                                         |
 | `FARCASTER_USERNAME`    | Farcaster | Yes      | Username to track (e.g. `yourname`)                                   |
 | `MASTODON_ACCESS_TOKEN` | Mastodon  | Yes      | OAuth token                                                           |
 | `MASTODON_INSTANCE`     | Mastodon  | Yes      | e.g. `mastodon.social`                                                |

@@ -42,8 +42,8 @@ Plan: [20250225-PLANS-sm-tracker-mvp.md](../20250225-PLANS-sm-tracker-mvp.md)
 
 ## Phase 6: Remaining Platform Adapters
 
-- [ ] Twitter (Tweepy)
-- [ ] Mastodon (Mastodon.py)
+- [x] Twitter (Tweepy)
+- [x] Mastodon (Mastodon.py)
 - [ ] Farcaster (Warpcast API)
 - [ ] Threads (meta-threads-sdk)
 - [ ] Tests: per-adapter unit tests plus real-credential verification test for each adapter

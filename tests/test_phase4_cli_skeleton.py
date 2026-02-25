@@ -19,11 +19,16 @@ def test_cli_root_help_lists_expected_commands() -> None:
 
 def test_track_platform_flag_is_repeatable() -> None:
     runner = CliRunner()
-    result = runner.invoke(app, ["track", "-p", "Twitter", "--platform", "bluesky"])
+    result = runner.invoke(
+        app,
+        ["track", "-p", "UnknownOne", "--platform", "unknown-two"],
+        env={},
+    )
 
     assert result.exit_code == 0
-    assert "Skipping unsupported platform: twitter" in result.stdout
-    assert "Tracking snapshot for: bluesky" in result.stdout
+    assert "Skipping unsupported platform: unknownone" in result.stdout
+    assert "Skipping unsupported platform: unknown-two" in result.stdout
+    assert "Tracking snapshot for: unknownone, unknown-two" in result.stdout
 
 
 def test_track_empty_state_message() -> None:
