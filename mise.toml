@@ -4,7 +4,7 @@
 [tools]
 python = "3.12"
 node = "lts"
-uv = "latest"
+"github:astral-sh/uv" = "latest"
 
 [tasks]
 test = "uv run pytest"
