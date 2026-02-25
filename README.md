@@ -19,7 +19,7 @@ sm-tracker show -p twitter -p bluesky
 
 ## Requirements
 
-- Python 3.10+
+- Python 3.12+
 - Platform API credentials (configured via `.env`)
 
 ## License
