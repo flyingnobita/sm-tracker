@@ -63,101 +63,101 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
 ## Functional Requirements
 
 - **Command-Line Interface (**`sm-tracker`**)**
-  - Core commands:
-    - `track`: Fetch and save the latest follower/following counts from all specified platforms and store in a local libSQL (SQLite-compatible) database.
+    - Core commands:
+        - `track`: Fetch and save the latest follower/following counts from all specified platforms and store in a local libSQL (SQLite-compatible) database.
 
-    - `show`: Display the latest saved snapshot for each selected platform, showing deltas versus the previous snapshot.
+        - `show`: Display the latest saved snapshot for each selected platform, showing deltas versus the previous snapshot.
 
-    - `history`: List the full history of previous tracked values per platform, supporting both `--platform` and `--limit` flags for granular queries.
+        - `history`: List the full history of previous tracked values per platform, supporting both `--platform` and `--limit` flags for granular queries.
 
-    - `config`: Run a guided setup for credentials (`.env`) and app config (`config.toml`); creates or validates both files, ensuring required API keys in `.env` and paths/retention in `config.toml` for all tracked platforms.
+        - `config`: Run a guided setup for credentials (`.env`) and app config (`config.toml`); creates or validates both files, ensuring required API keys in `.env` and paths/retention in `config.toml` for all tracked platforms.
 
-    - `help`: Command usage details.
+        - `help`: Command usage details.
 
-  - Uses repeatable, optional flags for platform selection, e.g.:
-    - `sm-tracker track -p twitter -p mastodon`
+    - Uses repeatable, optional flags for platform selection, e.g.:
+        - `sm-tracker track -p twitter -p mastodon`
 
-    - `sm-tracker show -p threads`
+        - `sm-tracker show -p threads`
 
-    - `sm-tracker history -p bluesky --limit 10`
+        - `sm-tracker history -p bluesky --limit 10`
 
-  - All arguments and actions are scriptable and strictly non-interactive (no prompts except for the guided `config` command).
+    - All arguments and actions are scriptable and strictly non-interactive (no prompts except for the guided `config` command).
 
 - **Supported Platforms (from MVP)**
-  - Twitter/X, Bluesky, Farcaster, Mastodon, Threads
+    - Twitter/X, Bluesky, Farcaster, Mastodon, Threads
 
-  - Farcaster uses Warpcast direct API (farcaster-py archived; no count fields).
+    - Farcaster uses Warpcast direct API (farcaster-py archived; no count fields).
 
-  - Threads requires `MANAGE_INSIGHTS` scope for follower count via `insights.get_user_insights()`.
+    - Threads requires `MANAGE_INSIGHTS` scope for follower count via `insights.get_user_insights()`.
 
-  - (Platform support implemented as per-platform modules/classes in the codebase.)
+    - (Platform support implemented as per-platform modules/classes in the codebase.)
 
 - **Data Storage & Persistence**
-  - All tracking data is persisted locally using libSQL (SQLite-compatible) for robustness, concurrency, and extensibility.
+    - All tracking data is persisted locally using libSQL (SQLite-compatible) for robustness, concurrency, and extensibility.
 
-  - No restriction on history retention for follower data; indefinite tracking enabled by schema.
+    - No restriction on history retention for follower data; indefinite tracking enabled by schema.
 
-  - Log data (operation logs, errors) retained for 14 days **by default**, with the retention period configurable via `config.toml` (`logging.retention_days`); logs are stored in a dedicated directory (configurable via `paths.logs`) with required daily rotation.
+    - Log data (operation logs, errors) retained for 14 days **by default**, with the retention period configurable via `config.toml` (`logging.retention_days`); logs are stored in a dedicated directory (configurable via `paths.logs`) with required daily rotation.
 
 - **Configuration**
-  - **Credentials:** API keys, tokens, and account identifiers live in `.env` (project dir or process env). Never committed.
+    - **Credentials:** API keys, tokens, and account identifiers live in `.env` (project dir or process env). Never committed.
 
-  - **App config:** Paths, log retention, log level live in `config.toml`. Lookup order: project dir, then `~/.config/sm-tracker/`. May ship with defaults.
+    - **App config:** Paths, log retention, log level live in `config.toml`. Lookup order: project dir, then `~/.config/sm-tracker/`. May ship with defaults.
 
-  - The `config` command provides a guided setup and validation for both `.env` and `config.toml`, prompting the user through required credentials and creating/updating files with appropriate warnings for missing/invalid values.
+    - The `config` command provides a guided setup and validation for both `.env` and `config.toml`, prompting the user through required credentials and creating/updating files with appropriate warnings for missing/invalid values.
 
-  - Defensive onboarding: If `.env` is missing or incomplete, tool warns which platforms are skipped in output/log, but continues for properly configured platforms.
+    - Defensive onboarding: If `.env` is missing or incomplete, tool warns which platforms are skipped in output/log, but continues for properly configured platforms.
 
 - **Behavior & Flow**
-  - `track` fetches and saves current counts ONLY; does not display the result.
+    - `track` fetches and saves current counts ONLY; does not display the result.
 
-  - `show` displays the latest saved snapshot for selected platforms, highlighting deltas versus last snapshot, in plain text.
+    - `show` displays the latest saved snapshot for selected platforms, highlighting deltas versus last snapshot, in plain text.
 
-  - `history` prints all (or the specified limit of) historical snapshots for specified platforms.
+    - `history` prints all (or the specified limit of) historical snapshots for specified platforms.
 
-  - Output is strictly plain text; no ANSI colors, formatting toggles, or rich console features.
+    - Output is strictly plain text; no ANSI colors, formatting toggles, or rich console features.
 
 - **Error Handling**
-  - If platform credentials are missing/invalid, log and warn for affected platforms; skip and continue processing others—never fail the entire batch.
+    - If platform credentials are missing/invalid, log and warn for affected platforms; skip and continue processing others—never fail the entire batch.
 
-  - API rate limit errors are logged and warned; tool continues running for other platforms.
+    - API rate limit errors are logged and warned; tool continues running for other platforms.
 
-  - All errors are reported in plain-text; robust but transparent handling for integration into automated or LLM-driven systems.
+    - All errors are reported in plain-text; robust but transparent handling for integration into automated or LLM-driven systems.
 
-  - No interactive error recovery/prompts outside of `config`—failure cases are clear and non-blocking.
+    - No interactive error recovery/prompts outside of `config`—failure cases are clear and non-blocking.
 
 - **Logging**
-  - All logs are **always** written to BOTH the file system (under `logs/`) and the console, with no optionality—this is required and not user-configurable in MVP.
+    - All logs are **always** written to BOTH the file system (under `logs/`) and the console, with no optionality—this is required and not user-configurable in MVP.
 
-  - Daily log rotation is required.
+    - Daily log rotation is required.
 
-  - Log retention is set to 14 days by default and may be overridden in `config.toml` (`logging.retention_days`).
+    - Log retention is set to 14 days by default and may be overridden in `config.toml` (`logging.retention_days`).
 
-  - Logging includes command executions, tracked actions, platform API successes/failures, missing configs, and all error traces as appropriate.
+    - Logging includes command executions, tracked actions, platform API successes/failures, missing configs, and all error traces as appropriate.
 
 - **Dependency Management**
-  - `mise` for package/tool management on this machine; `uv` for Python dependencies and tasks/env.
+    - `mise` for package/tool management on this machine; `uv` for Python dependencies and tasks/env.
 
 - **Project Structure & Tech Stack**
-  - CLI entrypoint: `sm-tracker` (not `tracker`).
+    - CLI entrypoint: `sm-tracker` (not `tracker`).
 
-  - Source code follows a package-based, modular organization:
-    - All source code resides under `src/sm_tracker/`
-      - `src/sm_tracker/cli/` (CLI entry logic and command parser, Typer app)
+    - Source code follows a package-based, modular organization:
+        - All source code resides under `src/sm_tracker/`
+            - `src/sm_tracker/cli/` (CLI entry logic and command parser, Typer app)
 
-      - `src/sm_tracker/platforms/` (modular adapters for each platform)
+            - `src/sm_tracker/platforms/` (modular adapters for each platform)
 
-      - `src/sm_tracker/db/` (database layer and utilities)
+            - `src/sm_tracker/db/` (database layer and utilities)
 
-      - `src/sm_tracker/config/` (.env + config.toml loading and validation)
+            - `src/sm_tracker/config/` (.env + config.toml loading and validation)
 
-      - `src/sm_tracker/logging/` (logging setup and utilities)
+            - `src/sm_tracker/logging/` (logging setup and utilities)
 
-      - `src/sm_tracker/__main__.py` (entry point for CLI execution)
+            - `src/sm_tracker/__main__.py` (entry point for CLI execution)
 
-      - Additional shared modules/utilities as needed
+            - Additional shared modules/utilities as needed
 
-  - No top-level flat Python files for these modules; everything is package-based and organized as described.
+    - No top-level flat Python files for these modules; everything is package-based and organized as described.
 
 ---
 
@@ -173,44 +173,44 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
 
 - Running `sm-tracker help` displays full CLI usage patterns, including:
 
-  ```
-  sm-tracker track -p twitter -p threads
-  sm-tracker show -p mastodon
-  sm-tracker history -p bluesky --limit 5
-  ```
+    ```
+    sm-tracker track -p twitter -p threads
+    sm-tracker show -p mastodon
+    sm-tracker history -p bluesky --limit 5
+    ```
 
 * All logs are written to both the console and to `logs/`, showing command results and any onboarding or config issues.
 
 ### Core Flows
 
 - **Tracking New Data:**
-  - `sm-tracker track -p <platform>` (e.g., `sm-tracker track -p twitter -p threads`)
+    - `sm-tracker track -p <platform>` (e.g., `sm-tracker track -p twitter -p threads`)
 
-  - Loads `.env` and `config.toml`, validates credentials (skipping platforms without them), fetches current counts, saves in the database.
+    - Loads `.env` and `config.toml`, validates credentials (skipping platforms without them), fetches current counts, saves in the database.
 
-  - Output and logs show updated platforms, skipped (due to missing config), and success/failure for each.
+    - Output and logs show updated platforms, skipped (due to missing config), and success/failure for each.
 
 - **Viewing Latest Snapshot:**
-  - `sm-tracker show -p <platform>` (e.g., `sm-tracker show -p farcaster`)
+    - `sm-tracker show -p <platform>` (e.g., `sm-tracker show -p farcaster`)
 
-  - Reads latest and previous records, outputs a plain-text delta display, e.g.:
+    - Reads latest and previous records, outputs a plain-text delta display, e.g.:
 
-    ```
-    Mastodon (@user@instance)
-    Followers: 1,050 (+10)
-    Following: 178 (0)
-    Date: 2024-06-12 08:30
-    ```
+        ```
+        Mastodon (@user@instance)
+        Followers: 1,050 (+10)
+        Following: 178 (0)
+        Date: 2024-06-12 08:30
+        ```
 
-  - Delta format: first snapshot `(N/A)`, positive `(+n)`, negative `(-n)`, zero `(0)`. Platforms with no following metric show `Following: N/A`.
+    - Delta format: first snapshot `(N/A)`, positive `(+n)`, negative `(-n)`, zero `(0)`. Platforms with no following metric show `Following: N/A`.
 
 * **Viewing History:**
-  - `sm-tracker history -p <platform> --limit 15`
+    - `sm-tracker history -p <platform> --limit 15`
 
-  - Prints plain-text table: `Date | Platform | Followers | Following | Delta` (up to limit). Same delta rules as `show` (N/A, +n, -n, 0). Platform with no following shows `N/A`.
+    - Prints plain-text table: `Date | Platform | Followers | Following | Delta` (up to limit). Same delta rules as `show` (N/A, +n, -n, 0). Platform with no following shows `N/A`.
 
 * **Automation & Scripting:**
-  - All features designed for non-interactive, batch, and LLM/automation use; all outputs are machine/LLM-readable.
+    - All features designed for non-interactive, batch, and LLM/automation use; all outputs are machine/LLM-readable.
 
 ### Error/Edge Cases
 

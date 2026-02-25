@@ -20,10 +20,10 @@ Self-contained reference for building the social media following tracker CLI pro
 
 Configuration is split into two files per best practice:
 
-| File           | Purpose                                      | Location                                  |
-| -------------- | -------------------------------------------- | ----------------------------------------- |
-| `.env`         | API keys, tokens, secrets, account identifiers | Project dir or loaded from process env    |
-| `config.toml`  | Paths, retention, log level, non-sensitive   | `~/.config/sm-tracker/config.toml` or project dir |
+| File          | Purpose                                        | Location                                          |
+| ------------- | ---------------------------------------------- | ------------------------------------------------- |
+| `.env`        | API keys, tokens, secrets, account identifiers | Project dir or loaded from process env            |
+| `config.toml` | Paths, retention, log level, non-sensitive     | `~/.config/sm-tracker/config.toml` or project dir |
 
 `.env` is never committed; `config.toml` may ship with defaults.
 
@@ -70,13 +70,13 @@ retention_days = 14
 level = "INFO"
 ```
 
-| Key                    | Default                    | Notes                            |
-| ---------------------- | -------------------------- | -------------------------------- |
-| `profile`              | `"dev"`                    | Active profile; override via env/flag |
-| `paths.<profile>.db`   | `~/.local/share/sm-tracker/data.db` | Database file path for profile   |
-| `paths.<profile>.logs` | `~/.local/share/sm-tracker/logs`   | Log directory for profile        |
-| `logging.<profile>.retention_days` | 14               | Days of log backups to keep      |
-| `logging.<profile>.level` | `INFO`                   | Log level                        |
+| Key                                | Default                             | Notes                                 |
+| ---------------------------------- | ----------------------------------- | ------------------------------------- |
+| `profile`                          | `"dev"`                             | Active profile; override via env/flag |
+| `paths.<profile>.db`               | `~/.local/share/sm-tracker/data.db` | Database file path for profile        |
+| `paths.<profile>.logs`             | `~/.local/share/sm-tracker/logs`    | Log directory for profile             |
+| `logging.<profile>.retention_days` | 14                                  | Days of log backups to keep           |
+| `logging.<profile>.level`          | `INFO`                              | Log level                             |
 
 ### Account Identifiers (per platform)
 
@@ -117,36 +117,36 @@ CREATE TABLE IF NOT EXISTS counts (
 
 ## Storage
 
-| Decision         | Choice                     | Notes                                                         |
-| ---------------- | -------------------------- | ------------------------------------------------------------- |
-| DB file location | `config.toml` → `paths.db` | Default: `~/.local/share/sm-tracker/data.db`; overridable      |
+| Decision         | Choice                     | Notes                                                     |
+| ---------------- | -------------------------- | --------------------------------------------------------- |
+| DB file location | `config.toml` → `paths.db` | Default: `~/.local/share/sm-tracker/data.db`; overridable |
 
 ## Tooling
 
-| Decision             | Choice                         |
-| -------------------- | ------------------------------ |
-| Package/tool manager | mise (this machine only)       |
-| Python deps & tasks  | uv                             |
-| Test framework       | pytest                         |
-| Linter               | ruff                           |
-| Type checker         | mypy                           |
-| Publishing           | Personal use only (for now)    |
+| Decision             | Choice                                                      |
+| -------------------- | ----------------------------------------------------------- |
+| Package/tool manager | mise (this machine only)                                    |
+| Python deps & tasks  | uv                                                          |
+| Test framework       | pytest                                                      |
+| Linter               | ruff                                                        |
+| Type checker         | mypy                                                        |
+| Publishing           | Personal use only (for now)                                 |
 | Pre-commit           | ruff, mypy, prettier, markdownlint-cli2 (local consistency) |
 
 ### Formatting & Linting
 
-| Tool            | Purpose                                    |
-| --------------- | ------------------------------------------ |
-| ruff            | Python linting and formatting               |
-| mypy            | Static type checking                        |
-| .editorconfig   | Editor consistency (indent, charset, eol)   |
-| prettier        | Markdown/YAML/JSON formatting (pre-commit)  |
-| markdownlint-cli2 | Markdown linting (pre-commit)             |
+| Tool              | Purpose                                    |
+| ----------------- | ------------------------------------------ |
+| ruff              | Python linting and formatting              |
+| mypy              | Static type checking                       |
+| .editorconfig     | Editor consistency (indent, charset, eol)  |
+| prettier          | Markdown/YAML/JSON formatting (pre-commit) |
+| markdownlint-cli2 | Markdown linting (pre-commit)              |
 
 ### Git
 
-| File           | Purpose                                                                 |
-| -------------- | ----------------------------------------------------------------------- |
+| File             | Purpose                                                                               |
+| ---------------- | ------------------------------------------------------------------------------------- |
 | `.gitattributes` | `* text=auto eol=lf` keeps LF in the repo; Git handles Windows conversion on checkout |
 
 ### Editor Consistency
@@ -192,7 +192,7 @@ sm-tracker = "sm_tracker.cli:app"
 | `track`   | Fetch current counts from all configured platforms, save to DB. Optional `--platform` / `-p`: run only for specified platform(s), can be repeated. |
 | `show`    | Display latest snapshot with counts and deltas vs previous. Optional `--platform` / `-p`: show only specified platform(s), can be repeated.        |
 | `history` | Show past snapshots (options: `--platform`, `--limit`)                                                                                             |
-| `config`  | Guide for initial setup: create/validate `.env` (credentials) and `config.toml` (paths, retention), document required variables per platform. |
+| `config`  | Guide for initial setup: create/validate `.env` (credentials) and `config.toml` (paths, retention), document required variables per platform.      |
 | `help`    | Show command usage and available options.                                                                                                          |
 
 **Multiple platforms example:**
@@ -216,23 +216,23 @@ sm-tracker show -p twitter -p bluesky
 
 ### Empty-State Messages
 
-| Command   | Condition               | Message                                                     |
-| --------- | ----------------------- | ----------------------------------------------------------- |
+| Command   | Condition               | Message                                                                   |
+| --------- | ----------------------- | ------------------------------------------------------------------------- |
 | `track`   | No platforms configured | "Add at least one platform via `sm-tracker config` or .env (credentials)" |
-| `show`    | No data yet             | "No snapshots yet. Run `sm-tracker track` first."           |
-| `history` | No data yet             | "No history yet. Run `sm-tracker track` first."             |
+| `show`    | No data yet             | "No snapshots yet. Run `sm-tracker track` first."                         |
+| `history` | No data yet             | "No history yet. Run `sm-tracker track` first."                           |
 
 ## Logging
 
-| Setting      | Choice                                                                 |
-| ------------ | ---------------------------------------------------------------------- |
+| Setting      | Choice                                                                   |
+| ------------ | ------------------------------------------------------------------------ |
 | Location     | `config.toml` → `paths.logs` (default: `~/.local/share/sm-tracker/logs`) |
-| Filename     | `sm-tracker.log`                                                       |
-| Format       | Human-readable: `%(asctime)s - %(name)s - %(levelname)s - %(message)s` |
-| Timestamp    | ISO 8601: `%Y-%m-%dT%H:%M:%S`                                          |
-| Rotation     | `TimedRotatingFileHandler`, daily at midnight                          |
-| Backup count | `config.toml` → `logging.retention_days` (default: 14)                 |
-| Output       | File + console (both)                                                  |
+| Filename     | `sm-tracker.log`                                                         |
+| Format       | Human-readable: `%(asctime)s - %(name)s - %(levelname)s - %(message)s`   |
+| Timestamp    | ISO 8601: `%Y-%m-%dT%H:%M:%S`                                            |
+| Rotation     | `TimedRotatingFileHandler`, daily at midnight                            |
+| Backup count | `config.toml` → `logging.retention_days` (default: 14)                   |
+| Output       | File + console (both)                                                    |
 
 Create log directory if it doesn't exist.
 
