@@ -34,6 +34,9 @@ env/
 # uv
 .uv/
 
+# Node
+node_modules/
+
 # Database (local dev data)
 *.db
 *.db-journal
