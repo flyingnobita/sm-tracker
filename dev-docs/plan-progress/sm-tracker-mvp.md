@@ -46,7 +46,7 @@ Plan: [20250225-PLANS-sm-tracker-mvp.md](../20250225-PLANS-sm-tracker-mvp.md)
 - [ ] Mastodon (Mastodon.py)
 - [ ] Farcaster (Warpcast API)
 - [ ] Threads (meta-threads-sdk)
-- [ ] Tests: per-adapter unit tests, missing-credential skip
+- [ ] Tests: per-adapter unit tests plus real-credential verification test for each adapter
 
 ## Phase 7: Output Formatting & Edge Cases
 
