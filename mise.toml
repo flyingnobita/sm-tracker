@@ -2,10 +2,12 @@
 # Python deps and tasks use uv
 
 [tools]
+node = "lts"
 uv = "latest"
 
 [tasks]
 test = "uv run pytest"
 lint = "uv run ruff check ."
 typecheck = "uv run mypy src/"
+precommit = "pre-commit run --all-files"
 check = "mise run lint && mise run typecheck && mise run test"

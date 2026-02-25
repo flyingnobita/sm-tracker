@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS counts (
 | Linter               | ruff                           |
 | Type checker         | mypy                           |
 | Publishing           | Personal use only (for now)    |
-| Pre-commit           | ruff, mypy (local consistency) |
+| Pre-commit           | ruff, mypy, prettier, markdownlint-cli2 (local consistency) |
 
 ### Formatting & Linting
 
@@ -140,6 +140,8 @@ CREATE TABLE IF NOT EXISTS counts (
 | ruff            | Python linting and formatting               |
 | mypy            | Static type checking                        |
 | .editorconfig   | Editor consistency (indent, charset, eol)   |
+| prettier        | Markdown/YAML/JSON formatting (pre-commit)  |
+| markdownlint-cli2 | Markdown linting (pre-commit)             |
 
 ### Git
 
