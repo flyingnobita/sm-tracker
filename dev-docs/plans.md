@@ -8,6 +8,8 @@ Suggested implementation order for the social media tracker CLI.
    - `pyproject.toml` (uv, pytest, ruff, mypy, deps, `[tool.ruff]`, `[tool.mypy]`)
    - `mise.toml` (tool versions, tasks)
    - `src/sm_tracker/` package layout
+   - `.gitattributes` (LF line endings)
+   - `.editorconfig` (indent, charset, eol)
    - `.env.example` (credentials template), `config.toml.example` (app config template)
 
 2. **Config & logging**

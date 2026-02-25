@@ -133,6 +133,24 @@ CREATE TABLE IF NOT EXISTS counts (
 | Publishing           | Personal use only (for now)    |
 | Pre-commit           | ruff, mypy (local consistency) |
 
+### Formatting & Linting
+
+| Tool            | Purpose                                    |
+| --------------- | ------------------------------------------ |
+| ruff            | Python linting and formatting               |
+| mypy            | Static type checking                        |
+| .editorconfig   | Editor consistency (indent, charset, eol)   |
+
+### Git
+
+| File           | Purpose                                                                 |
+| -------------- | ----------------------------------------------------------------------- |
+| `.gitattributes` | `* text=auto eol=lf` keeps LF in the repo; Git handles Windows conversion on checkout |
+
+### Editor Consistency
+
+`.editorconfig` enforces `end_of_line = lf`, charset, and indent rules at the root, with overrides for `*.md`, `*.py`, and `Makefile`. Editors that support EditorConfig apply these settings automatically.
+
 ### Tool Config (pyproject.toml)
 
 ```toml
