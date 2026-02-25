@@ -18,11 +18,18 @@ Self-contained reference for building the social media following tracker CLI pro
 
 ## Config & Credentials
 
-| Decision      | Choice | Notes                                                                                                                    |
-| ------------- | ------ | ------------------------------------------------------------------------------------------------------------------------ |
-| Config format | `.env` | API keys stored in config. **Note:** Move to `~/.config/sm-tracker/config.toml` for global CLI compatibility when ready. |
+Configuration is split into two files per best practice:
+
+| File           | Purpose                                      | Location                                  |
+| -------------- | -------------------------------------------- | ----------------------------------------- |
+| `.env`         | API keys, tokens, secrets, account identifiers | Project dir or loaded from process env    |
+| `config.toml`  | Paths, retention, log level, non-sensitive   | `~/.config/sm-tracker/config.toml` or project dir |
+
+`.env` is never committed; `config.toml` may ship with defaults.
 
 ### Environment Variables (.env)
+
+Sensitive values only. Loaded via `python-dotenv`.
 
 | Variable                | Platform  | Required | Notes                                                                 |
 | ----------------------- | --------- | -------- | --------------------------------------------------------------------- |
@@ -36,8 +43,40 @@ Self-contained reference for building the social media following tracker CLI pro
 | `MASTODON_INSTANCE`     | Mastodon  | Yes      | e.g. `mastodon.social`                                                |
 | `THREADS_ACCESS_TOKEN`  | Threads   | Yes      | Meta OAuth token; requires `MANAGE_INSIGHTS` scope for follower count |
 | `THREADS_USER_ID`       | Threads   | Yes      | User ID for `insights.get_user_insights()`                            |
-| `DB_PATH`               | —         | No       | Default: `./data.db` in project dir                                   |
-| `LOG_RETENTION_DAYS`    | —         | No       | Default: 14. Days of log backups to keep.                             |
+
+### App Config (config.toml)
+
+Non-sensitive settings. Parsed via `tomllib` (Python 3.11+). Lookup order: project dir, then `~/.config/sm-tracker/`.
+
+**Profiles:** Use `[paths.<profile>]` and `[logging.<profile>]` for environment-specific config. Override via `SM_TRACKER_PROFILE` env var or `--profile` CLI flag. Default profile: `profile = "dev"` (or `"dev"` if omitted).
+
+```toml
+profile = "dev"
+
+[paths.dev]
+db = "./data-dev.db"
+logs = "./logs-dev"
+
+[paths.production]
+db = "~/.local/share/sm-tracker/data.db"
+logs = "~/.local/share/sm-tracker/logs"
+
+[logging.dev]
+retention_days = 7
+level = "DEBUG"
+
+[logging.production]
+retention_days = 14
+level = "INFO"
+```
+
+| Key                    | Default                    | Notes                            |
+| ---------------------- | -------------------------- | -------------------------------- |
+| `profile`              | `"dev"`                    | Active profile; override via env/flag |
+| `paths.<profile>.db`   | `~/.local/share/sm-tracker/data.db` | Database file path for profile   |
+| `paths.<profile>.logs` | `~/.local/share/sm-tracker/logs`   | Log directory for profile        |
+| `logging.<profile>.retention_days` | 14               | Days of log backups to keep      |
+| `logging.<profile>.level` | `INFO`                   | Log level                        |
 
 ### Account Identifiers (per platform)
 
@@ -78,20 +117,20 @@ CREATE TABLE IF NOT EXISTS counts (
 
 ## Storage
 
-| Decision         | Choice      | Notes                                                                                                       |
-| ---------------- | ----------- | ----------------------------------------------------------------------------------------------------------- |
-| DB file location | Project dir | **Note:** Move to a more appropriate place (e.g. `~/.local/share/sm-tracker/`) after prototype is finished. |
+| Decision         | Choice                     | Notes                                                         |
+| ---------------- | -------------------------- | ------------------------------------------------------------- |
+| DB file location | `config.toml` → `paths.db` | Default: `~/.local/share/sm-tracker/data.db`; overridable      |
 
 ## Tooling
 
-| Decision             | Choice                      |
-| -------------------- | --------------------------- |
-| Package/tool manager | mise (this machine only)    |
-| Python deps & tasks  | uv                          |
-| Test framework       | pytest                      |
-| Linter               | ruff                        |
-| Type checker         | mypy                        |
-| Publishing           | Personal use only (for now) |
+| Decision             | Choice                         |
+| -------------------- | ------------------------------ |
+| Package/tool manager | mise (this machine only)       |
+| Python deps & tasks  | uv                             |
+| Test framework       | pytest                         |
+| Linter               | ruff                           |
+| Type checker         | mypy                           |
+| Publishing           | Personal use only (for now)    |
 | Pre-commit           | ruff, mypy (local consistency) |
 
 ### Tool Config (pyproject.toml)
@@ -112,7 +151,7 @@ strict = true
 src/sm_tracker/
 ├── __main__.py      # Entry point: python -m sm_tracker
 ├── cli/             # Typer commands
-├── config/          # .env loading and validation
+├── config/          # .env + config.toml loading and validation
 ├── db/              # libSQL connection, schema, queries
 ├── logging/         # Logging setup and utilities
 ├── platforms/       # Platform-specific fetchers (twitter, bluesky, etc.)
@@ -133,7 +172,7 @@ sm-tracker = "sm_tracker.cli:app"
 | `track`   | Fetch current counts from all configured platforms, save to DB. Optional `--platform` / `-p`: run only for specified platform(s), can be repeated. |
 | `show`    | Display latest snapshot with counts and deltas vs previous. Optional `--platform` / `-p`: show only specified platform(s), can be repeated.        |
 | `history` | Show past snapshots (options: `--platform`, `--limit`)                                                                                             |
-| `config`  | Guide for initial setup: create/validate `.env`, document required variables and account identifiers per platform.                                 |
+| `config`  | Guide for initial setup: create/validate `.env` (credentials) and `config.toml` (paths, retention), document required variables per platform. |
 | `help`    | Show command usage and available options.                                                                                                          |
 
 **Multiple platforms example:**
@@ -159,7 +198,7 @@ sm-tracker show -p twitter -p bluesky
 
 | Command   | Condition               | Message                                                     |
 | --------- | ----------------------- | ----------------------------------------------------------- |
-| `track`   | No platforms configured | "Add at least one platform via `sm-tracker config` or .env" |
+| `track`   | No platforms configured | "Add at least one platform via `sm-tracker config` or .env (credentials)" |
 | `show`    | No data yet             | "No snapshots yet. Run `sm-tracker track` first."           |
 | `history` | No data yet             | "No history yet. Run `sm-tracker track` first."             |
 
@@ -167,15 +206,15 @@ sm-tracker show -p twitter -p bluesky
 
 | Setting      | Choice                                                                 |
 | ------------ | ---------------------------------------------------------------------- |
-| Location     | `logs/` folder                                                         |
+| Location     | `config.toml` → `paths.logs` (default: `~/.local/share/sm-tracker/logs`) |
 | Filename     | `sm-tracker.log`                                                       |
 | Format       | Human-readable: `%(asctime)s - %(name)s - %(levelname)s - %(message)s` |
 | Timestamp    | ISO 8601: `%Y-%m-%dT%H:%M:%S`                                          |
 | Rotation     | `TimedRotatingFileHandler`, daily at midnight                          |
-| Backup count | 14 days (configurable via `LOG_RETENTION_DAYS`)                        |
+| Backup count | `config.toml` → `logging.retention_days` (default: 14)                 |
 | Output       | File + console (both)                                                  |
 
-Create `logs/` if it doesn't exist.
+Create log directory if it doesn't exist.
 
 ## CI
 

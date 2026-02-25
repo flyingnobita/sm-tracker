@@ -70,7 +70,7 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
 
     - `history`: List the full history of previous tracked values per platform, supporting both `--platform` and `--limit` flags for granular queries.
 
-    - `config`: Run a guided setup for required `.env` configuration; creates or validates the presence of `.env`, ensuring required API env vars are present for all tracked platforms.
+    - `config`: Run a guided setup for credentials (`.env`) and app config (`config.toml`); creates or validates both files, ensuring required API keys in `.env` and paths/retention in `config.toml` for all tracked platforms.
 
     - `help`: Command usage details.
 
@@ -97,16 +97,16 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
 
   - No restriction on history retention for follower data; indefinite tracking enabled by schema.
 
-  - Log data (operation logs, errors) retained for 14 days **by default**, with the retention period configurable via the `LOG_RETENTION_DAYS` environment variable; logs are stored in a dedicated `logs/` directory with required daily rotation.
+  - Log data (operation logs, errors) retained for 14 days **by default**, with the retention period configurable via `config.toml` (`logging.retention_days`); logs are stored in a dedicated directory (configurable via `paths.logs`) with required daily rotation.
 
 - **Configuration**
-  - Credentials and all runtime configuration are managed via environment variables loaded from a `.env` file in the local directory (or from process env).
+  - **Credentials:** API keys, tokens, and account identifiers live in `.env` (project dir or process env). Never committed.
 
-  - The `config` command provides a guided setup and validation for `.env`, prompting the user through required API credentials for all enabled platforms, and creates or updates the file with appropriate warnings for missing/invalid variables.
+  - **App config:** Paths, log retention, log level live in `config.toml`. Lookup order: project dir, then `~/.config/sm-tracker/`. May ship with defaults.
+
+  - The `config` command provides a guided setup and validation for both `.env` and `config.toml`, prompting the user through required credentials and creating/updating files with appropriate warnings for missing/invalid values.
 
   - Defensive onboarding: If `.env` is missing or incomplete, tool warns which platforms are skipped in output/log, but continues for properly configured platforms.
-
-  - After MVP, the config format may migrate to `~/.config/sm-tracker/config.toml` for richer management, but environment variables via `.env` and the guided setup are required for MVP.
 
 - **Behavior & Flow**
   - `track` fetches and saves current counts ONLY; does not display the result.
@@ -131,7 +131,7 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
 
   - Daily log rotation is required.
 
-  - Log retention is set to 14 days by default and may be overridden by the `LOG_RETENTION_DAYS` environment variable.
+  - Log retention is set to 14 days by default and may be overridden in `config.toml` (`logging.retention_days`).
 
   - Logging includes command executions, tracked actions, platform API successes/failures, missing configs, and all error traces as appropriate.
 
@@ -149,7 +149,7 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
 
       - `src/sm_tracker/db/` (database layer and utilities)
 
-      - `src/sm_tracker/config/` (configuration handler)
+      - `src/sm_tracker/config/` (.env + config.toml loading and validation)
 
       - `src/sm_tracker/logging/` (logging setup and utilities)
 
@@ -167,9 +167,9 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
 
 - Users install `sm-tracker` per project and access it via command line.
 
-- The first run or explicit `sm-tracker config` launches a **guided setup** that creates or validates the `.env` file in the working directory, walks the user through supplying required API keys/tokens for each desired platform, and ensures `.env` is ready for use.
+- The first run or explicit `sm-tracker config` launches a **guided setup** that creates or validates `.env` (credentials) and `config.toml` (paths, retention) in the project or config directory, walks the user through supplying required API keys/tokens for each desired platform, and ensures both files are ready for use.
 
-- Clear CLI and readme guidance describe all required env vars per platform.
+- Clear CLI and readme guidance describe all required env vars per platform and the structure of `config.toml`.
 
 - Running `sm-tracker help` displays full CLI usage patterns, including:
 
@@ -186,7 +186,7 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
 - **Tracking New Data:**
   - `sm-tracker track -p <platform>` (e.g., `sm-tracker track -p twitter -p threads`)
 
-  - Loads `.env`, validates credentials (skipping platforms without them), fetches current counts, saves in the database.
+  - Loads `.env` and `config.toml`, validates credentials (skipping platforms without them), fetches current counts, saves in the database.
 
   - Output and logs show updated platforms, skipped (due to missing config), and success/failure for each.
 
@@ -220,7 +220,7 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
 
 - With no config or no data, runs are clean no-ops with plain notifications—no crashes.
 
-- **Empty-state messages:** `track` with no platforms configured: "Add at least one platform via `sm-tracker config` or .env". `show` or `history` with no data: "No snapshots yet. Run `sm-tracker track` first." / "No history yet. Run `sm-tracker track` first."
+- **Empty-state messages:** `track` with no platforms configured: "Add at least one platform via `sm-tracker config` or .env (credentials)". `show` or `history` with no data: "No snapshots yet. Run `sm-tracker track` first." / "No history yet. Run `sm-tracker track` first."
 
 - No color or enhanced formatting: output is always plain text.
 
@@ -228,7 +228,7 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
 
 ## Narrative Example
 
-Jordan, a developer managing multiple online identities, wants to keep track of their audience metrics across Twitter/X, Mastodon, Threads, Bluesky, and Farcaster. They install `sm-tracker` and use the `sm-tracker config` guided setup to create their `.env` file with all necessary API keys.
+Jordan, a developer managing multiple online identities, wants to keep track of their audience metrics across Twitter/X, Mastodon, Threads, Bluesky, and Farcaster. They install `sm-tracker` and use the `sm-tracker config` guided setup to create their `.env` (credentials) and `config.toml` (paths, retention) with all necessary settings.
 
 They schedule a daily cron job:
 
@@ -277,7 +277,7 @@ Everything is plain text, ready for scripts or LLM pipelines, and historical dat
 
 ### Logging/Tracking Plan
 
-- All command invocations and errors logged to `logs/` directory—with retention for 14 days (configurable by `LOG_RETENTION_DAYS` env var).
+- All command invocations and errors logged to the configured log directory—with retention for 14 days (configurable in `config.toml` via `logging.retention_days`).
 
 - Platform usage breakdown tracked (anonymous/local).
 
@@ -299,7 +299,7 @@ Source Layout
 
 - `src/sm_tracker/db/` (database operations)
 
-- `src/sm_tracker/config/` (env/config management)
+- `src/sm_tracker/config/` (.env + config.toml loading and validation)
 
 - `src/sm_tracker/logging/` (logging setup and utilities)
 

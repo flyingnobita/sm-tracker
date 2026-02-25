@@ -7,7 +7,7 @@ CLI to track follower and following counts across Twitter/X, Bluesky, Farcaster,
 - `track` — Fetch and save counts from configured platforms
 - `show` — Display latest snapshot with deltas
 - `history` — View past snapshots
-- `config` — Guided setup for `.env` credentials
+- `config` — Guided setup for `.env` (credentials) and `config.toml` (paths, retention)
 - `help` — Command usage
 
 ## Example
@@ -20,7 +20,7 @@ sm-tracker show -p twitter -p bluesky
 ## Requirements
 
 - Python 3.12+
-- Platform API credentials (configured via `.env`)
+- Platform API credentials (`.env`); app config (paths, retention) in `config.toml`
 
 ## License
 

@@ -8,10 +8,10 @@ Suggested implementation order for the social media tracker CLI.
    - `pyproject.toml` (uv, pytest, ruff, mypy, deps, `[tool.ruff]`, `[tool.mypy]`)
    - `mise.toml` (tool versions, tasks)
    - `src/sm_tracker/` package layout
-   - `.env.example` (exists; update as needed)
+   - `.env.example` (credentials template), `config.toml.example` (app config template)
 
 2. **Config & logging**
-   - `src/sm_tracker/config/` — `.env` loading, validation
+   - `src/sm_tracker/config/` — `.env` (credentials) and `config.toml` (paths, retention) loading and validation
    - `src/sm_tracker/logging/` — file + console, daily rotation, retention
 
 3. **Database layer**
@@ -39,7 +39,7 @@ Suggested implementation order for the social media tracker CLI.
    - Empty-state messages for track/show/history
 
 8. **Config command**
-   - Guided `.env` setup and validation
+   - Guided `.env` (credentials) and `config.toml` (paths, retention) setup and validation
 
 9. **Tests & CI**
    - Unit tests for commands, platform adapters, db
