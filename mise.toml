@@ -7,7 +7,7 @@ uv = "latest"
 
 [tasks]
 test = "uv run pytest"
-lint = "uv run ruff check ."
+lint = "npx markdownlint-cli2 \"**/*.md\" && uv run ruff check ."
 typecheck = "uv run mypy src/"
 format = "npx prettier --write \"**/*.{md,yaml,yml,json}\" \".prettierrc\" \".prettierrc.*\" \"**/.prettierrc\" \"**/.prettierrc.*\""
 precommit = "pre-commit run --all-files"
