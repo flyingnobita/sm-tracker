@@ -1,3 +1,0 @@
-- Feb-26, 2026 - 12:06 AM +08 - Completed Phase 3 database layer with libSQL connection helpers, schema initialization, query APIs, and CRUD plus edge-case tests.
-- Feb-26, 2026 - 12:06 AM +08 - Completed Phase 4 CLI skeleton with Typer command stubs, repeatable platform flags, and CLI tests.
-- Feb-26, 2026 - 12:09 AM +08 - Completed Phase 2 config and logging with .env/config.toml profile resolution, defensive validation, rotating file plus console logging, and full Phase 2 tests.

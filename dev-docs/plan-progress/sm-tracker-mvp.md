@@ -35,10 +35,10 @@ Plan: [20250225-PLANS-sm-tracker-mvp.md](../20250225-PLANS-sm-tracker-mvp.md)
 
 ## Phase 5: First Platform Adapter (Bluesky)
 
-- [ ] `platforms/bluesky.py` with public profile fetch
-- [ ] Platform adapter interface/protocol
-- [ ] Wire `track` + `show` end-to-end
-- [ ] Tests: mocked API, integration flow
+- [x] `platforms/bluesky.py` with public profile fetch
+- [x] Platform adapter interface/protocol
+- [x] Wire `track` + `show` end-to-end
+- [x] Tests: mocked API, integration flow
 
 ## Phase 6: Remaining Platform Adapters
 

@@ -38,7 +38,8 @@ def test_track_empty_state_message() -> None:
 
 def test_show_empty_state_message() -> None:
     runner = CliRunner()
-    result = runner.invoke(app, ["show"])
+    with runner.isolated_filesystem():
+        result = runner.invoke(app, ["show"])
 
     assert result.exit_code == 0
     assert "No snapshots yet. Run `sm-tracker track` first." in result.stdout
@@ -46,7 +47,8 @@ def test_show_empty_state_message() -> None:
 
 def test_history_empty_state_message() -> None:
     runner = CliRunner()
-    result = runner.invoke(app, ["history"])
+    with runner.isolated_filesystem():
+        result = runner.invoke(app, ["history"])
 
     assert result.exit_code == 0
     assert "No history yet. Run `sm-tracker track` first." in result.stdout
