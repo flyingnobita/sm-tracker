@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from collections.abc import Sequence
 
 import typer
@@ -10,17 +11,40 @@ from sm_tracker.config import ConfigError, load_config
 from sm_tracker.db import fetch_history, fetch_latest, init_schema, insert_count, insert_snapshot
 from sm_tracker.db.connection import connect
 from sm_tracker.db.queries import CountRow
+from sm_tracker.logging import setup_logging
 from sm_tracker.platforms import resolve_adapters
 
 app = typer.Typer(
     help="Track follower and following counts across social media platforms.",
     no_args_is_help=True,
 )
+LOGGER = logging.getLogger("sm_tracker.cli")
 
 
 @app.callback()
 def root() -> None:
     """Root command group for sm-tracker."""
+    _try_setup_logging()
+
+
+def _try_setup_logging() -> None:
+    """Best-effort logging bootstrap from app config."""
+    try:
+        config = load_config()
+    except ConfigError:
+        return
+
+    setup_logging(
+        logs_path=config.logs_path,
+        level=config.log_level,
+        retention_days=config.log_retention_days,
+    )
+    LOGGER.info(
+        "CLI logging initialized for profile=%s db_path=%s logs_path=%s",
+        config.profile,
+        config.db_path,
+        config.logs_path,
+    )
 
 
 def _normalized_platforms(platform: Sequence[str]) -> list[str]:
@@ -41,21 +65,26 @@ def track(
 ) -> None:
     """Fetch counts and persist a snapshot."""
     selected = _normalized_platforms(platform or [])
+    LOGGER.info("track command started selected_platforms=%s", selected)
     if not selected:
+        LOGGER.warning("track command aborted: no platforms selected")
         typer.echo("Add at least one platform via `sm-tracker config` or .env (credentials)")
         return
 
     adapters, warnings = resolve_adapters(selected)
     for warning in warnings:
+        LOGGER.warning("%s", warning)
         typer.echo(warning)
 
     if not adapters:
+        LOGGER.info("track command finished with no adapters selected_platforms=%s", selected)
         typer.echo(f"Tracking snapshot for: {', '.join(selected)}")
         return
 
     try:
         config = load_config()
     except ConfigError as exc:
+        LOGGER.error("track command failed to load config: %s", exc)
         typer.echo(f"Could not load config: {exc}")
         return
 
@@ -68,6 +97,7 @@ def track(
             try:
                 counts = adapter.fetch_counts()
             except Exception as exc:  # pragma: no cover - defensive branch
+                LOGGER.exception("Skipping %s: fetch failed", adapter.name)
                 typer.echo(f"Skipping {adapter.name}: fetch failed ({exc})")
                 continue
 
@@ -79,11 +109,19 @@ def track(
                 following_count=counts.following_count,
             )
             successful += 1
+            LOGGER.info(
+                "captured counts platform=%s followers=%s following=%s",
+                counts.platform,
+                counts.follower_count,
+                counts.following_count,
+            )
 
     if successful == 0:
+        LOGGER.warning("track command completed with zero successful adapter fetches")
         typer.echo("No platform data captured.")
         return
 
+    LOGGER.info("track command finished tracked_platforms=%s", tracked_platforms)
     typer.echo(f"Tracking snapshot for: {', '.join(tracked_platforms)}")
 
 
@@ -94,10 +132,12 @@ def show(
     """Show latest snapshot with deltas."""
     selected = _normalized_platforms(platform or [])
     selected_set = set(selected)
+    LOGGER.info("show command started selected_platforms=%s", selected)
 
     try:
         config = load_config()
     except ConfigError:
+        LOGGER.warning("show command aborted: config unavailable")
         typer.echo("No snapshots yet. Run `sm-tracker track` first.")
         return
 
@@ -105,12 +145,14 @@ def show(
         init_schema(client)
         latest = fetch_latest(client)
         if not latest:
+            LOGGER.info("show command: no snapshots found")
             typer.echo("No snapshots yet. Run `sm-tracker track` first.")
             return
 
         if selected_set:
             latest = [row for row in latest if row.platform in selected_set]
             if not latest:
+                LOGGER.info("show command: selected platforms have no snapshot rows")
                 typer.echo("No snapshots yet. Run `sm-tracker track` first.")
                 return
 
@@ -135,6 +177,7 @@ def show(
         typer.echo(f"{row.platform}")
         typer.echo(f"  Followers: {followers}")
         typer.echo(f"  Following: {following}")
+    LOGGER.info("show command finished rows_rendered=%s", len(latest))
 
 
 @app.command()
@@ -145,10 +188,12 @@ def history(
     """Show historical snapshots."""
     selected = _normalized_platforms(platform or [])
     selected_set = set(selected)
+    LOGGER.info("history command started selected_platforms=%s limit=%s", selected, limit)
 
     try:
         config = load_config()
     except ConfigError:
+        LOGGER.warning("history command aborted: config unavailable")
         typer.echo("No history yet. Run `sm-tracker track` first.")
         return
 
@@ -160,6 +205,7 @@ def history(
         rows = [row for row in rows if row.platform in selected_set]
 
     if not rows:
+        LOGGER.info("history command: no rows available after filtering")
         typer.echo("No history yet. Run `sm-tracker track` first.")
         return
 
@@ -168,6 +214,7 @@ def history(
         followers = "N/A" if row.follower_count is None else str(row.follower_count)
         following = "N/A" if row.following_count is None else str(row.following_count)
         typer.echo(f"{row.timestamp} | {row.platform} | {followers} | {following}")
+    LOGGER.info("history command finished rows_rendered=%s", len(rows))
 
 
 @app.command(name="config")

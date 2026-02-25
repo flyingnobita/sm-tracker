@@ -5,7 +5,9 @@ from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
 
 import pytest
+from typer.testing import CliRunner
 
+from sm_tracker.cli import app
 from sm_tracker.logging import LOG_FILENAME, setup_logging
 
 
@@ -52,3 +54,32 @@ def test_setup_logging_uses_timed_rotation_settings(tmp_path: Path) -> None:
         if isinstance(h, StreamHandler) and not isinstance(h, TimedRotatingFileHandler)
     ]
     assert len(console_handlers) == 1
+
+
+def test_cli_bootstrap_creates_configured_log_file() -> None:
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        Path("config.toml").write_text(
+            (
+                'profile = "dev"\n'
+                "\n"
+                "[paths.dev]\n"
+                'db = "./data-dev.db"\n'
+                'logs = "./logs-dev"\n'
+                "\n"
+                "[logging.dev]\n"
+                "retention_days = 7\n"
+                'level = "INFO"\n'
+            ),
+            encoding="utf-8",
+        )
+        result = runner.invoke(app, ["track", "-p", "unsupported"])
+        log_path = Path("logs-dev", LOG_FILENAME)
+        assert log_path.exists()
+        contents = log_path.read_text(encoding="utf-8")
+        assert "CLI logging initialized" in contents
+        assert "track command started" in contents
+        assert "Skipping unsupported platform: unsupported" in contents
+        assert "track command finished with no adapters" in contents
+
+    assert result.exit_code == 0

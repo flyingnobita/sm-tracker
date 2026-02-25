@@ -22,7 +22,8 @@ def test_track_platform_flag_is_repeatable() -> None:
     result = runner.invoke(app, ["track", "-p", "Twitter", "--platform", "bluesky"])
 
     assert result.exit_code == 0
-    assert "Tracking snapshot for: twitter, bluesky" in result.stdout
+    assert "Skipping unsupported platform: twitter" in result.stdout
+    assert "Tracking snapshot for: bluesky" in result.stdout
 
 
 def test_track_empty_state_message() -> None:
