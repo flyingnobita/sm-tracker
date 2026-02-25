@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sm-tracker"
+version = "0.1.0"
+description = "CLI to track social media follower/following counts."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "atproto>=0.0.61",
+    "libsql-client>=0.3.1",
+    "Mastodon.py>=1.8.1",
+    "meta-threads-sdk>=0.2.1",
+    "python-dotenv>=1.0.1",
+    "tweepy>=4.15.0",
+    "typer>=0.16.0",
+]
+
+[project.scripts]
+sm-tracker = "sm_tracker.cli:app"
+
+[dependency-groups]
+dev = ["mypy>=1.15.0", "pytest>=8.3.5", "ruff>=0.11.0"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+mypy_path = "src"
+packages = ["sm_tracker"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

@@ -1,0 +1,76 @@
+# Progress: sm-tracker MVP
+
+Plan: [20250225-PLANS-sm-tracker-mvp.md](../20250225-PLANS-sm-tracker-mvp.md)
+
+## Phase 1: Project Scaffolding
+
+- [x] `pyproject.toml` with deps, ruff, mypy config
+- [x] `mise.toml` tool versions and tasks
+- [x] `src/sm_tracker/` package layout
+- [x] `.gitattributes`, `.editorconfig`
+- [x] `.env.example`, `config.toml.example`
+- [x] Verify: package imports, `ruff check`, `mypy`
+
+## Phase 2: Config & Logging
+
+- [ ] `.env` loading (`python-dotenv`)
+- [ ] `config.toml` parsing (`tomllib`) with profile support
+- [ ] Config validation and defensive error handling
+- [ ] Logging: file + console, daily rotation, retention
+- [ ] Tests: config loading, profile resolution, log output
+
+## Phase 3: Database Layer
+
+- [ ] libSQL connection management
+- [ ] Schema init (`snapshots`, `counts`)
+- [ ] Query functions (insert, fetch latest, fetch history)
+- [ ] Tests: CRUD, edge cases
+
+## Phase 4: CLI Skeleton
+
+- [ ] Typer app with command stubs
+- [ ] Platform flag parsing (`-p`, repeatable)
+- [ ] Entry point wiring (`[project.scripts]`)
+- [ ] Tests: CLI invocation, flags, help, empty-state messages
+
+## Phase 5: First Platform Adapter (Bluesky)
+
+- [ ] `platforms/bluesky.py` with public profile fetch
+- [ ] Platform adapter interface/protocol
+- [ ] Wire `track` + `show` end-to-end
+- [ ] Tests: mocked API, integration flow
+
+## Phase 6: Remaining Platform Adapters
+
+- [ ] Twitter (Tweepy)
+- [ ] Mastodon (Mastodon.py)
+- [ ] Farcaster (Warpcast API)
+- [ ] Threads (meta-threads-sdk)
+- [ ] Tests: per-adapter unit tests, missing-credential skip
+
+## Phase 7: Output Formatting & Edge Cases
+
+- [ ] Delta display rules (N/A, +n, -n, 0)
+- [ ] History plain-text table
+- [ ] Error handling: skip + warn, partial snapshots
+- [ ] Tests: formatting, error/skip scenarios
+
+## Phase 8: Config Command
+
+- [ ] Guided `.env` setup
+- [ ] Guided `config.toml` setup
+- [ ] Validation and warnings
+- [ ] Tests: creation, validation, guided flow
+
+## Phase 9: CI & Quality
+
+- [ ] GitHub Actions workflow
+- [ ] Pre-commit hooks
+- [ ] All tests green, no lint/type errors
+
+## Phase 10: Documentation
+
+- [ ] README with installation and usage
+- [ ] Onboarding guide
+- [ ] Config reference
+- [ ] Link checking, markdown lint clean

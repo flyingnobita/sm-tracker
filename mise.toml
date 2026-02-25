@@ -2,6 +2,7 @@
 # Python deps and tasks use uv
 
 [tools]
+python = "3.12"
 node = "lts"
 uv = "latest"
 
