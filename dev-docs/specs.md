@@ -4,17 +4,17 @@ Self-contained reference for building the social media following tracker CLI pro
 
 ## Tech Stack
 
-| Layer     | Technology       | Notes                                                                              |
-| --------- | ---------------- | ---------------------------------------------------------------------------------- |
-| CLI       | Typer            |                                                                                    |
-| Storage   | libSQL           | SQLite-compatible, [tursodatabase/libsql](https://github.com/tursodatabase/libsql) |
-| Twitter   | Tweepy           | [tweepy/tweepy](https://github.com/tweepy/tweepy)                                  |
-| Bluesky   | atproto          | [bluesky-social/atproto](https://github.com/bluesky-social/atproto)                |
-| Farcaster | farcaster-py     | Archived, [a16z/farcaster-py](https://github.com/a16z/farcaster-py)                |
-| Mastodon  | Mastodon.py      | [halcy/Mastodon.py](https://github.com/halcy/Mastodon.py)                          |
-| Threads   | meta-threads-sdk | [MetaThreads/meta-threads-sdk](https://github.com/MetaThreads/meta-threads-sdk)    |
+| Layer     | Technology       | Notes                                                                                                                      |
+| --------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| CLI       | Typer            |                                                                                                                            |
+| Storage   | libSQL           | SQLite-compatible, [tursodatabase/libsql](https://github.com/tursodatabase/libsql)                                         |
+| Twitter   | Tweepy           | [tweepy/tweepy](https://github.com/tweepy/tweepy)                                                                          |
+| Bluesky   | atproto          | [bluesky-social/atproto](https://github.com/bluesky-social/atproto)                                                        |
+| Farcaster | Direct API       | Warpcast API (`api.warpcast.com`); farcaster-py archived. If user endpoint lacks counts, paginate `followers`/`following`. |
+| Mastodon  | Mastodon.py      | [halcy/Mastodon.py](https://github.com/halcy/Mastodon.py)                                                                  |
+| Threads   | meta-threads-sdk | [MetaThreads/meta-threads-sdk](https://github.com/MetaThreads/meta-threads-sdk)                                            |
 
-**Python:** 3.10+
+**Python:** 3.12+ (required by meta-threads-sdk)
 
 ## Config & Credentials
 
@@ -24,17 +24,20 @@ Self-contained reference for building the social media following tracker CLI pro
 
 ### Environment Variables (.env)
 
-| Variable                | Platform  | Required | Notes                                     |
-| ----------------------- | --------- | -------- | ----------------------------------------- |
-| `TWITTER_BEARER_TOKEN`  | Twitter   | Yes      | X Developer account                       |
-| `BLUESKY_HANDLE`        | Bluesky   | No       | Public profile, no auth needed for counts |
-| `BLUESKY_APP_PASSWORD`  | Bluesky   | No       | Only if handle is private                 |
-| `FARCASTER_MNEMONIC`    | Farcaster | Yes      | Or private key for auth                   |
-| `MASTODON_ACCESS_TOKEN` | Mastodon  | Yes      | OAuth token                               |
-| `MASTODON_INSTANCE`     | Mastodon  | Yes      | e.g. `mastodon.social`                    |
-| `THREADS_ACCESS_TOKEN`  | Threads   | Yes      | Meta OAuth token                          |
-| `DB_PATH`               | —         | No       | Default: `./data.db` in project dir       |
-| `LOG_RETENTION_DAYS`    | —         | No       | Default: 14. Days of log backups to keep. |
+| Variable                | Platform  | Required | Notes                                                                 |
+| ----------------------- | --------- | -------- | --------------------------------------------------------------------- |
+| `TWITTER_BEARER_TOKEN`  | Twitter   | Yes      | X Developer account                                                   |
+| `TWITTER_HANDLE`        | Twitter   | Yes      | Account to track (e.g. `yourhandle`)                                  |
+| `BLUESKY_HANDLE`        | Bluesky   | Yes      | Account to track; public profile needs no auth                        |
+| `BLUESKY_APP_PASSWORD`  | Bluesky   | No       | Only if handle is private                                             |
+| `FARCASTER_MNEMONIC`    | Farcaster | Yes      | Or private key for auth                                               |
+| `FARCASTER_USERNAME`    | Farcaster | Yes      | Username to track (e.g. `yourname`)                                   |
+| `MASTODON_ACCESS_TOKEN` | Mastodon  | Yes      | OAuth token                                                           |
+| `MASTODON_INSTANCE`     | Mastodon  | Yes      | e.g. `mastodon.social`                                                |
+| `THREADS_ACCESS_TOKEN`  | Threads   | Yes      | Meta OAuth token; requires `MANAGE_INSIGHTS` scope for follower count |
+| `THREADS_USER_ID`       | Threads   | Yes      | User ID for `insights.get_user_insights()`                            |
+| `DB_PATH`               | —         | No       | Default: `./data.db` in project dir                                   |
+| `LOG_RETENTION_DAYS`    | —         | No       | Default: 14. Days of log backups to keep.                             |
 
 ### Account Identifiers (per platform)
 
@@ -46,7 +49,7 @@ Self-contained reference for building the social media following tracker CLI pro
 | Mastodon  | `@user@instance` | `@you@mastodon.social` |
 | Threads   | username         | `yourname`             |
 
-Store identifiers in `.env` (e.g. `TWITTER_HANDLE`, `BLUESKY_HANDLE`, etc.) or derive from auth where possible.
+Identifiers stored in `.env` per the table above. Mastodon derives `@user@instance` from token/instance.
 
 ## Data Model
 
@@ -67,7 +70,7 @@ CREATE TABLE IF NOT EXISTS counts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     snapshot_id INTEGER NOT NULL,
     platform TEXT NOT NULL,
-    following_count INTEGER NOT NULL,
+    following_count INTEGER,  -- Nullable; some platforms don't expose
     follower_count INTEGER,
     FOREIGN KEY (snapshot_id) REFERENCES snapshots(id)
 );
@@ -81,10 +84,27 @@ CREATE TABLE IF NOT EXISTS counts (
 
 ## Tooling
 
-| Decision              | Choice                      |
-| --------------------- | --------------------------- |
-| Dependency management | uv                          |
-| Publishing            | Personal use only (for now) |
+| Decision             | Choice                      |
+| -------------------- | --------------------------- |
+| Package/tool manager | mise (this machine only)    |
+| Python deps & tasks  | uv                          |
+| Test framework       | pytest                      |
+| Linter               | ruff                        |
+| Type checker         | mypy                        |
+| Publishing           | Personal use only (for now) |
+| Pre-commit           | ruff, mypy (local consistency) |
+
+### Tool Config (pyproject.toml)
+
+```toml
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+```
 
 ## Project Structure
 
@@ -125,6 +145,24 @@ sm-tracker show -p twitter -p bluesky
 
 **Output:** Plain text (no Rich).
 
+### Output Format (show)
+
+| Scenario                  | Format           |
+| ------------------------- | ---------------- |
+| First snapshot (no delta) | `132 (N/A)`      |
+| Positive delta            | `132 (+10)`      |
+| Negative delta            | `132 (-1)`       |
+| Zero delta                | `132 (0)`        |
+| Platform has no following | `Following: N/A` |
+
+### Empty-State Messages
+
+| Command   | Condition               | Message                                                     |
+| --------- | ----------------------- | ----------------------------------------------------------- |
+| `track`   | No platforms configured | "Add at least one platform via `sm-tracker config` or .env" |
+| `show`    | No data yet             | "No snapshots yet. Run `sm-tracker track` first."           |
+| `history` | No data yet             | "No history yet. Run `sm-tracker track` first."             |
+
 ## Logging
 
 | Setting      | Choice                                                                 |
@@ -139,10 +177,21 @@ sm-tracker show -p twitter -p bluesky
 
 Create `logs/` if it doesn't exist.
 
+## CI
+
+| Setting  | Choice                                             |
+| -------- | -------------------------------------------------- |
+| Platform | GitHub Actions                                     |
+| Jobs     | Run pytest (tests), ruff (lint), mypy (type check) |
+
 ## Error Handling
 
 | Scenario                                     | Behavior                                            |
 | -------------------------------------------- | --------------------------------------------------- |
 | Missing credentials for a platform           | Skip that platform, continue with others            |
 | Platform fetch fails (rate limit, API error) | Log/warn, continue with others, partial snapshot OK |
-| No previous snapshot                         | Show current counts only, no delta                  |
+| No previous snapshot                         | Show current counts with `(N/A)` for delta          |
+
+### Output Format (history)
+
+Plain-text table, columns: `Date | Platform | Followers | Following | Delta`. Same delta rules as `show` (N/A, +n, -n, 0). Platform with no following shows `N/A`.

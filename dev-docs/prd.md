@@ -84,15 +84,11 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
   - All arguments and actions are scriptable and strictly non-interactive (no prompts except for the guided `config` command).
 
 - **Supported Platforms (from MVP)**
-  - Twitter/X
+  - Twitter/X, Bluesky, Farcaster, Mastodon, Threads
 
-  - Bluesky
+  - Farcaster uses Warpcast direct API (farcaster-py archived; no count fields).
 
-  - Farcaster
-
-  - Mastodon
-
-  - Threads
+  - Threads requires `MANAGE_INSIGHTS` scope for follower count via `insights.get_user_insights()`.
 
   - (Platform support implemented as per-platform modules/classes in the codebase.)
 
@@ -140,7 +136,7 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
   - Logging includes command executions, tracked actions, platform API successes/failures, missing configs, and all error traces as appropriate.
 
 - **Dependency Management**
-  - All dependencies for development and production are managed exclusively via `uv`, per the specification.
+  - `mise` for package/tool management on this machine; `uv` for Python dependencies and tasks/env.
 
 - **Project Structure & Tech Stack**
   - CLI entrypoint: `sm-tracker` (not `tracker`).
@@ -206,12 +202,12 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
     Date: 2024-06-12 08:30
     ```
 
-    _Plain-text deltas always included for transparency._
+  - Delta format: first snapshot `(N/A)`, positive `(+n)`, negative `(-n)`, zero `(0)`. Platforms with no following metric show `Following: N/A`.
 
 * **Viewing History:**
   - `sm-tracker history -p <platform> --limit 15`
 
-  - Prints plain-text table of historical data (up to limit), no gap markers required by spec.
+  - Prints plain-text table: `Date | Platform | Followers | Following | Delta` (up to limit). Same delta rules as `show` (N/A, +n, -n, 0). Platform with no following shows `N/A`.
 
 * **Automation & Scripting:**
   - All features designed for non-interactive, batch, and LLM/automation use; all outputs are machine/LLM-readable.
@@ -223,6 +219,8 @@ A command-line tool (`sm-tracker`) for technical users to monitor follower and f
 - Platform API rate limit or transient error: logged and warned; tool continues processing other platforms.
 
 - With no config or no data, runs are clean no-ops with plain notifications—no crashes.
+
+- **Empty-state messages:** `track` with no platforms configured: "Add at least one platform via `sm-tracker config` or .env". `show` or `history` with no data: "No snapshots yet. Run `sm-tracker track` first." / "No history yet. Run `sm-tracker track` first."
 
 - No color or enhanced formatting: output is always plain text.
 
@@ -291,6 +289,8 @@ Everything is plain text, ready for scripts or LLM pipelines, and historical dat
 
 ### Stack & Architecture
 
+**Runtime:** Python 3.12+ (minimum required by meta-threads-sdk)
+
 Source Layout
 
 - `src/sm_tracker/cli/` (main CLI and Typer app)
@@ -351,7 +351,7 @@ Source Layout
 
 2. **Testing & Documentation (2–3 days)**
 
-- Automated test suite for all commands/flows.
+- Automated test suite (pytest), lint (ruff), type check (mypy); CI via GitHub Actions.
 
 - Full README, onboarding instructions, and config setup guides.
 
