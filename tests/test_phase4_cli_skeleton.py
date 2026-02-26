@@ -1,5 +1,6 @@
 """Phase 4 CLI skeleton tests."""
 
+from pytest import MonkeyPatch
 from typer.testing import CliRunner
 
 from sm_tracker.cli import app
@@ -17,18 +18,25 @@ def test_cli_root_help_lists_expected_commands() -> None:
     assert "help" in result.stdout
 
 
-def test_track_platform_flag_is_repeatable() -> None:
+def test_track_platform_flag_is_repeatable(monkeypatch: MonkeyPatch) -> None:
+    monkeypatch.setattr("sm_tracker.cli.resolve_adapters", lambda _platforms: ([], []))
     runner = CliRunner()
     result = runner.invoke(
         app,
-        ["track", "-p", "UnknownOne", "--platform", "unknown-two"],
+        ["track", "-p", "twitter", "--platform", "bluesky"],
         env={},
     )
 
     assert result.exit_code == 0
-    assert "Skipping unsupported platform: unknownone" in result.stdout
-    assert "Skipping unsupported platform: unknown-two" in result.stdout
-    assert "Tracking snapshot for: unknownone, unknown-two" in result.stdout
+    assert "Tracking snapshot for: twitter, bluesky" in result.stdout
+
+
+def test_track_rejects_unknown_platform() -> None:
+    runner = CliRunner()
+    result = runner.invoke(app, ["track", "-p", "unknownplatform"], env={})
+
+    assert result.exit_code != 0
+    assert "Unknown platform 'unknownplatform'" in result.output
 
 
 def test_track_all_scope_targets_supported_platforms() -> None:
@@ -74,7 +82,7 @@ def test_show_empty_state_message() -> None:
         result = runner.invoke(app, ["show"])
 
     assert result.exit_code == 0
-    assert "No snapshots yet. Run `sm-tracker track` first." in result.stdout
+    assert "Could not load configuration:" in result.stdout
 
 
 def test_history_empty_state_message() -> None:
@@ -83,7 +91,7 @@ def test_history_empty_state_message() -> None:
         result = runner.invoke(app, ["history"])
 
     assert result.exit_code == 0
-    assert "No history yet. Run `sm-tracker track` first." in result.stdout
+    assert "Could not load configuration:" in result.stdout
 
 
 def test_show_all_empty_state_message() -> None:
@@ -92,7 +100,7 @@ def test_show_all_empty_state_message() -> None:
         result = runner.invoke(app, ["show", "--all"])
 
     assert result.exit_code == 0
-    assert "No snapshots yet. Run `sm-tracker track` first." in result.stdout
+    assert "Could not load configuration:" in result.stdout
 
 
 def test_history_all_empty_state_message() -> None:
@@ -101,7 +109,7 @@ def test_history_all_empty_state_message() -> None:
         result = runner.invoke(app, ["history", "--all"])
 
     assert result.exit_code == 0
-    assert "No history yet. Run `sm-tracker track` first." in result.stdout
+    assert "Could not load configuration:" in result.stdout
 
 
 def test_command_help_describes_default_all_scope() -> None:

@@ -11,7 +11,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 import typer
-from dotenv import load_dotenv
+from dotenv import dotenv_values, load_dotenv
 from threads import ThreadsClient
 from threads.constants import Scope
 
@@ -35,6 +35,8 @@ app = typer.Typer(
     no_args_is_help=True,
 )
 LOGGER = logging.getLogger("sm_tracker.cli")
+
+_AUTH_SUPPORTED_PLATFORMS: frozenset[str] = frozenset({"threads"})
 
 ENV_FIELD_SPECS: list[tuple[str, str, bool]] = [
     ("TWITTER_BEARER_TOKEN", "Twitter bearer token", True),
@@ -106,6 +108,10 @@ def _selected_platforms(platform: Sequence[str], all_platforms: bool) -> list[st
         raise typer.BadParameter("Use either --platform or --all, not both.")
     if all_platforms:
         return list(SUPPORTED_PLATFORM_NAMES)
+    for name in selected:
+        if name not in SUPPORTED_PLATFORM_NAMES:
+            supported = ", ".join(SUPPORTED_PLATFORM_NAMES)
+            raise typer.BadParameter(f"Unknown platform '{name}'. Supported: {supported}.")
     return selected
 
 
@@ -201,9 +207,9 @@ def show(
 
     try:
         config = load_config()
-    except ConfigError:
-        LOGGER.warning("show command aborted: config unavailable")
-        typer.echo("No snapshots yet. Run `sm-tracker track` first.")
+    except ConfigError as exc:
+        LOGGER.warning("show command aborted: %s", exc)
+        typer.echo(f"Could not load configuration: {exc}")
         return
 
     with connect(config.db_path) as client:
@@ -252,6 +258,9 @@ def history(
     limit: int = typer.Option(20, min=1, help="Maximum rows to print."),
 ) -> None:
     """Show historical snapshots."""
+    if limit < 1:
+        typer.echo("--limit must be at least 1.")
+        raise typer.Exit(code=1)
     selected = _selected_platforms(platform or [], all_platforms)
     _warn_threads_token_expiry_if_needed(selected)
     selected_set = set(selected)
@@ -259,9 +268,9 @@ def history(
 
     try:
         config = load_config()
-    except ConfigError:
-        LOGGER.warning("history command aborted: config unavailable")
-        typer.echo("No history yet. Run `sm-tracker track` first.")
+    except ConfigError as exc:
+        LOGGER.warning("history command aborted: %s", exc)
+        typer.echo(f"Could not load configuration: {exc}")
         return
 
     with connect(config.db_path) as client:
@@ -333,9 +342,10 @@ def auth_command(
 ) -> None:
     """Run platform OAuth flow and save credentials to .env."""
     selected_platform = platform.strip().lower()
-    if selected_platform != "threads":
+    if selected_platform not in _AUTH_SUPPORTED_PLATFORMS:
+        supported = ", ".join(sorted(_AUTH_SUPPORTED_PLATFORMS))
         typer.echo(f"Unsupported auth platform: {platform}")
-        typer.echo("Currently supported: threads")
+        typer.echo(f"Currently supported: {supported}")
         raise typer.Exit(code=1)
 
     load_dotenv()
@@ -388,7 +398,7 @@ def auth_command(
             short_lived_token=short_token.access_token,
         )
         expires_at_utc = datetime.now(UTC) + timedelta(seconds=int(long_token.expires_in))
-        expires_at_iso = expires_at_utc.replace(microsecond=0).isoformat().replace("+00:00", "Z")
+        expires_at_iso = expires_at_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
         typer.echo(f"Expires at (UTC): {expires_at_iso}")
 
         env_path = Path(".env")
@@ -603,15 +613,7 @@ def _write_env_file(env_path: Path, values: Mapping[str, str]) -> None:
 def _read_env_file(env_path: Path) -> dict[str, str]:
     if not env_path.exists():
         return {}
-
-    values: dict[str, str] = {}
-    for raw_line in env_path.read_text(encoding="utf-8").splitlines():
-        line = raw_line.strip()
-        if not line or line.startswith("#") or "=" not in line:
-            continue
-        key, value = line.split("=", maxsplit=1)
-        values[key.strip()] = value.strip()
-    return values
+    return {k: v for k, v in dotenv_values(env_path).items() if v is not None}
 
 
 def _validate_required_env_values(env_values: Mapping[str, str]) -> list[str]:

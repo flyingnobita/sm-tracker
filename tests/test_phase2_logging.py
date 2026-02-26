@@ -5,6 +5,7 @@ from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
 
 import pytest
+from pytest import MonkeyPatch
 from typer.testing import CliRunner
 
 from sm_tracker.cli import app
@@ -56,7 +57,11 @@ def test_setup_logging_uses_timed_rotation_settings(tmp_path: Path) -> None:
     assert len(console_handlers) == 1
 
 
-def test_cli_bootstrap_creates_configured_log_file() -> None:
+def test_cli_bootstrap_creates_configured_log_file(monkeypatch: MonkeyPatch) -> None:
+    monkeypatch.setattr(
+        "sm_tracker.cli.resolve_adapters",
+        lambda _platforms: ([], ["Skipping twitter: missing TWITTER_BEARER_TOKEN in environment."]),
+    )
     runner = CliRunner()
     with runner.isolated_filesystem():
         Path("config.toml").write_text(
@@ -73,13 +78,12 @@ def test_cli_bootstrap_creates_configured_log_file() -> None:
             ),
             encoding="utf-8",
         )
-        result = runner.invoke(app, ["track", "-p", "unsupported"])
+        result = runner.invoke(app, ["track", "-p", "twitter"])
         log_path = Path("logs-dev", LOG_FILENAME)
         assert log_path.exists()
         contents = log_path.read_text(encoding="utf-8")
         assert "CLI logging initialized" in contents
         assert "track command started" in contents
-        assert "Skipping unsupported platform: unsupported" in contents
         assert "track command finished with no adapters" in contents
 
     assert result.exit_code == 0
