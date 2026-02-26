@@ -119,7 +119,7 @@ level = "INFO"
     assert "bluesky" in show_result.stdout
     assert "Followers: 108 (+8)" in show_result.stdout
     assert "Following: 30 (+5)" in show_result.stdout
-    assert "Date | Platform | Followers | Following" in history_result.stdout
+    assert "Date | Platform | Followers | Following | Delta" in history_result.stdout
     assert "bluesky" in history_result.stdout
 
 

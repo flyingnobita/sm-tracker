@@ -124,7 +124,7 @@ level = "INFO"
     assert "farcaster" in show_result.stdout
     assert "Followers: 49 (+4)" in show_result.stdout
     assert "Following: 21 (+1)" in show_result.stdout
-    assert "Date | Platform | Followers | Following" in history_result.stdout
+    assert "Date | Platform | Followers | Following | Delta" in history_result.stdout
     assert "farcaster" in history_result.stdout
 
 

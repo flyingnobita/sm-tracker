@@ -114,7 +114,7 @@ level = "INFO"
     assert "twitter" in show_result.stdout
     assert "Followers: 209 (+9)" in show_result.stdout
     assert "Following: 53 (+3)" in show_result.stdout
-    assert "Date | Platform | Followers | Following" in history_result.stdout
+    assert "Date | Platform | Followers | Following | Delta" in history_result.stdout
     assert "twitter" in history_result.stdout
 
 

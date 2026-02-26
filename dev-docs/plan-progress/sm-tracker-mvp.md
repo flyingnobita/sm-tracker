@@ -50,10 +50,10 @@ Plan: [20250225-PLANS-sm-tracker-mvp.md](../20250225-PLANS-sm-tracker-mvp.md)
 
 ## Phase 7: Output Formatting & Edge Cases
 
-- [ ] Delta display rules (N/A, +n, -n, 0)
-- [ ] History plain-text table
-- [ ] Error handling: skip + warn, partial snapshots
-- [ ] Tests: formatting, error/skip scenarios
+- [x] Delta display rules (N/A, +n, -n, 0)
+- [x] History plain-text table
+- [x] Error handling: skip + warn, partial snapshots
+- [x] Tests: formatting, error/skip scenarios
 
 ## Phase 8: Config Command
 

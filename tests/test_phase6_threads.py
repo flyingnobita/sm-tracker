@@ -158,7 +158,7 @@ level = "INFO"
     assert "threads" in show_result.stdout
     assert "Followers: 507 (+7)" in show_result.stdout
     assert "Following: 96 (-4)" in show_result.stdout
-    assert "Date | Platform | Followers | Following" in history_result.stdout
+    assert "Date | Platform | Followers | Following | Delta" in history_result.stdout
     assert "threads" in history_result.stdout
 
 

@@ -113,7 +113,7 @@ level = "INFO"
     assert "mastodon" in show_result.stdout
     assert "Followers: 102 (+3)" in show_result.stdout
     assert "Following: 28 (-2)" in show_result.stdout
-    assert "Date | Platform | Followers | Following" in history_result.stdout
+    assert "Date | Platform | Followers | Following | Delta" in history_result.stdout
     assert "mastodon" in history_result.stdout
 
 

@@ -96,7 +96,7 @@ def track(
         typer.echo(f"Could not load config: {exc}")
         return
 
-    tracked_platforms = [adapter.name for adapter in adapters]
+    successful_platforms: list[str] = []
     successful = 0
     with connect(config.db_path) as client:
         init_schema(client)
@@ -117,6 +117,7 @@ def track(
                 following_count=counts.following_count,
             )
             successful += 1
+            successful_platforms.append(counts.platform)
             LOGGER.info(
                 "captured counts platform=%s followers=%s following=%s",
                 counts.platform,
@@ -129,8 +130,8 @@ def track(
         typer.echo("No platform data captured.")
         return
 
-    LOGGER.info("track command finished tracked_platforms=%s", tracked_platforms)
-    typer.echo(f"Tracking snapshot for: {', '.join(tracked_platforms)}")
+    LOGGER.info("track command finished tracked_platforms=%s", successful_platforms)
+    typer.echo(f"Tracking snapshot for: {', '.join(successful_platforms)}")
 
 
 @app.command()
@@ -219,11 +220,12 @@ def history(
         typer.echo("No history yet. Run `sm-tracker track` first.")
         return
 
-    typer.echo("Date | Platform | Followers | Following")
-    for row in rows:
+    deltas = _history_follower_deltas(rows)
+    typer.echo("Date | Platform | Followers | Following | Delta")
+    for row, delta in zip(rows, deltas, strict=False):
         followers = "N/A" if row.follower_count is None else str(row.follower_count)
         following = "N/A" if row.following_count is None else str(row.following_count)
-        typer.echo(f"{row.timestamp} | {row.platform} | {followers} | {following}")
+        typer.echo(f"{row.timestamp} | {row.platform} | {followers} | {following} | {delta}")
     LOGGER.info("history command finished rows_rendered=%s", len(rows))
 
 
@@ -351,6 +353,22 @@ def _previous_rows_by_platform(
             continue
         previous.setdefault(row.platform, row)
     return previous
+
+
+def _history_follower_deltas(rows: list[CountRow]) -> list[str]:
+    deltas: list[str] = ["N/A"] * len(rows)
+    indexes_by_platform: dict[str, list[int]] = {}
+
+    for idx, row in enumerate(rows):
+        indexes_by_platform.setdefault(row.platform, []).append(idx)
+
+    for platform_indexes in indexes_by_platform.values():
+        for pos, current_index in enumerate(platform_indexes):
+            older_index = platform_indexes[pos + 1] if pos + 1 < len(platform_indexes) else None
+            previous = rows[older_index].follower_count if older_index is not None else None
+            deltas[current_index] = _format_delta(rows[current_index].follower_count, previous)
+
+    return deltas
 
 
 def _upsert_env_var(env_path: Path, key: str, value: str) -> None:
