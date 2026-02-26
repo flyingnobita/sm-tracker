@@ -113,12 +113,10 @@ def track(
 ) -> None:
     """Fetch counts and persist a snapshot."""
     selected = _selected_platforms(platform or [], all_platforms)
+    if not selected:
+        selected = list(SUPPORTED_PLATFORM_NAMES)
     _warn_threads_token_expiry_if_needed(selected)
     LOGGER.info("track command started selected_platforms=%s", selected)
-    if not selected:
-        LOGGER.warning("track command aborted: no platforms selected")
-        typer.echo("Add at least one platform via `sm-tracker config` or .env (credentials)")
-        return
 
     adapters, warnings = resolve_adapters(selected)
     for warning in warnings:

@@ -57,13 +57,14 @@ def test_scope_flags_are_mutually_exclusive() -> None:
     assert "Use either --platform or --all, not both." in history_result.output
 
 
-def test_track_empty_state_message() -> None:
+def test_track_defaults_to_all_scope() -> None:
     runner = CliRunner()
-    result = runner.invoke(app, ["track"])
+    result = runner.invoke(app, ["track"], env={})
 
     assert result.exit_code == 0
     assert (
-        "Add at least one platform via `sm-tracker config` or .env (credentials)" in result.stdout
+        "Tracking snapshot for: bluesky, farcaster, mastodon, threads, twitter"
+        in result.stdout
     )
 
 
