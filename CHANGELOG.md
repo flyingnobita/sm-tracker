@@ -1,5 +1,6 @@
 # Changelog
 
+- Feb-26, 2026 - 08:50 PM +08 - Disabled automatic GitHub Actions CI triggers by changing `CI` workflow to `workflow_dispatch` only (manual run).
 - Feb-26, 2026 - 08:32 PM +08 - Updated quality workflow to keep CI non-mutating: added `lint-check` task (`ruff check` + `ruff format --check`), switched CI lint job to use it, and kept local autofix behavior in `lint`.
 - Feb-26, 2026 - 05:45 PM +08 - Applied code review fixes (low severity): consolidated five near-identical adapter extraction helpers into a shared `platforms/utils.py` (`extract_int`, `coerce_int`); restricted local DB file permissions to `0o600` on connect; removed unused `tmp_path` fixtures from two end-to-end tests.
 - Feb-26, 2026 - 04:30 PM +08 - Applied code review fixes (medium severity): added early platform validation with `BadParameter`, surfaced actual `ConfigError` message in `show`/`history`, replaced custom `.env` parser with `dotenv_values()`, added explicit `--limit` guard, hardened token expiry formatting with `strftime`, and introduced `_AUTH_SUPPORTED_PLATFORMS` constant.
