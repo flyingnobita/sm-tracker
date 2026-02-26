@@ -22,6 +22,19 @@ sm-tracker show -p twitter -p bluesky
 - Python 3.12+
 - Platform API credentials (`.env`); app config (paths, retention) in `config.toml`
 
+## Farcaster Credential Setup
+
+1. Go to the Warpcast developer portal: `https://warpcast.com/developer`
+2. Log in with your Farcaster account.
+3. Create a new API application.
+4. Copy the API key.
+5. Save credentials in `.env`:
+
+```env
+FARCASTER_API_KEY=your_api_key_here
+FARCASTER_USERNAME=your_farcaster_username
+```
+
 ## License
 
 MIT
