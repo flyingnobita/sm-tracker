@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import os
+import tomllib
 from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -14,7 +15,15 @@ from dotenv import load_dotenv
 from threads import ThreadsClient
 from threads.constants import Scope
 
-from sm_tracker.config import ConfigError, load_config
+from sm_tracker.config import (
+    DEFAULT_DB_PATH,
+    DEFAULT_LOG_LEVEL,
+    DEFAULT_LOG_RETENTION_DAYS,
+    DEFAULT_LOGS_PATH,
+    SUPPORTED_LOG_LEVELS,
+    ConfigError,
+    load_config,
+)
 from sm_tracker.db import fetch_history, fetch_latest, init_schema, insert_count, insert_snapshot
 from sm_tracker.db.connection import connect
 from sm_tracker.db.queries import CountRow
@@ -26,6 +35,23 @@ app = typer.Typer(
     no_args_is_help=True,
 )
 LOGGER = logging.getLogger("sm_tracker.cli")
+
+ENV_FIELD_SPECS: list[tuple[str, str, bool]] = [
+    ("TWITTER_BEARER_TOKEN", "Twitter bearer token", True),
+    ("TWITTER_HANDLE", "Twitter handle to track", True),
+    ("BLUESKY_HANDLE", "Bluesky handle to track", True),
+    ("BLUESKY_APP_PASSWORD", "Bluesky app password (optional)", False),
+    ("FARCASTER_API_KEY", "Farcaster API key", True),
+    ("FARCASTER_USERNAME", "Farcaster username to track", True),
+    ("MASTODON_ACCESS_TOKEN", "Mastodon access token", True),
+    ("MASTODON_INSTANCE", "Mastodon instance (for example mastodon.social)", True),
+    ("THREADS_APP_ID", "Threads app ID (optional, needed for auth command)", False),
+    ("THREADS_APP_SECRET", "Threads app secret (optional, needed for auth command)", False),
+    ("THREADS_REDIRECT_URI", "Threads redirect URI", False),
+    ("THREADS_ACCESS_TOKEN", "Threads access token", True),
+    ("THREADS_USER_ID", "Threads user ID", True),
+    ("THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC", "Threads token expiry UTC (ISO, optional)", False),
+]
 
 
 @app.callback()
@@ -232,7 +258,38 @@ def history(
 @app.command(name="config")
 def config_command() -> None:
     """Guide credential and config setup."""
-    typer.echo("Configuration wizard is not implemented yet.")
+    env_path = Path(".env")
+    config_path = Path("config.toml")
+
+    typer.echo("Guided setup for .env and config.toml")
+    pre_warnings = _collect_config_warnings(env_path=env_path, config_path=config_path)
+    if pre_warnings:
+        typer.echo("Found existing configuration warnings:")
+        for warning in pre_warnings:
+            typer.echo(f"- {warning}")
+
+    env_values = _run_env_wizard(env_path)
+    _write_env_file(env_path, env_values)
+    typer.echo(f"Updated {env_path}")
+
+    profile, db_path, logs_path, retention_days, log_level = _run_config_wizard(config_path)
+    _write_config_file(
+        config_path=config_path,
+        active_profile=profile,
+        active_db_path=db_path,
+        active_logs_path=logs_path,
+        active_retention_days=retention_days,
+        active_log_level=log_level,
+    )
+    typer.echo(f"Updated {config_path}")
+
+    post_warnings = _collect_config_warnings(env_path=env_path, config_path=config_path)
+    if post_warnings:
+        typer.echo("Validation warnings:")
+        for warning in post_warnings:
+            typer.echo(f"- {warning}")
+    else:
+        typer.echo("Validation passed. Configuration looks good.")
 
 
 @app.command(name="auth")
@@ -382,6 +439,211 @@ def _upsert_env_var(env_path: Path, key: str, value: str) -> None:
     if not updated:
         lines.append(f"{key}={value}")
     env_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _collect_config_warnings(env_path: Path, config_path: Path) -> list[str]:
+    warnings: list[str] = []
+    env_values = _read_env_file(env_path)
+    if not env_path.exists():
+        warnings.append(".env is missing and will be created.")
+    warnings.extend(_validate_required_env_values(env_values))
+
+    if not config_path.exists():
+        warnings.append("config.toml is missing and will be created.")
+    else:
+        try:
+            load_config(config_path=config_path, env_path=env_path)
+        except ConfigError as exc:
+            warnings.append(f"config.toml error: {exc}")
+
+    return warnings
+
+
+def _run_env_wizard(env_path: Path) -> dict[str, str]:
+    existing = _read_env_file(env_path)
+    typer.echo("Configure .env values (press Enter to keep current value).")
+    updated: dict[str, str] = dict(existing)
+
+    for key, prompt, required in ENV_FIELD_SPECS:
+        current = existing.get(key, "")
+        default_value = current
+        if key == "THREADS_REDIRECT_URI" and not default_value:
+            default_value = "https://localhost/callback"
+        value = typer.prompt(
+            prompt,
+            default=default_value,
+            show_default=bool(default_value),
+        ).strip()
+        if value:
+            updated[key] = value
+            continue
+        if required:
+            updated.pop(key, None)
+            continue
+        updated.pop(key, None)
+
+    return updated
+
+
+def _run_config_wizard(config_path: Path) -> tuple[str, str, str, int, str]:
+    existing_profile, existing_db, existing_logs, existing_retention, existing_level = (
+        _read_existing_profile_settings(config_path)
+    )
+    typer.echo("Configure config.toml values.")
+
+    profile = typer.prompt(
+        "Active profile (dev/production)",
+        default=existing_profile,
+        show_default=True,
+    ).strip() or "dev"
+    if profile not in {"dev", "production"}:
+        typer.echo("Unsupported profile value. Falling back to dev.")
+        profile = "dev"
+
+    default_db = existing_db or (DEFAULT_DB_PATH if profile == "production" else "./data-dev.db")
+    default_logs = existing_logs or (DEFAULT_LOGS_PATH if profile == "production" else "./logs-dev")
+    default_retention = existing_retention if existing_retention > 0 else (
+        DEFAULT_LOG_RETENTION_DAYS if profile == "production" else 7
+    )
+    default_level = existing_level or (DEFAULT_LOG_LEVEL if profile == "production" else "DEBUG")
+
+    db_path = typer.prompt("Database path", default=default_db, show_default=True).strip()
+    logs_path = typer.prompt("Log directory path", default=default_logs, show_default=True).strip()
+    retention_days = typer.prompt(
+        "Log retention days",
+        default=str(default_retention),
+        show_default=True,
+    ).strip()
+    level = typer.prompt(
+        "Log level",
+        default=default_level,
+        show_default=True,
+    ).strip()
+
+    retention_int = (
+        int(retention_days) if retention_days.isdigit() and int(retention_days) > 0 else 14
+    )
+    normalized_level = level.upper() if level else DEFAULT_LOG_LEVEL
+    if normalized_level not in SUPPORTED_LOG_LEVELS:
+        normalized_level = DEFAULT_LOG_LEVEL
+
+    return profile, db_path, logs_path, retention_int, normalized_level
+
+
+def _read_existing_profile_settings(config_path: Path) -> tuple[str, str, str, int, str]:
+    if not config_path.exists():
+        return "dev", "", "", 0, ""
+
+    try:
+        parsed = tomllib.loads(config_path.read_text(encoding="utf-8"))
+    except tomllib.TOMLDecodeError:
+        return "dev", "", "", 0, ""
+
+    profile_raw = parsed.get("profile")
+    profile = profile_raw if isinstance(profile_raw, str) and profile_raw.strip() else "dev"
+
+    paths = parsed.get("paths", {})
+    logging_table = parsed.get("logging", {})
+    profile_paths = paths.get(profile, {}) if isinstance(paths, Mapping) else {}
+    profile_logging = logging_table.get(profile, {}) if isinstance(logging_table, Mapping) else {}
+
+    db = profile_paths.get("db", "") if isinstance(profile_paths, Mapping) else ""
+    logs = profile_paths.get("logs", "") if isinstance(profile_paths, Mapping) else ""
+    retention = (
+        profile_logging.get("retention_days", 0) if isinstance(profile_logging, Mapping) else 0
+    )
+    level = profile_logging.get("level", "") if isinstance(profile_logging, Mapping) else ""
+    resolved_db = db if isinstance(db, str) else ""
+    resolved_logs = logs if isinstance(logs, str) else ""
+    resolved_retention = retention if isinstance(retention, int) else 0
+    resolved_level = level if isinstance(level, str) else ""
+
+    return profile, resolved_db, resolved_logs, resolved_retention, resolved_level
+
+
+def _write_env_file(env_path: Path, values: Mapping[str, str]) -> None:
+    filtered_items = [(key, value) for key, value in values.items() if value.strip()]
+    lines = [f"{key}={value}" for key, value in filtered_items]
+    env_path.write_text("\n".join(lines) + ("\n" if lines else ""), encoding="utf-8")
+
+
+def _read_env_file(env_path: Path) -> dict[str, str]:
+    if not env_path.exists():
+        return {}
+
+    values: dict[str, str] = {}
+    for raw_line in env_path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", maxsplit=1)
+        values[key.strip()] = value.strip()
+    return values
+
+
+def _validate_required_env_values(env_values: Mapping[str, str]) -> list[str]:
+    missing_by_platform: dict[str, list[str]] = {
+        "twitter": ["TWITTER_BEARER_TOKEN", "TWITTER_HANDLE"],
+        "bluesky": ["BLUESKY_HANDLE"],
+        "farcaster": ["FARCASTER_API_KEY", "FARCASTER_USERNAME"],
+        "mastodon": ["MASTODON_ACCESS_TOKEN", "MASTODON_INSTANCE"],
+        "threads": ["THREADS_ACCESS_TOKEN", "THREADS_USER_ID"],
+    }
+    warnings: list[str] = []
+    for platform, keys in missing_by_platform.items():
+        missing = [key for key in keys if not env_values.get(key, "").strip()]
+        if missing:
+            warnings.append(f"{platform}: missing {', '.join(missing)}")
+    return warnings
+
+
+def _write_config_file(
+    *,
+    config_path: Path,
+    active_profile: str,
+    active_db_path: str,
+    active_logs_path: str,
+    active_retention_days: int,
+    active_log_level: str,
+) -> None:
+    defaults_by_profile: dict[str, tuple[str, str, int, str]] = {
+        "dev": ("./data-dev.db", "./logs-dev", 7, "DEBUG"),
+        "production": (DEFAULT_DB_PATH, DEFAULT_LOGS_PATH, 14, "INFO"),
+    }
+
+    dev_db, dev_logs, dev_retention, dev_level = defaults_by_profile["dev"]
+    prod_db, prod_logs, prod_retention, prod_level = defaults_by_profile["production"]
+    if active_profile == "dev":
+        dev_db = active_db_path
+        dev_logs = active_logs_path
+        dev_retention = active_retention_days
+        dev_level = active_log_level
+    else:
+        prod_db = active_db_path
+        prod_logs = active_logs_path
+        prod_retention = active_retention_days
+        prod_level = active_log_level
+
+    config_body = (
+        f'profile = "{active_profile}"\n'
+        "\n"
+        "[paths.dev]\n"
+        f'db = "{dev_db}"\n'
+        f'logs = "{dev_logs}"\n'
+        "\n"
+        "[paths.production]\n"
+        f'db = "{prod_db}"\n'
+        f'logs = "{prod_logs}"\n'
+        "\n"
+        "[logging.dev]\n"
+        f"retention_days = {dev_retention}\n"
+        f'level = "{dev_level}"\n'
+        "\n"
+        "[logging.production]\n"
+        f"retention_days = {prod_retention}\n"
+        f'level = "{prod_level}"\n'
+    )
+    config_path.write_text(config_body, encoding="utf-8")
 
 
 def _extract_threads_code_from_callback_url(callback_url: str) -> str:

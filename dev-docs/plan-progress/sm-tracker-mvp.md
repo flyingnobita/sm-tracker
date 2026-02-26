@@ -57,10 +57,10 @@ Plan: [20250225-PLANS-sm-tracker-mvp.md](../20250225-PLANS-sm-tracker-mvp.md)
 
 ## Phase 8: Config Command
 
-- [ ] Guided `.env` setup
-- [ ] Guided `config.toml` setup
-- [ ] Validation and warnings
-- [ ] Tests: creation, validation, guided flow
+- [x] Guided `.env` setup
+- [x] Guided `config.toml` setup
+- [x] Validation and warnings
+- [x] Tests: creation, validation, guided flow
 
 ## Phase 9: CI & Quality
 
