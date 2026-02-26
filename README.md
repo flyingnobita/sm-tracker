@@ -128,9 +128,9 @@ uv run sm-tracker auth -p threads
 
 ## Commands
 
-- `track`: fetch counts from configured platforms and save a snapshot
-- `show`: print latest snapshot with deltas from previous snapshot
-- `history`: print history table (`Date | Platform | Followers | Following | Delta`)
+- `track`: fetch counts from configured platforms and save a snapshot (`--json` / `--csv` for structured output)
+- `show`: print latest snapshot with deltas from previous snapshot (`--json` / `--csv` supported)
+- `history`: print history table (`Date | Platform | Followers | Following | Delta`) or structured output with `--json` / `--csv`
 - `config`: guided setup and validation for `.env` and `config.toml`
 - `auth`: run OAuth for supported platforms (currently `threads`)
 - `help`: print CLI usage
@@ -157,7 +157,7 @@ Date | Platform | Followers | Following | Delta
 
 ## Notes
 
-- Output is plain text only.
+- Default output is plain text. Use `--json` or `--csv` on `track`, `show`, and `history` for structured output.
 - Missing credentials for one platform do not stop other platforms from running.
 - `show` and `history` print empty-state guidance if there is no stored data yet.
 

@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import csv
+import json
 import logging
 import os
 import tomllib
 from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime, timedelta
+from io import StringIO
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
@@ -115,13 +118,38 @@ def _selected_platforms(platform: Sequence[str], all_platforms: bool) -> list[st
     return selected
 
 
+OUTPUT_JSON_OPTION = typer.Option(
+    False,
+    "--json",
+    help="Output results as JSON.",
+)
+OUTPUT_CSV_OPTION = typer.Option(
+    False,
+    "--csv",
+    help="Output results as CSV.",
+)
+
+
+def _resolve_output_mode(as_json: bool, as_csv: bool) -> str:
+    if as_json and as_csv:
+        raise typer.BadParameter("Use either --json or --csv, not both.")
+    if as_json:
+        return "json"
+    if as_csv:
+        return "csv"
+    return "text"
+
+
 @app.command()
 def track(
     platform: list[str] | None = PLATFORM_OPTION,
     all_platforms: bool = ALL_OPTION,
+    as_json: bool = OUTPUT_JSON_OPTION,
+    as_csv: bool = OUTPUT_CSV_OPTION,
 ) -> None:
     """Fetch counts and persist a snapshot."""
     selected = _selected_platforms(platform or [], all_platforms)
+    output_mode = _resolve_output_mode(as_json, as_csv)
     if not selected:
         selected = list(SUPPORTED_PLATFORM_NAMES)
     _warn_threads_token_expiry_if_needed(selected)
@@ -145,7 +173,9 @@ def track(
         return
 
     successful_platforms: list[str] = []
+    successful_counts: list[CountRow] = []
     successful = 0
+    snapshot_id: int | None = None
     with connect(config.db_path) as client:
         try:
             init_schema(client)
@@ -180,6 +210,15 @@ def track(
 
             successful += 1
             successful_platforms.append(counts.platform)
+            successful_counts.append(
+                CountRow(
+                    snapshot_id=snapshot_id,
+                    timestamp="",
+                    platform=counts.platform,
+                    follower_count=counts.follower_count,
+                    following_count=counts.following_count,
+                )
+            )
             LOGGER.info(
                 "captured counts platform=%s followers=%s following=%s",
                 counts.platform,
@@ -187,9 +226,23 @@ def track(
                 counts.following_count,
             )
 
+        if successful > 0 and output_mode != "text":
+            latest_rows = fetch_latest(client)
+            successful_platform_set = set(successful_platforms)
+            successful_counts = [
+                row for row in latest_rows if row.platform in successful_platform_set
+            ]
+
     if successful == 0:
         LOGGER.warning("track command completed with zero successful adapter fetches")
         typer.echo("No platform data captured.")
+        return
+
+    if output_mode == "json":
+        typer.echo(_format_rows_json(_show_rows_with_deltas(successful_counts, {})))
+        return
+    if output_mode == "csv":
+        typer.echo(_format_rows_csv(_show_rows_with_deltas(successful_counts, {})).rstrip("\n"))
         return
 
     LOGGER.info("track command finished tracked_platforms=%s", successful_platforms)
@@ -200,9 +253,12 @@ def track(
 def show(
     platform: list[str] | None = PLATFORM_OPTION,
     all_platforms: bool = ALL_OPTION,
+    as_json: bool = OUTPUT_JSON_OPTION,
+    as_csv: bool = OUTPUT_CSV_OPTION,
 ) -> None:
     """Show latest snapshot with deltas."""
     selected = _selected_platforms(platform or [], all_platforms)
+    output_mode = _resolve_output_mode(as_json, as_csv)
     _warn_threads_token_expiry_if_needed(selected)
     selected_set = set(selected)
     LOGGER.info("show command started selected_platforms=%s", selected)
@@ -235,6 +291,16 @@ def show(
         history,
         latest_snapshot_id=latest[0].snapshot_id,
     )
+    if output_mode == "json":
+        typer.echo(_format_rows_json(_show_rows_with_deltas(latest, previous_by_platform)))
+        LOGGER.info("show command finished rows_rendered=%s", len(latest))
+        return
+    if output_mode == "csv":
+        show_rows = _show_rows_with_deltas(latest, previous_by_platform)
+        typer.echo(_format_rows_csv(show_rows).rstrip("\n"))
+        LOGGER.info("show command finished rows_rendered=%s", len(latest))
+        return
+
     for row in latest:
         previous = previous_by_platform.get(row.platform)
         follower_delta = _format_delta(
@@ -258,12 +324,15 @@ def history(
     platform: list[str] | None = PLATFORM_OPTION,
     all_platforms: bool = ALL_OPTION,
     limit: int = typer.Option(20, min=1, help="Maximum rows to print."),
+    as_json: bool = OUTPUT_JSON_OPTION,
+    as_csv: bool = OUTPUT_CSV_OPTION,
 ) -> None:
     """Show historical snapshots."""
     if limit < 1:
         typer.echo("--limit must be at least 1.")
         raise typer.Exit(code=1)
     selected = _selected_platforms(platform or [], all_platforms)
+    output_mode = _resolve_output_mode(as_json, as_csv)
     _warn_threads_token_expiry_if_needed(selected)
     selected_set = set(selected)
     LOGGER.info("history command started selected_platforms=%s limit=%s", selected, limit)
@@ -285,6 +354,16 @@ def history(
     if not rows:
         LOGGER.info("history command: no rows available after filtering")
         typer.echo("No history yet. Run `sm-tracker track` first.")
+        return
+
+    if output_mode == "json":
+        typer.echo(_format_rows_json(_history_rows_with_deltas(rows)))
+        LOGGER.info("history command finished rows_rendered=%s", len(rows))
+        return
+    if output_mode == "csv":
+        history_rows = _history_rows_with_deltas(rows)
+        typer.echo(_format_rows_csv(history_rows, history_mode=True).rstrip("\n"))
+        LOGGER.info("history command finished rows_rendered=%s", len(rows))
         return
 
     deltas = _history_follower_deltas(rows)
@@ -466,6 +545,83 @@ def _history_follower_deltas(rows: list[CountRow]) -> list[str]:
             deltas[current_index] = _format_delta(rows[current_index].follower_count, previous)
 
     return deltas
+
+
+def _history_rows_with_deltas(rows: list[CountRow]) -> list[dict[str, str | int | None]]:
+    deltas = _history_follower_deltas(rows)
+    structured: list[dict[str, str | int | None]] = []
+    for row, delta in zip(rows, deltas, strict=False):
+        structured.append(
+            {
+                "snapshot_id": row.snapshot_id,
+                "snapshot_timestamp": row.timestamp,
+                "platform": row.platform,
+                "follower_count": row.follower_count,
+                "following_count": row.following_count,
+                "follower_delta": delta,
+                "following_delta": None,
+            }
+        )
+    return structured
+
+
+def _show_rows_with_deltas(
+    latest: list[CountRow], previous_by_platform: Mapping[str, CountRow]
+) -> list[dict[str, str | int | None]]:
+    rows: list[dict[str, str | int | None]] = []
+    for row in latest:
+        previous = previous_by_platform.get(row.platform)
+        rows.append(
+            {
+                "snapshot_id": row.snapshot_id,
+                "snapshot_timestamp": row.timestamp,
+                "platform": row.platform,
+                "follower_count": row.follower_count,
+                "following_count": row.following_count,
+                "follower_delta": _format_delta(
+                    row.follower_count,
+                    previous.follower_count if previous else None,
+                ),
+                "following_delta": _format_delta(
+                    row.following_count,
+                    previous.following_count if previous else None,
+                ),
+            }
+        )
+    return rows
+
+
+def _format_rows_json(rows: list[dict[str, str | int | None]]) -> str:
+    return json.dumps(rows)
+
+
+def _format_rows_csv(rows: list[dict[str, str | int | None]], *, history_mode: bool = False) -> str:
+    output = StringIO()
+    writer = csv.writer(output)
+    writer.writerow(
+        [
+            "snapshot_id",
+            "timestamp" if history_mode else "snapshot_timestamp",
+            "platform",
+            "follower_count",
+            "following_count",
+            "follower_delta",
+            "following_delta",
+        ]
+    )
+    for row in rows:
+        writer.writerow(
+            [
+                row["snapshot_id"],
+                row["snapshot_timestamp"],
+                row["platform"],
+                row["follower_count"] if row["follower_count"] is not None else "",
+                row["following_count"] if row["following_count"] is not None else "",
+                row["follower_delta"] if row["follower_delta"] is not None else "",
+                row["following_delta"] if row["following_delta"] is not None else "",
+            ]
+        )
+    return output.getvalue()
 
 
 def _upsert_env_var(env_path: Path, key: str, value: str) -> None:

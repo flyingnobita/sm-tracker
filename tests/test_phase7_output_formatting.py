@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -9,7 +10,7 @@ from typing import Any
 from pytest import MonkeyPatch
 from typer.testing import CliRunner
 
-from sm_tracker.cli import _format_delta, app
+from sm_tracker.cli import _format_delta, _format_rows_csv, _format_rows_json, app
 from sm_tracker.platforms.bluesky import BlueskyAdapter
 from sm_tracker.platforms.twitter import TwitterAdapter
 
@@ -178,3 +179,88 @@ def test_track_warns_and_keeps_partial_snapshot_on_fetch_error(monkeypatch: Monk
     assert "Skipping twitter: fetch failed. Check logs for details." in track_result.stdout
     assert "Tracking snapshot for: bluesky" in track_result.stdout
     assert "Followers: 55 (N/A)" in show_result.stdout
+
+
+def test_show_json_output(monkeypatch: MonkeyPatch) -> None:
+    runner = CliRunner()
+    env = {
+        "TWITTER_BEARER_TOKEN": "token",
+        "TWITTER_HANDLE": "alice",
+    }
+    metrics_sequence = iter(
+        [
+            {"followers_count": 190, "following_count": 45},
+            {"followers_count": 200, "following_count": 50},
+        ]
+    )
+    monkeypatch.setattr(
+        TwitterAdapter,
+        "_build_client",
+        lambda _self: _FakeTwitterClient(next(metrics_sequence)),
+    )
+
+    with runner.isolated_filesystem():
+        _write_test_config(Path("config.toml"))
+        runner.invoke(app, ["track", "-p", "twitter"], env=env)
+        runner.invoke(app, ["track", "-p", "twitter"], env=env)
+        result = runner.invoke(app, ["show", "-p", "twitter", "--json"], env=env)
+
+    assert result.exit_code == 0
+    data = json.loads(result.stdout)
+    assert data[0]["platform"] == "twitter"
+    assert data[0]["follower_count"] == 200
+    assert data[0]["follower_delta"] == "+10"
+    assert data[0]["following_delta"] == "+5"
+
+
+def test_history_csv_output_includes_header(monkeypatch: MonkeyPatch) -> None:
+    runner = CliRunner()
+    env = {
+        "TWITTER_BEARER_TOKEN": "token",
+        "TWITTER_HANDLE": "alice",
+    }
+    monkeypatch.setattr(
+        TwitterAdapter,
+        "_build_client",
+        lambda _self: _FakeTwitterClient(
+            metrics={"followers_count": 200, "following_count": 50},
+        ),
+    )
+
+    with runner.isolated_filesystem():
+        _write_test_config(Path("config.toml"))
+        runner.invoke(app, ["track", "-p", "twitter"], env=env)
+        result = runner.invoke(app, ["history", "-p", "twitter", "--csv"], env=env)
+
+    assert result.exit_code == 0
+    assert result.stdout.startswith(
+        "snapshot_id,timestamp,platform,follower_count,following_count,follower_delta,following_delta"
+    )
+
+
+def test_json_and_csv_flags_are_mutually_exclusive() -> None:
+    runner = CliRunner()
+    result = runner.invoke(app, ["show", "--json", "--csv"])
+    assert result.exit_code != 0
+    assert "Use either --json or --csv, not both." in result.output
+
+
+def test_formatter_functions_render_null_and_empty_values() -> None:
+    rows = [
+        {
+            "snapshot_id": 42,
+            "snapshot_timestamp": "2025-02-26T08:00:00",
+            "platform": "twitter",
+            "follower_count": None,
+            "following_count": None,
+            "follower_delta": None,
+            "following_delta": None,
+        }
+    ]
+
+    json_text = _format_rows_json(rows)
+    csv_text = _format_rows_csv(rows)
+
+    assert '"follower_count": null' in json_text
+    assert '"following_delta": null' in json_text
+    assert "twitter,,,," in csv_text

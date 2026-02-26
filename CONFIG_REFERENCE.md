@@ -107,3 +107,12 @@ Run guided validation again after editing:
 ```bash
 sm-tracker config
 ```
+
+## Output format flags
+
+The `track`, `show`, and `history` commands support machine-readable output:
+
+- `--json`: emit JSON arrays (uses `null` for missing values)
+- `--csv`: emit CSV rows with a header (uses empty strings for missing values)
+
+`--json` and `--csv` are mutually exclusive.
