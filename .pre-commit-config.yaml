@@ -1,6 +1,24 @@
 repos:
   - repo: local
     hooks:
+      - id: docs-fix-restage
+        name: docs fix and restage
+        entry: ./scripts/precommit-docs-fix.sh
+        language: system
+        files: (^\.prettierrc$)|(\.(md|yaml|yml|json)$)
+        stages: [pre-commit]
+      - id: prettier-check
+        name: prettier check
+        entry: mise run prettier-check
+        language: system
+        pass_filenames: false
+        stages: [pre-commit, pre-push]
+      - id: markdownlint-check
+        name: markdownlint check
+        entry: mise run markdownlint-check
+        language: system
+        pass_filenames: false
+        stages: [pre-commit, pre-push]
       - id: ruff-check
         name: ruff check
         entry: uv run ruff check --fix .
@@ -14,15 +32,5 @@ repos:
       - id: mypy
         name: mypy
         entry: uv run mypy src/
-        language: system
-        pass_filenames: false
-      - id: prettier
-        name: prettier
-        entry: npx prettier --check "**/*.{md,yaml,yml,json}" ".prettierrc"
-        language: system
-        pass_filenames: false
-      - id: markdownlint-cli2
-        name: markdownlint-cli2
-        entry: npx markdownlint-cli2 "**/*.md"
         language: system
         pass_filenames: false

@@ -2,7 +2,7 @@
 # Python deps and tasks use uv
 
 [hooks]
-postinstall = "uv run pre-commit install"
+postinstall = "uv run pre-commit install && uv run pre-commit install --hook-type pre-push"
 
 [env]
 _.python.venv = { path = ".venv", create = true }
@@ -17,6 +17,8 @@ node = "lts"
 test = "uv run pytest"
 # Run during development to auto-fix Ruff issues, then enforce CI-style Ruff checks.
 lint = "uv run ruff check --fix . && uv run ruff format . && uv run ruff check . && uv run ruff format --check ."
+# Run in CI/push gates to enforce Ruff without mutating files.
+lint-check = "uv run ruff check . && uv run ruff format --check ."
 # Run after Python changes to confirm static typing stays green.
 typecheck = "uv run mypy src/"
 # Run when editing docs/config files to auto-format with Prettier.
@@ -35,4 +37,4 @@ format-check = "mise run prettier-check && mise run markdownlint-check"
 # Run if pre-commit hooks are configured and you want hook parity locally.
 precommit = "uv run pre-commit run --all-files"
 # Run as the one-shot local CI gate (lint + types + docs format + tests).
-check = "mise run lint && mise run typecheck && mise run format-check && mise run test"
+check = "mise run lint-check && mise run typecheck && mise run format-check && mise run test"
