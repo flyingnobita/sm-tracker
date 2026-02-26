@@ -104,6 +104,32 @@ def test_history_all_empty_state_message() -> None:
     assert "No history yet. Run `sm-tracker track` first." in result.stdout
 
 
+def test_command_help_describes_default_all_scope() -> None:
+    runner = CliRunner()
+
+    track_help = runner.invoke(app, ["track", "--help"])
+    show_help = runner.invoke(app, ["show", "--help"])
+    history_help = runner.invoke(app, ["history", "--help"])
+
+    assert track_help.exit_code == 0
+    assert show_help.exit_code == 0
+    assert history_help.exit_code == 0
+    assert "If" in track_help.stdout
+    assert "omitted" in track_help.stdout
+    assert "all platforms" in track_help.stdout
+    assert "(same as --all)." in track_help.stdout
+
+    assert "If" in show_help.stdout
+    assert "omitted" in show_help.stdout
+    assert "all platforms" in show_help.stdout
+    assert "(same as --all)." in show_help.stdout
+
+    assert "If" in history_help.stdout
+    assert "omitted" in history_help.stdout
+    assert "all platforms" in history_help.stdout
+    assert "(same as --all)." in history_help.stdout
+
+
 def test_help_command_outputs_usage() -> None:
     runner = CliRunner()
     result = runner.invoke(app, ["help"])

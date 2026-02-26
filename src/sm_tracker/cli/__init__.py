@@ -88,12 +88,15 @@ PLATFORM_OPTION = typer.Option(
     None,
     "--platform",
     "-p",
-    help="Target platform(s). Repeat option to pass multiple values.",
+    help=(
+        "Target platform(s). Repeat option to pass multiple values. "
+        "If omitted, all platforms are targeted (same as --all)."
+    ),
 )
 ALL_OPTION = typer.Option(
     False,
     "--all",
-    help="Target all supported platforms.",
+    help="Target all supported platforms (same as omitting --platform).",
 )
 
 
