@@ -1,6 +1,9 @@
 # mise: package and tool management (this machine only)
 # Python deps and tasks use uv
 
+[hooks]
+postinstall = "uv run pre-commit install"
+
 [env]
 _.python.venv = { path = ".venv", create = true }
 

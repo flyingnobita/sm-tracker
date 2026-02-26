@@ -100,8 +100,8 @@ Minor future concern if i18n is ever needed - all output strings are inline lite
 
 ## Priority order for fixes
 
-| Priority | Issues |
-|---|---|
-| Fix before next release | #1, #2, #3, #4, #5 |
-| Fix in next sprint | #6, #7, #9, #10, #11, #12 |
-| Polish / nice-to-have | #13-#26 |
+| Priority                | Issues                    |
+| ----------------------- | ------------------------- |
+| Fix before next release | #1, #2, #3, #4, #5        |
+| Fix in next sprint      | #6, #7, #9, #10, #11, #12 |
+| Polish / nice-to-have   | #13-#26                   |
