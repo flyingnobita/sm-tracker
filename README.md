@@ -1,16 +1,19 @@
-# sm-tracker
+# Social Media Tracker (sm-tracker)
 
-`sm-tracker` is a CLI that tracks follower and following counts across Twitter/X, Bluesky, Farcaster, Mastodon, and Threads.
+![sm-tracker banner](assets/sm-tracker-banner.jpeg)
 
-It stores snapshots locally in libSQL (SQLite-compatible), prints plain-text output, and is designed for scripts, cron, and automation workflows.
+`sm-tracker` is a CLI that tracks follower and following counts across 🐦 Twitter/X, 🦋 Bluesky, 🛰️ Farcaster, 🐘 Mastodon, and 🧵 Threads.
 
-## Requirements
+`sm-tracker` stores social-metric snapshots in libSQL (local SQLite-compatible by default), prints human-readable output by default, and supports JSON/CSV for scripts, cron jobs, and AI-agent automation.
+
+## ✅ Requirements
 
 - Python 3.12+
+- `uv`
 - API credentials in `.env`
 - Runtime settings in `config.toml`
 
-## Installation
+## ⚙️ Installation
 
 ### Local development
 
@@ -26,7 +29,9 @@ uv pip install -e .
 sm-tracker help
 ```
 
-## Quickstart
+## 🚀 Quickstart
+
+After `uv pip install -e .`, run:
 
 1. Create credentials and app config via guided setup:
 
@@ -52,17 +57,17 @@ sm-tracker show -p twitter -p bluesky
 sm-tracker history -p twitter --limit 10
 ```
 
-## Onboarding Guide
+## 🧭 Onboarding Guide
 
 Use this flow for a clean checkout to first successful snapshot.
 
-### 1) Install dependencies
+### 📦 1) Install dependencies
 
 ```bash
 uv sync
 ```
 
-### 2) Run guided setup
+### 🛠️ 2) Run guided setup
 
 ```bash
 uv run sm-tracker config
@@ -73,7 +78,7 @@ The command will create or update:
 - `.env` for API credentials and account identifiers
 - `config.toml` for database path, log path, retention, and log level
 
-### 3) Platform credential checklist
+### 🔑 3) Platform credential checklist
 
 You can configure one or many platforms. Missing credentials skip only that platform.
 
@@ -111,13 +116,13 @@ Refresh Threads credentials via OAuth when needed:
 uv run sm-tracker auth -p threads
 ```
 
-### 4) File locations
+### 📁 4) File locations
 
 - Database path: from `config.toml` (`[paths.<profile>].db`)
 - Logs directory: from `config.toml` (`[paths.<profile>].logs`)
 - Log file name: `sm-tracker.log`
 
-### 5) Common troubleshooting
+### 🧪 5) Common troubleshooting
 
 - No platforms detected in `track`:
     - Run `sm-tracker config` and ensure required platform env vars are present.
@@ -126,7 +131,7 @@ uv run sm-tracker auth -p threads
 - Threads token warning:
     - Run `sm-tracker auth -p threads` to refresh and save token values.
 
-## Commands
+## 🧰 Commands
 
 - `track`: fetch counts from configured platforms and save a snapshot (`--json` / `--csv` for structured output)
 - `show`: print latest snapshot with deltas from previous snapshot (`--json` / `--csv` supported)
@@ -135,13 +140,13 @@ uv run sm-tracker auth -p threads
 - `auth`: run OAuth for supported platforms (currently `threads`)
 - `help`: print CLI usage
 
-## Configuration
+## 📝 Configuration
 
 - Credential template: [`.env.example`](.env.example)
 - App config template: [`config.toml.example`](config.toml.example)
 - Full config and env variable reference: [`CONFIG_REFERENCE.md`](CONFIG_REFERENCE.md)
 
-## Example output
+## 📊 Example output
 
 ```text
 twitter
@@ -155,12 +160,12 @@ Date | Platform | Followers | Following | Delta
 2026-02-26T10:30:00Z | twitter | 132 | 178 | +10
 ```
 
-## Notes
+## 💡 Notes
 
 - Default output is plain text. Use `--json` or `--csv` on `track`, `show`, and `history` for structured output.
 - Missing credentials for one platform do not stop other platforms from running.
 - `show` and `history` print empty-state guidance if there is no stored data yet.
 
-## License
+## 📄 License
 
 MIT
