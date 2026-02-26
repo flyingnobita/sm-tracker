@@ -64,6 +64,15 @@ def test_farcaster_adapter_fetch_counts(monkeypatch: MonkeyPatch) -> None:
     assert counts.following_count == 65
 
 
+def test_farcaster_adapter_builds_curl_like_request_headers() -> None:
+    adapter = FarcasterAdapter(username="alice", api_key="secret")
+    request = adapter._build_request()
+
+    assert request.full_url.endswith("username=alice")
+    assert request.get_header("Authorization") == "Bearer secret"
+    assert request.get_header("User-agent") == "curl/8.7.1"
+
+
 def test_track_and_show_farcaster_end_to_end(monkeypatch: MonkeyPatch, tmp_path: Path) -> None:
     _ = tmp_path
     runner = CliRunner()

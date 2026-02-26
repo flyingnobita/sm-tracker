@@ -4,15 +4,15 @@ Self-contained reference for building the social media following tracker CLI pro
 
 ## Tech Stack
 
-| Layer     | Technology       | Notes                                                                                                                      |
-| --------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| CLI       | Typer            |                                                                                                                            |
-| Storage   | libSQL           | SQLite-compatible, [tursodatabase/libsql](https://github.com/tursodatabase/libsql)                                         |
-| Twitter   | Tweepy           | [tweepy/tweepy](https://github.com/tweepy/tweepy)                                                                          |
-| Bluesky   | atproto          | [bluesky-social/atproto](https://github.com/bluesky-social/atproto)                                                        |
-| Farcaster | Direct API       | Warpcast API (`api.warpcast.com`); farcaster-py archived. If user endpoint lacks counts, paginate `followers`/`following`. |
-| Mastodon  | Mastodon.py      | [halcy/Mastodon.py](https://github.com/halcy/Mastodon.py)                                                                  |
-| Threads   | meta-threads-sdk | [MetaThreads/meta-threads-sdk](https://github.com/MetaThreads/meta-threads-sdk)                                            |
+| Layer     | Technology       | Notes                                                                              |
+| --------- | ---------------- | ---------------------------------------------------------------------------------- |
+| CLI       | Typer            |                                                                                    |
+| Storage   | libSQL           | SQLite-compatible, [tursodatabase/libsql](https://github.com/tursodatabase/libsql) |
+| Twitter   | Tweepy           | [tweepy/tweepy](https://github.com/tweepy/tweepy)                                  |
+| Bluesky   | atproto          | [bluesky-social/atproto](https://github.com/bluesky-social/atproto)                |
+| Farcaster | Direct API       | Warpcast API (`api.warpcast.com`)                                                  |
+| Mastodon  | Mastodon.py      | [halcy/Mastodon.py](https://github.com/halcy/Mastodon.py)                          |
+| Threads   | meta-threads-sdk | [MetaThreads/meta-threads-sdk](https://github.com/MetaThreads/meta-threads-sdk)    |
 
 **Python:** 3.12+ (required by meta-threads-sdk)
 

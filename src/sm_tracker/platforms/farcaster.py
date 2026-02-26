@@ -20,17 +20,20 @@ class FarcasterAdapter:
     api_key: str
     name: str = "farcaster"
 
-    def _request_user_payload(self) -> Mapping[str, Any]:
+    def _build_request(self) -> Request:
         username_encoded = quote(self.username, safe="")
         url = f"https://api.warpcast.com/v2/user-by-username?username={username_encoded}"
-        request = Request(
+        return Request(
             url,
             headers={
-                "Accept": "application/json",
-                # Keep this opt-in for endpoints requiring auth.
+                # Mirror curl-style request shape to avoid urllib-specific 403s.
                 "Authorization": f"Bearer {self.api_key}",
+                "User-Agent": "curl/8.7.1",
             },
         )
+
+    def _request_user_payload(self) -> Mapping[str, Any]:
+        request = self._build_request()
         with urlopen(request, timeout=30) as response:
             payload = json.loads(response.read().decode("utf-8"))
         if isinstance(payload, Mapping):
