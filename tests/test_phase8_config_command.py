@@ -10,55 +10,61 @@ from sm_tracker.cli import app
 
 
 def _guided_input_for_full_setup() -> str:
-    return "\n".join(
-        [
-            "twitter-token",
-            "alice",
-            "alice.bsky.social",
-            "",
-            "warpcast-key",
-            "alice-fc",
-            "mastodon-token",
-            "mastodon.social",
-            "",
-            "",
-            "https://localhost/callback",
-            "threads-token",
-            "12345",
-            "",
-            "dev",
-            "./data-dev.db",
-            "./logs-dev",
-            "7",
-            "DEBUG",
-        ]
-    ) + "\n"
+    return (
+        "\n".join(
+            [
+                "twitter-token",
+                "alice",
+                "alice.bsky.social",
+                "",
+                "warpcast-key",
+                "alice-fc",
+                "mastodon-token",
+                "mastodon.social",
+                "",
+                "",
+                "https://localhost/callback",
+                "threads-token",
+                "12345",
+                "",
+                "dev",
+                "./data-dev.db",
+                "./logs-dev",
+                "7",
+                "DEBUG",
+            ]
+        )
+        + "\n"
+    )
 
 
 def _guided_input_with_empty_required_values() -> str:
-    return "\n".join(
-        [
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-        ]
-    ) + "\n"
+    return (
+        "\n".join(
+            [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            ]
+        )
+        + "\n"
+    )
 
 
 def test_config_command_guided_flow_creates_env_and_config() -> None:

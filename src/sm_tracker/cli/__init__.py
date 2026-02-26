@@ -491,19 +491,24 @@ def _run_config_wizard(config_path: Path) -> tuple[str, str, str, int, str]:
     )
     typer.echo("Configure config.toml values.")
 
-    profile = typer.prompt(
-        "Active profile (dev/production)",
-        default=existing_profile,
-        show_default=True,
-    ).strip() or "dev"
+    profile = (
+        typer.prompt(
+            "Active profile (dev/production)",
+            default=existing_profile,
+            show_default=True,
+        ).strip()
+        or "dev"
+    )
     if profile not in {"dev", "production"}:
         typer.echo("Unsupported profile value. Falling back to dev.")
         profile = "dev"
 
     default_db = existing_db or (DEFAULT_DB_PATH if profile == "production" else "./data-dev.db")
     default_logs = existing_logs or (DEFAULT_LOGS_PATH if profile == "production" else "./logs-dev")
-    default_retention = existing_retention if existing_retention > 0 else (
-        DEFAULT_LOG_RETENTION_DAYS if profile == "production" else 7
+    default_retention = (
+        existing_retention
+        if existing_retention > 0
+        else (DEFAULT_LOG_RETENTION_DAYS if profile == "production" else 7)
     )
     default_level = existing_level or (DEFAULT_LOG_LEVEL if profile == "production" else "DEBUG")
 
