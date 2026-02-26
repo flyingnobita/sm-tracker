@@ -175,8 +175,7 @@ def test_threads_live_credentials_fetch_counts() -> None:
     assert counts.platform == "threads"
     assert counts.follower_count is not None
     assert counts.follower_count >= 0
-    assert counts.following_count is not None
-    assert counts.following_count >= 0
+    assert counts.following_count is None or counts.following_count >= 0
 
 
 def test_warn_threads_token_expired(capsys: pytest.CaptureFixture[str]) -> None:

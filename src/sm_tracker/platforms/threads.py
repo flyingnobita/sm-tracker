@@ -52,20 +52,26 @@ def create_threads_adapter(env: Mapping[str, str]) -> ThreadsAdapter:
     return ThreadsAdapter(access_token=access_token, user_id=user_id)
 
 
-def _extract_count(profile: Any, key: str) -> int:
+def _extract_count(profile: Any, key: str) -> int | None:
     value = getattr(profile, key, None)
     if value is None and isinstance(profile, Mapping):
         value = profile.get(key)
     if value is None:
-        return 0
-    return int(value)
+        return None
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return None
 
 
-def _extract_metric(user_insights: Any, key: str) -> int:
+def _extract_metric(user_insights: Any, key: str) -> int | None:
     get_metric = getattr(user_insights, "get_metric", None)
     if callable(get_metric):
         value = get_metric(key)
         if value is None:
-            return 0
-        return int(value)
-    return 0
+            return None
+        try:
+            return int(value)
+        except (ValueError, TypeError):
+            return None
+    return None

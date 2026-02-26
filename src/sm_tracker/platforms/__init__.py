@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import logging
 import os
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Protocol
+
+LOGGER = logging.getLogger(__name__)
 
 
 class AdapterConfigError(ValueError):
@@ -78,6 +81,7 @@ def resolve_adapters(
         try:
             adapters.append(factory(env_map))
         except AdapterConfigError as exc:
+            LOGGER.debug("Adapter not configured for %s: %s", name, exc)
             warnings.append(str(exc))
 
     return adapters, warnings

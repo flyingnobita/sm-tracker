@@ -23,10 +23,7 @@ class BlueskyAdapter:
         return Client()
 
     def _fetch_profile(self, client: Client) -> Any:
-        try:
-            return client.get_profile(actor=self.handle)
-        except TypeError:
-            return client.get_profile(self.handle)
+        return client.get_profile(actor=self.handle)
 
     def fetch_counts(self) -> PlatformCounts:
         client = self._build_client()
@@ -65,4 +62,7 @@ def _extract_count(profile: Any, snake_key: str, camel_key: str) -> int | None:
 
     if value is None:
         return None
-    return int(value)
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return None

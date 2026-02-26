@@ -76,4 +76,7 @@ def _extract_public_metrics(response: Any) -> Mapping[str, Any]:
 def _coerce_int(value: Any) -> int | None:
     if value is None:
         return None
-    return int(value)
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return None

@@ -23,8 +23,10 @@ def to_database_url(path: str | Path) -> str:
 def connect(path: str | Path, auth_token: str | None = None) -> Iterator[ClientSync]:
     """Yield a sync libSQL client and close it after use."""
     database_url = to_database_url(path)
-    client = create_client_sync(database_url, auth_token=auth_token)
+    client: ClientSync | None = None
     try:
+        client = create_client_sync(database_url, auth_token=auth_token)
         yield client
     finally:
-        client.close()
+        if client is not None:
+            client.close()

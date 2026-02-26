@@ -84,4 +84,7 @@ def _extract_count(data: Mapping[str, Any], snake_key: str, camel_key: str) -> i
     value = data.get(snake_key, data.get(camel_key))
     if value is None:
         return None
-    return int(value)
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return None

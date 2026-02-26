@@ -62,4 +62,7 @@ def _extract_count(account: Any, key: str) -> int | None:
         value = account.get(key)
     if value is None:
         return None
-    return int(value)
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return None

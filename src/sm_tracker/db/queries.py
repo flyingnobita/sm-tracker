@@ -103,9 +103,7 @@ def fetch_latest(client: ClientSync) -> list[CountRow]:
     ]
 
 
-def fetch_history(client: ClientSync, *, limit: int | None = None) -> list[CountRow]:
-    """Fetch historical counts across snapshots, newest first."""
-    sql = """
+_FETCH_HISTORY_SQL = """
     SELECT
         s.id AS snapshot_id,
         s.timestamp AS timestamp,
@@ -116,12 +114,16 @@ def fetch_history(client: ClientSync, *, limit: int | None = None) -> list[Count
     INNER JOIN snapshots s ON s.id = c.snapshot_id
     ORDER BY s.timestamp DESC, s.id DESC, c.platform ASC
     """
-    args: list[int] | None = None
-    if limit is not None:
-        sql += " LIMIT ?"
-        args = [limit]
 
-    result = client.execute(sql, args)
+_FETCH_HISTORY_SQL_LIMITED = _FETCH_HISTORY_SQL + " LIMIT ?"
+
+
+def fetch_history(client: ClientSync, *, limit: int | None = None) -> list[CountRow]:
+    """Fetch historical counts across snapshots, newest first."""
+    if limit is not None:
+        result = client.execute(_FETCH_HISTORY_SQL_LIMITED, [limit])
+    else:
+        result = client.execute(_FETCH_HISTORY_SQL)
     return [
         CountRow(
             snapshot_id=int(row["snapshot_id"]),
