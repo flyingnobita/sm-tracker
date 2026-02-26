@@ -1,40 +1,165 @@
 # sm-tracker
 
-CLI to track follower and following counts across Twitter/X, Bluesky, Farcaster, Mastodon, and Threads.
+`sm-tracker` is a CLI that tracks follower and following counts across Twitter/X, Bluesky, Farcaster, Mastodon, and Threads.
 
-## Commands
-
-- `track` — Fetch and save counts from configured platforms
-- `show` — Display latest snapshot with deltas
-- `history` — View past snapshots
-- `config` — Guided setup for `.env` (credentials) and `config.toml` (paths, retention)
-- `auth` — Run OAuth flow per platform, e.g. `sm-tracker auth -p threads`
-- `help` — Command usage
-
-## Example
-
-```bash
-sm-tracker track -p twitter -p bluesky
-sm-tracker show -p twitter -p bluesky
-```
+It stores snapshots locally in libSQL (SQLite-compatible), prints plain-text output, and is designed for scripts, cron, and automation workflows.
 
 ## Requirements
 
 - Python 3.12+
-- Platform API credentials (`.env`); app config (paths, retention) in `config.toml`
+- API credentials in `.env`
+- Runtime settings in `config.toml`
 
-## Farcaster Credential Setup
+## Installation
 
-1. Go to the Warpcast developer portal: `https://warpcast.com/developer`
-2. Log in with your Farcaster account.
-3. Create a new API application.
-4. Copy the API key.
-5. Save credentials in `.env`:
+### Local development
 
-```env
-FARCASTER_API_KEY=your_api_key_here
-FARCASTER_USERNAME=your_farcaster_username
+```bash
+uv sync
+uv run sm-tracker help
 ```
+
+### Install as a CLI tool
+
+```bash
+uv pip install -e .
+sm-tracker help
+```
+
+## Quickstart
+
+1. Create credentials and app config via guided setup:
+
+```bash
+sm-tracker config
+```
+
+1. Track a snapshot:
+
+```bash
+sm-tracker track -p twitter -p bluesky
+```
+
+1. Show latest values with deltas:
+
+```bash
+sm-tracker show -p twitter -p bluesky
+```
+
+1. Inspect historical data:
+
+```bash
+sm-tracker history -p twitter --limit 10
+```
+
+## Onboarding Guide
+
+Use this flow for a clean checkout to first successful snapshot.
+
+### 1) Install dependencies
+
+```bash
+uv sync
+```
+
+### 2) Run guided setup
+
+```bash
+uv run sm-tracker config
+```
+
+The command will create or update:
+
+- `.env` for API credentials and account identifiers
+- `config.toml` for database path, log path, retention, and log level
+
+### 3) Platform credential checklist
+
+You can configure one or many platforms. Missing credentials skip only that platform.
+
+#### Twitter/X
+
+- `TWITTER_BEARER_TOKEN`
+- `TWITTER_HANDLE`
+
+#### Bluesky
+
+- `BLUESKY_HANDLE`
+- Optional: `BLUESKY_APP_PASSWORD`
+
+#### Farcaster
+
+- `FARCASTER_API_KEY`
+- `FARCASTER_USERNAME`
+
+Get API credentials from `https://warpcast.com/developer`.
+
+#### Mastodon
+
+- `MASTODON_ACCESS_TOKEN`
+- `MASTODON_INSTANCE` (for example `mastodon.social`)
+
+#### Threads
+
+- `THREADS_ACCESS_TOKEN`
+- `THREADS_USER_ID`
+- Optional for OAuth flow: `THREADS_APP_ID`, `THREADS_APP_SECRET`, `THREADS_REDIRECT_URI`
+
+Refresh Threads credentials via OAuth when needed:
+
+```bash
+uv run sm-tracker auth -p threads
+```
+
+### 4) File locations
+
+- Database path: from `config.toml` (`[paths.<profile>].db`)
+- Logs directory: from `config.toml` (`[paths.<profile>].logs`)
+- Log file name: `sm-tracker.log`
+
+### 5) Common troubleshooting
+
+- No platforms detected in `track`:
+    - Run `sm-tracker config` and ensure required platform env vars are present.
+- `show` says no snapshots yet:
+    - Run `sm-tracker track` first.
+- Threads token warning:
+    - Run `sm-tracker auth -p threads` to refresh and save token values.
+
+## Commands
+
+- `track`: fetch counts from configured platforms and save a snapshot
+- `show`: print latest snapshot with deltas from previous snapshot
+- `history`: print history table (`Date | Platform | Followers | Following | Delta`)
+- `config`: guided setup and validation for `.env` and `config.toml`
+- `auth`: run OAuth for supported platforms (currently `threads`)
+- `help`: print CLI usage
+
+## Configuration
+
+- Credential template: [`.env.example`](.env.example)
+- App config template: [`config.toml.example`](config.toml.example)
+- Full config and env variable reference: [`CONFIG_REFERENCE.md`](CONFIG_REFERENCE.md)
+
+## Example output
+
+```text
+twitter
+  Followers: 132 (+10)
+  Following: 178 (0)
+```
+
+```text
+Date | Platform | Followers | Following | Delta
+2026-02-25T10:30:00Z | twitter | 122 | 178 | N/A
+2026-02-26T10:30:00Z | twitter | 132 | 178 | +10
+```
+
+## Notes
+
+- Output is plain text only.
+- Missing credentials for one platform do not stop other platforms from running.
+- `show` and `history` print empty-state guidance if there is no stored data yet.
 
 ## License
 
