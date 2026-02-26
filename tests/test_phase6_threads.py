@@ -32,7 +32,7 @@ class _FakeThreadsInsights:
         self.followers_count = followers_count
         self.calls: list[str] = []
 
-    def get_user_insights(self, user_id: str) -> "_FakeThreadsInsights":
+    def get_user_insights(self, user_id: str) -> _FakeThreadsInsights:
         self.calls.append(user_id)
         return self
 

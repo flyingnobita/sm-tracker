@@ -45,8 +45,8 @@ Plan: [20250225-PLANS-sm-tracker-mvp.md](../20250225-PLANS-sm-tracker-mvp.md)
 - [x] Twitter (Tweepy)
 - [x] Mastodon (Mastodon.py)
 - [x] Farcaster (Warpcast API)
-- [ ] Threads (meta-threads-sdk)
-- [ ] Tests: per-adapter unit tests plus real-credential verification test for each adapter
+- [x] Threads (meta-threads-sdk)
+- [x] Tests: per-adapter unit tests plus real-credential verification test for each adapter
 
 ## Phase 7: Output Formatting & Edge Cases
 
