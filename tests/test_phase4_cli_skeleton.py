@@ -39,7 +39,8 @@ def test_track_rejects_unknown_platform() -> None:
     assert "Unknown platform 'unknownplatform'" in result.output
 
 
-def test_track_all_scope_targets_supported_platforms() -> None:
+def test_track_all_scope_targets_supported_platforms(monkeypatch: MonkeyPatch) -> None:
+    monkeypatch.setattr("sm_tracker.cli.resolve_adapters", lambda _platforms: ([], []))
     runner = CliRunner()
     result = runner.invoke(app, ["track", "--all"], env={})
 
@@ -62,7 +63,8 @@ def test_scope_flags_are_mutually_exclusive() -> None:
     assert "Use either --platform or --all, not both." in history_result.output
 
 
-def test_track_defaults_to_all_scope() -> None:
+def test_track_defaults_to_all_scope(monkeypatch: MonkeyPatch) -> None:
+    monkeypatch.setattr("sm_tracker.cli.resolve_adapters", lambda _platforms: ([], []))
     runner = CliRunner()
     result = runner.invoke(app, ["track"], env={})
 
