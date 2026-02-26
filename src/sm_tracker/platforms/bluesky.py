@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
 
 from atproto import Client  # type: ignore[import-untyped]
 
 from sm_tracker.platforms import AdapterConfigError, PlatformCounts
+from sm_tracker.platforms.utils import extract_int
 
 
 @dataclass(frozen=True)
@@ -31,8 +31,8 @@ class BlueskyAdapter:
             client.login(self.handle, self.app_password)
 
         profile = self._fetch_profile(client)
-        follower_count = _extract_count(profile, "followers_count", "followersCount")
-        following_count = _extract_count(profile, "follows_count", "followsCount")
+        follower_count = extract_int(profile, "followers_count", "followersCount")
+        following_count = extract_int(profile, "follows_count", "followsCount")
         return PlatformCounts(
             platform=self.name,
             follower_count=follower_count,
@@ -51,18 +51,3 @@ def create_bluesky_adapter(env: Mapping[str, str]) -> BlueskyAdapter:
     return BlueskyAdapter(handle=handle, app_password=app_password)
 
 
-def _extract_count(profile: Any, snake_key: str, camel_key: str) -> int | None:
-    value = getattr(profile, snake_key, None)
-    if value is None:
-        value = getattr(profile, camel_key, None)
-
-    if value is None and isinstance(profile, Mapping):
-        mapped = profile.get(snake_key, profile.get(camel_key))
-        value = mapped
-
-    if value is None:
-        return None
-    try:
-        return int(value)
-    except (ValueError, TypeError):
-        return None

@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
 
 from threads import ThreadsClient
 
 from sm_tracker.platforms import AdapterConfigError, PlatformCounts
+from sm_tracker.platforms.utils import coerce_int, extract_int
 
 
 @dataclass(frozen=True)
@@ -31,7 +31,7 @@ class ThreadsAdapter:
             client.close()
 
         follower_count = _extract_metric(user_insights, "followers_count")
-        following_count = _extract_count(profile, "following_count")
+        following_count = extract_int(profile, "following_count")
         return PlatformCounts(
             platform=self.name,
             follower_count=follower_count,
@@ -52,26 +52,9 @@ def create_threads_adapter(env: Mapping[str, str]) -> ThreadsAdapter:
     return ThreadsAdapter(access_token=access_token, user_id=user_id)
 
 
-def _extract_count(profile: Any, key: str) -> int | None:
-    value = getattr(profile, key, None)
-    if value is None and isinstance(profile, Mapping):
-        value = profile.get(key)
-    if value is None:
-        return None
-    try:
-        return int(value)
-    except (ValueError, TypeError):
-        return None
-
-
 def _extract_metric(user_insights: Any, key: str) -> int | None:
+    """Extract a metric from a user_insights object via its get_metric() method."""
     get_metric = getattr(user_insights, "get_metric", None)
     if callable(get_metric):
-        value = get_metric(key)
-        if value is None:
-            return None
-        try:
-            return int(value)
-        except (ValueError, TypeError):
-            return None
+        return coerce_int(get_metric(key))
     return None

@@ -10,6 +10,7 @@ from urllib.parse import quote
 from urllib.request import Request, urlopen
 
 from sm_tracker.platforms import AdapterConfigError, PlatformCounts
+from sm_tracker.platforms.utils import extract_int
 
 
 @dataclass(frozen=True)
@@ -43,8 +44,8 @@ class FarcasterAdapter:
     def fetch_counts(self) -> PlatformCounts:
         payload = self._request_user_payload()
         user_data = _extract_user_object(payload)
-        follower_count = _extract_count(user_data, "follower_count", "followerCount")
-        following_count = _extract_count(user_data, "following_count", "followingCount")
+        follower_count = extract_int(user_data, "follower_count", "followerCount")
+        following_count = extract_int(user_data, "following_count", "followingCount")
         return PlatformCounts(
             platform=self.name,
             follower_count=follower_count,
@@ -80,11 +81,3 @@ def _extract_user_object(payload: Mapping[str, Any]) -> Mapping[str, Any]:
     return payload
 
 
-def _extract_count(data: Mapping[str, Any], snake_key: str, camel_key: str) -> int | None:
-    value = data.get(snake_key, data.get(camel_key))
-    if value is None:
-        return None
-    try:
-        return int(value)
-    except (ValueError, TypeError):
-        return None

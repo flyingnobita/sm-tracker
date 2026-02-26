@@ -9,6 +9,7 @@ from typing import Any
 import tweepy  # type: ignore[import-untyped]
 
 from sm_tracker.platforms import AdapterConfigError, PlatformCounts
+from sm_tracker.platforms.utils import coerce_int
 
 
 @dataclass(frozen=True)
@@ -32,8 +33,8 @@ class TwitterAdapter:
             user_fields=["public_metrics"],
         )
         metrics = _extract_public_metrics(response)
-        follower_count = _coerce_int(metrics.get("followers_count"))
-        following_count = _coerce_int(metrics.get("following_count"))
+        follower_count = coerce_int(metrics.get("followers_count"))
+        following_count = coerce_int(metrics.get("following_count"))
         return PlatformCounts(
             platform=self.name,
             follower_count=follower_count,
@@ -55,6 +56,7 @@ def create_twitter_adapter(env: Mapping[str, str]) -> TwitterAdapter:
 
 
 def _extract_public_metrics(response: Any) -> Mapping[str, Any]:
+    """Extract the public_metrics dict from a tweepy Response, supporting both attr and dict access."""
     data = getattr(response, "data", None)
     if data is None and isinstance(response, Mapping):
         data = response.get("data")
@@ -73,10 +75,3 @@ def _extract_public_metrics(response: Any) -> Mapping[str, Any]:
     return {}
 
 
-def _coerce_int(value: Any) -> int | None:
-    if value is None:
-        return None
-    try:
-        return int(value)
-    except (ValueError, TypeError):
-        return None

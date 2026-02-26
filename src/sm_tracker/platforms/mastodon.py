@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
 
 from mastodon import Mastodon
 
 from sm_tracker.platforms import AdapterConfigError, PlatformCounts
+from sm_tracker.platforms.utils import extract_int
 
 
 @dataclass(frozen=True)
@@ -27,8 +27,8 @@ class MastodonAdapter:
 
     def fetch_counts(self) -> PlatformCounts:
         account = self._build_client().account_verify_credentials()
-        follower_count = _extract_count(account, "followers_count")
-        following_count = _extract_count(account, "following_count")
+        follower_count = extract_int(account, "followers_count")
+        following_count = extract_int(account, "following_count")
         return PlatformCounts(
             platform=self.name,
             follower_count=follower_count,
@@ -56,13 +56,3 @@ def _normalized_instance_url(instance: str) -> str:
     return f"https://{trimmed}"
 
 
-def _extract_count(account: Any, key: str) -> int | None:
-    value = getattr(account, key, None)
-    if value is None and isinstance(account, Mapping):
-        value = account.get(key)
-    if value is None:
-        return None
-    try:
-        return int(value)
-    except (ValueError, TypeError):
-        return None
