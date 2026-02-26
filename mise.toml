@@ -27,6 +27,6 @@ format = "mise run prettier-fix && mise run markdownlint-fix"
 # Run before commit/push to validate docs/config formatting and markdown lint.
 format-check = "mise run prettier-check && mise run markdownlint-check"
 # Run if pre-commit hooks are configured and you want hook parity locally.
-precommit = "pre-commit run --all-files"
+precommit = "uv run pre-commit run --all-files"
 # Run as the one-shot local CI gate (lint + types + docs format + tests).
 check = "mise run lint && mise run typecheck && mise run format-check && mise run test"

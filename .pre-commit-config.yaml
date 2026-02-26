@@ -1,18 +1,28 @@
 repos:
   - repo: local
     hooks:
-      - id: mise-format
-        name: mise format
-        entry: mise run format
+      - id: ruff-check
+        name: ruff check
+        entry: uv run ruff check --fix .
         language: system
         pass_filenames: false
-      - id: mise-lint
-        name: mise lint
-        entry: mise run lint
+      - id: ruff-format-check
+        name: ruff format check
+        entry: uv run ruff format --check .
         language: system
         pass_filenames: false
-      - id: mise-typecheck
-        name: mise typecheck
-        entry: mise run typecheck
+      - id: mypy
+        name: mypy
+        entry: uv run mypy src/
+        language: system
+        pass_filenames: false
+      - id: prettier
+        name: prettier
+        entry: npx prettier --check "**/*.{md,yaml,yml,json}" ".prettierrc"
+        language: system
+        pass_filenames: false
+      - id: markdownlint-cli2
+        name: markdownlint-cli2
+        entry: npx markdownlint-cli2 "**/*.md"
         language: system
         pass_filenames: false
