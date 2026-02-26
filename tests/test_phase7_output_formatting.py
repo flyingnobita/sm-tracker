@@ -175,6 +175,6 @@ def test_track_warns_and_keeps_partial_snapshot_on_fetch_error(monkeypatch: Monk
 
     assert track_result.exit_code == 0
     assert show_result.exit_code == 0
-    assert "Skipping twitter: fetch failed (boom)" in track_result.stdout
+    assert "Skipping twitter: fetch failed. Check logs for details." in track_result.stdout
     assert "Tracking snapshot for: bluesky" in track_result.stdout
     assert "Followers: 55 (N/A)" in show_result.stdout

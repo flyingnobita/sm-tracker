@@ -141,23 +141,35 @@ def track(
     successful_platforms: list[str] = []
     successful = 0
     with connect(config.db_path) as client:
-        init_schema(client)
-        snapshot_id = insert_snapshot(client)
+        try:
+            init_schema(client)
+            snapshot_id = insert_snapshot(client)
+        except Exception:  # pragma: no cover - defensive branch
+            LOGGER.exception("track command failed to initialize database")
+            typer.echo("Failed to initialize database. Check logs for details.")
+            return
+
         for adapter in adapters:
             try:
                 counts = adapter.fetch_counts()
-            except Exception as exc:  # pragma: no cover - defensive branch
+            except Exception:  # pragma: no cover - defensive branch
                 LOGGER.exception("Skipping %s: fetch failed", adapter.name)
-                typer.echo(f"Skipping {adapter.name}: fetch failed ({exc})")
+                typer.echo(f"Skipping {adapter.name}: fetch failed. Check logs for details.")
                 continue
 
-            insert_count(
-                client,
-                snapshot_id=snapshot_id,
-                platform=counts.platform,
-                follower_count=counts.follower_count,
-                following_count=counts.following_count,
-            )
+            try:
+                insert_count(
+                    client,
+                    snapshot_id=snapshot_id,
+                    platform=counts.platform,
+                    follower_count=counts.follower_count,
+                    following_count=counts.following_count,
+                )
+            except Exception:  # pragma: no cover - defensive branch
+                LOGGER.exception("Skipping %s: failed to save counts", adapter.name)
+                typer.echo(f"Skipping {adapter.name}: failed to save counts. Check logs for details.")
+                continue
+
             successful += 1
             successful_platforms.append(counts.platform)
             LOGGER.info(
@@ -369,7 +381,6 @@ def auth_command(
             redirect_uri=redirect_uri,
             code=code,
         )
-        typer.echo(f"Short-lived token: {short_token.access_token}")
         typer.echo(f"User ID: {short_token.user_id}")
 
         long_token = client.auth.get_long_lived_token(
@@ -378,7 +389,6 @@ def auth_command(
         )
         expires_at_utc = datetime.now(UTC) + timedelta(seconds=int(long_token.expires_in))
         expires_at_iso = expires_at_utc.replace(microsecond=0).isoformat().replace("+00:00", "Z")
-        typer.echo(f"Long-lived token: {long_token.access_token}")
         typer.echo(f"Expires at (UTC): {expires_at_iso}")
 
         env_path = Path(".env")
