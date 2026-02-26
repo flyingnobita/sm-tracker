@@ -28,7 +28,7 @@ from sm_tracker.db import fetch_history, fetch_latest, init_schema, insert_count
 from sm_tracker.db.connection import connect
 from sm_tracker.db.queries import CountRow
 from sm_tracker.logging import setup_logging
-from sm_tracker.platforms import resolve_adapters
+from sm_tracker.platforms import SUPPORTED_PLATFORM_NAMES, resolve_adapters
 
 app = typer.Typer(
     help="Track follower and following counts across social media platforms.",
@@ -90,14 +90,29 @@ PLATFORM_OPTION = typer.Option(
     "-p",
     help="Target platform(s). Repeat option to pass multiple values.",
 )
+ALL_OPTION = typer.Option(
+    False,
+    "--all",
+    help="Target all supported platforms.",
+)
+
+
+def _selected_platforms(platform: Sequence[str], all_platforms: bool) -> list[str]:
+    selected = _normalized_platforms(platform)
+    if all_platforms and selected:
+        raise typer.BadParameter("Use either --platform or --all, not both.")
+    if all_platforms:
+        return list(SUPPORTED_PLATFORM_NAMES)
+    return selected
 
 
 @app.command()
 def track(
     platform: list[str] | None = PLATFORM_OPTION,
+    all_platforms: bool = ALL_OPTION,
 ) -> None:
     """Fetch counts and persist a snapshot."""
-    selected = _normalized_platforms(platform or [])
+    selected = _selected_platforms(platform or [], all_platforms)
     _warn_threads_token_expiry_if_needed(selected)
     LOGGER.info("track command started selected_platforms=%s", selected)
     if not selected:
@@ -163,9 +178,10 @@ def track(
 @app.command()
 def show(
     platform: list[str] | None = PLATFORM_OPTION,
+    all_platforms: bool = ALL_OPTION,
 ) -> None:
     """Show latest snapshot with deltas."""
-    selected = _normalized_platforms(platform or [])
+    selected = _selected_platforms(platform or [], all_platforms)
     _warn_threads_token_expiry_if_needed(selected)
     selected_set = set(selected)
     LOGGER.info("show command started selected_platforms=%s", selected)
@@ -219,10 +235,11 @@ def show(
 @app.command()
 def history(
     platform: list[str] | None = PLATFORM_OPTION,
+    all_platforms: bool = ALL_OPTION,
     limit: int = typer.Option(20, min=1, help="Maximum rows to print."),
 ) -> None:
     """Show historical snapshots."""
-    selected = _normalized_platforms(platform or [])
+    selected = _selected_platforms(platform or [], all_platforms)
     _warn_threads_token_expiry_if_needed(selected)
     selected_set = set(selected)
     LOGGER.info("history command started selected_platforms=%s limit=%s", selected, limit)

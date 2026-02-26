@@ -34,6 +34,15 @@ class PlatformAdapter(Protocol):
         ...
 
 
+SUPPORTED_PLATFORM_NAMES: tuple[str, ...] = (
+    "bluesky",
+    "farcaster",
+    "mastodon",
+    "threads",
+    "twitter",
+)
+
+
 def resolve_adapters(
     selected_platforms: Sequence[str], env: Mapping[str, str] | None = None
 ) -> tuple[list[PlatformAdapter], list[str]]:
@@ -78,5 +87,6 @@ __all__ = [
     "AdapterConfigError",
     "PlatformAdapter",
     "PlatformCounts",
+    "SUPPORTED_PLATFORM_NAMES",
     "resolve_adapters",
 ]

@@ -31,6 +31,32 @@ def test_track_platform_flag_is_repeatable() -> None:
     assert "Tracking snapshot for: unknownone, unknown-two" in result.stdout
 
 
+def test_track_all_scope_targets_supported_platforms() -> None:
+    runner = CliRunner()
+    result = runner.invoke(app, ["track", "--all"], env={})
+
+    assert result.exit_code == 0
+    assert (
+        "Tracking snapshot for: bluesky, farcaster, mastodon, threads, twitter"
+        in result.stdout
+    )
+
+
+def test_scope_flags_are_mutually_exclusive() -> None:
+    runner = CliRunner()
+
+    track_result = runner.invoke(app, ["track", "--all", "--platform", "twitter"], env={})
+    show_result = runner.invoke(app, ["show", "--all", "--platform", "twitter"], env={})
+    history_result = runner.invoke(app, ["history", "--all", "--platform", "twitter"], env={})
+
+    assert track_result.exit_code != 0
+    assert show_result.exit_code != 0
+    assert history_result.exit_code != 0
+    assert "Use either --platform or --all, not both." in track_result.output
+    assert "Use either --platform or --all, not both." in show_result.output
+    assert "Use either --platform or --all, not both." in history_result.output
+
+
 def test_track_empty_state_message() -> None:
     runner = CliRunner()
     result = runner.invoke(app, ["track"])
@@ -54,6 +80,24 @@ def test_history_empty_state_message() -> None:
     runner = CliRunner()
     with runner.isolated_filesystem():
         result = runner.invoke(app, ["history"])
+
+    assert result.exit_code == 0
+    assert "No history yet. Run `sm-tracker track` first." in result.stdout
+
+
+def test_show_all_empty_state_message() -> None:
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        result = runner.invoke(app, ["show", "--all"])
+
+    assert result.exit_code == 0
+    assert "No snapshots yet. Run `sm-tracker track` first." in result.stdout
+
+
+def test_history_all_empty_state_message() -> None:
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        result = runner.invoke(app, ["history", "--all"])
 
     assert result.exit_code == 0
     assert "No history yet. Run `sm-tracker track` first." in result.stdout
