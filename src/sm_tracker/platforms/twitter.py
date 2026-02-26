@@ -56,7 +56,7 @@ def create_twitter_adapter(env: Mapping[str, str]) -> TwitterAdapter:
 
 
 def _extract_public_metrics(response: Any) -> Mapping[str, Any]:
-    """Extract the public_metrics dict from a tweepy Response, supporting both attr and dict access."""
+    """Extract the public_metrics dict from a tweepy Response, supporting attr and dict access."""
     data = getattr(response, "data", None)
     if data is None and isinstance(response, Mapping):
         data = response.get("data")
@@ -73,5 +73,3 @@ def _extract_public_metrics(response: Any) -> Mapping[str, Any]:
     if isinstance(metrics, Mapping):
         return metrics
     return {}
-
-

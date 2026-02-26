@@ -173,7 +173,9 @@ def track(
                 )
             except Exception:  # pragma: no cover - defensive branch
                 LOGGER.exception("Skipping %s: failed to save counts", adapter.name)
-                typer.echo(f"Skipping {adapter.name}: failed to save counts. Check logs for details.")
+                typer.echo(
+                    f"Skipping {adapter.name}: failed to save counts. Check logs for details."
+                )
                 continue
 
             successful += 1

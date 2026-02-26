@@ -79,5 +79,3 @@ def _extract_user_object(payload: Mapping[str, Any]) -> Mapping[str, Any]:
     if isinstance(user, Mapping):
         return user
     return payload
-
-

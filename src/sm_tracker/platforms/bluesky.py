@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
 
@@ -49,5 +50,3 @@ def create_bluesky_adapter(env: Mapping[str, str]) -> BlueskyAdapter:
     app_password_raw = env.get("BLUESKY_APP_PASSWORD")
     app_password = app_password_raw.strip() if app_password_raw else None
     return BlueskyAdapter(handle=handle, app_password=app_password)
-
-

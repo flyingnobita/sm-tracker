@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Any
 
 from mastodon import Mastodon
 
@@ -54,5 +54,3 @@ def _normalized_instance_url(instance: str) -> str:
     if trimmed.startswith("http://") or trimmed.startswith("https://"):
         return trimmed
     return f"https://{trimmed}"
-
-
