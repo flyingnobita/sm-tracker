@@ -1,5 +1,7 @@
 # Changelog
 
+- Feb-26, 2026 - 12:47 PM +08 - Completed Phase 10 documentation by expanding README installation and usage guidance, adding a dedicated onboarding guide, adding a full configuration reference for `.env` and `config.toml`, and validating markdown/link consistency.
+- Feb-26, 2026 - 12:44 PM +08 - Completed Phase 9 by validating CI quality gates (`pytest`, `ruff`, `mypy`, Prettier, markdownlint), aligning pre-commit hooks to run ruff/mypy/prettier/markdownlint-cli2 directly, and confirming Phase 8 config-command coverage remains green.
 - Feb-26, 2026 - 12:35 PM +08 - Completed Phase 7 by adding Delta output to `history`, tightening track partial-snapshot messaging to only successful platforms, and adding dedicated formatting plus error/skip tests.
 - Feb-26, 2026 - 11:56 AM +08 - Completed Phase 6 by validating Threads plus Twitter, Mastodon, and Farcaster adapters with unit and CLI integration coverage, and confirmed opt-in real-credential verification tests for all adapters.
 - Feb-26, 2026 - 01:05 AM +08 - Added concrete Phase 2 runtime logging events for CLI startup plus track/show/history lifecycle, warning, and error paths, and expanded tests to assert emitted log content.

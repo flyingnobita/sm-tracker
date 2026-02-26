@@ -64,13 +64,13 @@ Plan: [20250225-PLANS-sm-tracker-mvp.md](../20250225-PLANS-sm-tracker-mvp.md)
 
 ## Phase 9: CI & Quality
 
-- [ ] GitHub Actions workflow
-- [ ] Pre-commit hooks
-- [ ] All tests green, no lint/type errors
+- [x] GitHub Actions workflow
+- [x] Pre-commit hooks
+- [x] All tests green, no lint/type errors
 
 ## Phase 10: Documentation
 
-- [ ] README with installation and usage
-- [ ] Onboarding guide
-- [ ] Config reference
-- [ ] Link checking, markdown lint clean
+- [x] README with installation and usage
+- [x] Onboarding guide
+- [x] Config reference
+- [x] Link checking, markdown lint clean
