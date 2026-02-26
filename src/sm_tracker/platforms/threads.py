@@ -25,14 +25,12 @@ class ThreadsAdapter:
     def fetch_counts(self) -> PlatformCounts:
         client = self._build_client()
         try:
-            profile = client.users.get(
-                user_id=self.user_id,
-                fields=["follower_count", "following_count"],
-            )
+            user_insights = client.insights.get_user_insights(self.user_id)
+            profile = client.users.get(user_id=self.user_id)
         finally:
             client.close()
 
-        follower_count = _extract_count(profile, "follower_count")
+        follower_count = _extract_metric(user_insights, "followers_count")
         following_count = _extract_count(profile, "following_count")
         return PlatformCounts(
             platform=self.name,
@@ -58,10 +56,20 @@ def create_threads_adapter(env: Mapping[str, str]) -> ThreadsAdapter:
     return ThreadsAdapter(access_token=access_token, user_id=user_id)
 
 
-def _extract_count(profile: Any, key: str) -> int | None:
+def _extract_count(profile: Any, key: str) -> int:
     value = getattr(profile, key, None)
     if value is None and isinstance(profile, Mapping):
         value = profile.get(key)
     if value is None:
-        return None
+        return 0
     return int(value)
+
+
+def _extract_metric(user_insights: Any, key: str) -> int:
+    get_metric = getattr(user_insights, "get_metric", None)
+    if callable(get_metric):
+        value = get_metric(key)
+        if value is None:
+            return 0
+        return int(value)
+    return 0

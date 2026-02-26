@@ -8,6 +8,7 @@ CLI to track follower and following counts across Twitter/X, Bluesky, Farcaster,
 - `show` — Display latest snapshot with deltas
 - `history` — View past snapshots
 - `config` — Guided setup for `.env` (credentials) and `config.toml` (paths, retention)
+- `auth` — Run OAuth flow per platform, e.g. `sm-tracker auth -p threads`
 - `help` — Command usage
 
 ## Example

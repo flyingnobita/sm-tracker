@@ -27,9 +27,36 @@ class _FakeThreadsUsers:
         return self.profile
 
 
+class _FakeThreadsInsights:
+    def __init__(self, followers_count: int) -> None:
+        self.followers_count = followers_count
+        self.calls: list[str] = []
+
+    def get_user_insights(self, user_id: str) -> "_FakeThreadsInsights":
+        self.calls.append(user_id)
+        return self
+
+    def get_metric(self, key: str) -> int:
+        if key == "followers_count":
+            return self.followers_count
+        return 0
+
+
+def _extract_profile_follower_count(profile: object) -> int:
+    value = getattr(profile, "follower_count", None)
+    if value is None and isinstance(profile, dict):
+        value = profile.get("follower_count")
+    if value is None:
+        return 0
+    return int(value)
+
+
 class _FakeThreadsClient:
     def __init__(self, profile: object) -> None:
         self.users = _FakeThreadsUsers(profile=profile)
+        self.insights = _FakeThreadsInsights(
+            followers_count=_extract_profile_follower_count(profile),
+        )
         self.closed = False
 
     def close(self) -> None:
@@ -70,7 +97,8 @@ def test_threads_adapter_fetch_counts(monkeypatch: MonkeyPatch) -> None:
     assert counts.platform == "threads"
     assert counts.follower_count == 312
     assert counts.following_count == 91
-    assert fake_client.users.calls == [("123", ("follower_count", "following_count"))]
+    assert fake_client.insights.calls == ["123"]
+    assert fake_client.users.calls == [("123", ())]
     assert fake_client.closed is True
 
 

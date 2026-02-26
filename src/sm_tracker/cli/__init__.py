@@ -3,9 +3,16 @@
 from __future__ import annotations
 
 import logging
+import os
 from collections.abc import Sequence
+from datetime import UTC, datetime, timedelta
+from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 
 import typer
+from dotenv import load_dotenv
+from threads import ThreadsClient
+from threads.constants import Scope
 
 from sm_tracker.config import ConfigError, load_config
 from sm_tracker.db import fetch_history, fetch_latest, init_schema, insert_count, insert_snapshot
@@ -223,6 +230,90 @@ def config_command() -> None:
     typer.echo("Configuration wizard is not implemented yet.")
 
 
+@app.command(name="auth")
+def auth_command(
+    platform: str = typer.Option(
+        ...,
+        "--platform",
+        "-p",
+        help="Target platform for auth flow (currently: threads).",
+    ),
+) -> None:
+    """Run platform OAuth flow and save credentials to .env."""
+    selected_platform = platform.strip().lower()
+    if selected_platform != "threads":
+        typer.echo(f"Unsupported auth platform: {platform}")
+        typer.echo("Currently supported: threads")
+        raise typer.Exit(code=1)
+
+    load_dotenv()
+
+    app_id = os.getenv("THREADS_APP_ID", "").strip()
+    app_secret = os.getenv("THREADS_APP_SECRET", "").strip()
+    redirect_uri = os.getenv("THREADS_REDIRECT_URI", "https://localhost/callback").strip()
+    if not app_id or not app_secret:
+        typer.echo(
+            "Missing THREADS_APP_ID or THREADS_APP_SECRET in environment. "
+            "Set them in your .env file."
+        )
+        raise typer.Exit(code=1)
+
+    client = ThreadsClient(access_token="")
+    try:
+        auth_url = client.auth.get_authorization_url(
+            client_id=app_id,
+            redirect_uri=redirect_uri,
+            scopes=[
+                Scope.BASIC,
+                Scope.CONTENT_PUBLISH,
+                Scope.MANAGE_INSIGHTS,
+                Scope.READ_REPLIES,
+                Scope.MANAGE_REPLIES,
+            ],
+        )
+        typer.echo(
+            "Open this URL and authorize the app. "
+            "You will be redirected to THREADS_REDIRECT_URI with a code."
+        )
+        typer.echo(f"Open this URL: {auth_url}")
+
+        callback_url = typer.prompt("Paste the full callback URL").strip()
+        code = _extract_threads_code_from_callback_url(callback_url)
+        if not code:
+            typer.echo("Could not extract authorization code from callback URL.")
+            raise typer.Exit(code=1)
+
+        short_token = client.auth.exchange_code(
+            client_id=app_id,
+            client_secret=app_secret,
+            redirect_uri=redirect_uri,
+            code=code,
+        )
+        typer.echo(f"Short-lived token: {short_token.access_token}")
+        typer.echo(f"User ID: {short_token.user_id}")
+
+        long_token = client.auth.get_long_lived_token(
+            client_secret=app_secret,
+            short_lived_token=short_token.access_token,
+        )
+        expires_at_utc = datetime.now(UTC) + timedelta(seconds=int(long_token.expires_in))
+        expires_at_iso = expires_at_utc.replace(microsecond=0).isoformat().replace("+00:00", "Z")
+        typer.echo(f"Long-lived token: {long_token.access_token}")
+        typer.echo(f"Expires at (UTC): {expires_at_iso}")
+
+        env_path = Path(".env")
+        if not env_path.exists():
+            typer.echo("Could not find .env in current working directory.")
+            raise typer.Exit(code=1)
+
+        _upsert_env_var(env_path, "THREADS_ACCESS_TOKEN", long_token.access_token)
+        _upsert_env_var(env_path, "THREADS_USER_ID", str(short_token.user_id))
+        _upsert_env_var(env_path, "THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC", expires_at_iso)
+        typer.echo("Saved THREADS_ACCESS_TOKEN, THREADS_USER_ID, and expiry time to .env")
+    finally:
+        client.close()
+
+
 @app.command(name="help")
 def help_command(ctx: typer.Context) -> None:
     """Show command help."""
@@ -257,3 +348,34 @@ def _previous_rows_by_platform(
             continue
         previous.setdefault(row.platform, row)
     return previous
+
+
+def _upsert_env_var(env_path: Path, key: str, value: str) -> None:
+    lines = env_path.read_text(encoding="utf-8").splitlines()
+    updated = False
+    for idx, line in enumerate(lines):
+        if line.startswith(f"{key}="):
+            lines[idx] = f"{key}={value}"
+            updated = True
+            break
+    if not updated:
+        lines.append(f"{key}={value}")
+    env_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _extract_threads_code_from_callback_url(callback_url: str) -> str:
+    url = callback_url.strip()
+    if not url:
+        return ""
+    if url.endswith("#_"):
+        url = url[:-2]
+
+    parsed = urlparse(url)
+    query = parse_qs(parsed.query)
+    code = query.get("code", [""])[0].strip()
+    if not code and "code=" in url:
+        # Fallback for malformed callback URL input.
+        code = url.split("code=", maxsplit=1)[1].strip()
+    if code.endswith("#_"):
+        code = code[:-2]
+    return code
