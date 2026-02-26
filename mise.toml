@@ -7,9 +7,26 @@ node = "lts"
 "github:astral-sh/uv" = "latest"
 
 [tasks]
+# Run before pushing to validate the full test suite.
 test = "uv run pytest"
-lint = "npx markdownlint-cli2 \"**/*.md\" && uv run ruff check ."
+# Run during development to auto-fix Ruff issues, then enforce CI-style Ruff checks.
+lint = "uv run ruff check --fix . && uv run ruff format . && uv run ruff check . && uv run ruff format --check ."
+# Run after Python changes to confirm static typing stays green.
 typecheck = "uv run mypy src/"
-format = "npx prettier --write \"**/*.{md,yaml,yml,json}\" \".prettierrc\" \".prettierrc.*\" \"**/.prettierrc\" \"**/.prettierrc.*\""
+# Run when editing docs/config files to auto-format with Prettier.
+prettier-fix = "npx prettier --write \"**/*.{md,yaml,yml,json}\" \".prettierrc\""
+# Run before commit/push to verify Prettier formatting is clean.
+prettier-check = "npx prettier --check \"**/*.{md,yaml,yml,json}\" \".prettierrc\""
+# Run when editing Markdown docs to apply markdownlint auto-fixes where possible.
+markdownlint-fix = "npx markdownlint-cli2 --fix \"**/*.md\""
+# Run before commit/push to verify Markdown lint rules pass.
+markdownlint-check = "npx markdownlint-cli2 \"**/*.md\""
+
+# Run when you want one command to fix docs/config formatting issues.
+format = "mise run prettier-fix && mise run markdownlint-fix"
+# Run before commit/push to validate docs/config formatting and markdown lint.
+format-check = "mise run prettier-check && mise run markdownlint-check"
+# Run if pre-commit hooks are configured and you want hook parity locally.
 precommit = "pre-commit run --all-files"
-check = "mise run lint && mise run typecheck && mise run test"
+# Run as the one-shot local CI gate (lint + types + docs format + tests).
+check = "mise run lint && mise run typecheck && mise run format-check && mise run test"

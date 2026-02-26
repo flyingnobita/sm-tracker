@@ -44,9 +44,7 @@ def load_env_file(env_path: Path | None = None) -> None:
     load_dotenv(dotenv_path=env_path, override=False)
 
 
-def resolve_profile(
-    config_data: Mapping[str, Any], profile_override: str | None = None
-) -> str:
+def resolve_profile(config_data: Mapping[str, Any], profile_override: str | None = None) -> str:
     """Resolve active profile from CLI override, env var, then config default."""
     if profile_override:
         return profile_override
@@ -73,9 +71,7 @@ def find_config_file(project_dir: Path | None = None) -> Path:
     if user_config.exists():
         return user_config
 
-    raise ConfigError(
-        "Could not find config.toml in project directory or ~/.config/sm-tracker/."
-    )
+    raise ConfigError("Could not find config.toml in project directory or ~/.config/sm-tracker/.")
 
 
 def _as_table(root: Mapping[str, Any], key: str) -> Mapping[str, Any]:
@@ -118,9 +114,7 @@ def _resolve_profile_logging(config_data: Mapping[str, Any], profile: str) -> tu
     level = profile_logging.get("level", DEFAULT_LOG_LEVEL)
 
     if not isinstance(retention_days, int) or retention_days < 1:
-        raise ConfigError(
-            f"Expected logging.{profile}.retention_days to be a positive integer."
-        )
+        raise ConfigError(f"Expected logging.{profile}.retention_days to be a positive integer.")
     if not isinstance(level, str):
         raise ConfigError(f"Expected logging.{profile}.level to be a string.")
 
@@ -164,4 +158,3 @@ def load_config(
         log_level=log_level,
         config_path=resolved_config_path,
     )
-

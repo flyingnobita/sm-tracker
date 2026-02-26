@@ -37,8 +37,7 @@ def test_track_empty_state_message() -> None:
 
     assert result.exit_code == 0
     assert (
-        "Add at least one platform via `sm-tracker config` or .env (credentials)"
-        in result.stdout
+        "Add at least one platform via `sm-tracker config` or .env (credentials)" in result.stdout
     )
 
 

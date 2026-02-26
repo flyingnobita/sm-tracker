@@ -1,2 +1,1 @@
 """sm-tracker package."""
-

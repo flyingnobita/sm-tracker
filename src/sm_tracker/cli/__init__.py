@@ -417,8 +417,7 @@ def _warn_threads_token_expiry_if_needed(
     current_time = datetime.now(UTC) if now_utc is None else now_utc
     if expires_at <= current_time:
         typer.echo(
-            "Threads access token is expired. "
-            "Run `sm-tracker auth -p threads` to refresh it."
+            "Threads access token is expired. Run `sm-tracker auth -p threads` to refresh it."
         )
         return
 

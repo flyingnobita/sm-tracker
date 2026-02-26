@@ -43,15 +43,11 @@ def create_threads_adapter(env: Mapping[str, str]) -> ThreadsAdapter:
     """Create a Threads adapter from env vars."""
     access_token = env.get("THREADS_ACCESS_TOKEN", "").strip()
     if not access_token:
-        raise AdapterConfigError(
-            "Skipping threads: missing THREADS_ACCESS_TOKEN in environment."
-        )
+        raise AdapterConfigError("Skipping threads: missing THREADS_ACCESS_TOKEN in environment.")
 
     user_id = env.get("THREADS_USER_ID", "").strip()
     if not user_id:
-        raise AdapterConfigError(
-            "Skipping threads: missing THREADS_USER_ID in environment."
-        )
+        raise AdapterConfigError("Skipping threads: missing THREADS_USER_ID in environment.")
 
     return ThreadsAdapter(access_token=access_token, user_id=user_id)
 

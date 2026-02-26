@@ -47,9 +47,7 @@ def create_bluesky_adapter(env: Mapping[str, str]) -> BlueskyAdapter:
     """Create a Bluesky adapter from env vars."""
     handle = env.get("BLUESKY_HANDLE", "").strip()
     if not handle:
-        raise AdapterConfigError(
-            "Skipping bluesky: missing BLUESKY_HANDLE in environment."
-        )
+        raise AdapterConfigError("Skipping bluesky: missing BLUESKY_HANDLE in environment.")
 
     app_password_raw = env.get("BLUESKY_APP_PASSWORD")
     app_password = app_password_raw.strip() if app_password_raw else None

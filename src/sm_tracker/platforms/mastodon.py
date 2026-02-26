@@ -40,15 +40,11 @@ def create_mastodon_adapter(env: Mapping[str, str]) -> MastodonAdapter:
     """Create a Mastodon adapter from env vars."""
     access_token = env.get("MASTODON_ACCESS_TOKEN", "").strip()
     if not access_token:
-        raise AdapterConfigError(
-            "Skipping mastodon: missing MASTODON_ACCESS_TOKEN in environment."
-        )
+        raise AdapterConfigError("Skipping mastodon: missing MASTODON_ACCESS_TOKEN in environment.")
 
     instance = env.get("MASTODON_INSTANCE", "").strip()
     if not instance:
-        raise AdapterConfigError(
-            "Skipping mastodon: missing MASTODON_INSTANCE in environment."
-        )
+        raise AdapterConfigError("Skipping mastodon: missing MASTODON_INSTANCE in environment.")
 
     return MastodonAdapter(access_token=access_token, instance=instance)
 

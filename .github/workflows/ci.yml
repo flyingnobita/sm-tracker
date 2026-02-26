@@ -12,76 +12,61 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
+      - name: Set up mise tools
+        uses: jdx/mise-action@v2
         with:
-          version: "latest"
-
-      - name: Set up Python
-        run: uv python install 3.12
+          install: true
 
       - name: Install dependencies
-        run: uv sync
+        run: mise exec -- uv sync
 
       - name: Run tests
-        run: uv run pytest
+        run: mise run test
 
   lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
+      - name: Set up mise tools
+        uses: jdx/mise-action@v2
         with:
-          version: "latest"
-
-      - name: Set up Python
-        run: uv python install 3.12
+          install: true
 
       - name: Install dependencies
-        run: uv sync
+        run: mise exec -- uv sync
 
-      - name: Run ruff check
-        run: uv run ruff check .
-
-      - name: Run ruff format check
-        run: uv run ruff format --check .
+      - name: Run lint
+        run: mise run lint
 
   typecheck:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
+      - name: Set up mise tools
+        uses: jdx/mise-action@v2
         with:
-          version: "latest"
-
-      - name: Set up Python
-        run: uv python install 3.12
+          install: true
 
       - name: Install dependencies
-        run: uv sync
+        run: mise exec -- uv sync
 
       - name: Run mypy
-        run: uv run mypy src/
+        run: mise run typecheck
 
   format:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
+      - name: Set up mise tools
+        uses: jdx/mise-action@v2
         with:
-          node-version: "lts/*"
+          install: true
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Run prettier check
-        run: npx prettier --check "**/*.{md,yml,yaml,json}" ".prettierrc"
-
-      - name: Run markdownlint
-        run: npx markdownlint-cli2 "**/*.md"
+      - name: Run format checks
+        run: mise run format-check

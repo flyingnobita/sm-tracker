@@ -59,15 +59,11 @@ def create_farcaster_adapter(env: Mapping[str, str]) -> FarcasterAdapter:
         # Backward-compatible fallback for older configs.
         api_key = env.get("FARCASTER_MNEMONIC", "").strip()
     if not api_key:
-        raise AdapterConfigError(
-            "Skipping farcaster: missing FARCASTER_API_KEY in environment."
-        )
+        raise AdapterConfigError("Skipping farcaster: missing FARCASTER_API_KEY in environment.")
 
     username = env.get("FARCASTER_USERNAME", "").strip()
     if not username:
-        raise AdapterConfigError(
-            "Skipping farcaster: missing FARCASTER_USERNAME in environment."
-        )
+        raise AdapterConfigError("Skipping farcaster: missing FARCASTER_USERNAME in environment.")
 
     return FarcasterAdapter(username=username, api_key=api_key)
 

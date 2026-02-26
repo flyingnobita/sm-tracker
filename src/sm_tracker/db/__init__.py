@@ -22,4 +22,3 @@ __all__ = [
     "insert_snapshot",
     "to_database_url",
 ]
-

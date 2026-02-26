@@ -45,15 +45,11 @@ def create_twitter_adapter(env: Mapping[str, str]) -> TwitterAdapter:
     """Create a Twitter adapter from env vars."""
     bearer_token = env.get("TWITTER_BEARER_TOKEN", "").strip()
     if not bearer_token:
-        raise AdapterConfigError(
-            "Skipping twitter: missing TWITTER_BEARER_TOKEN in environment."
-        )
+        raise AdapterConfigError("Skipping twitter: missing TWITTER_BEARER_TOKEN in environment.")
 
     handle = env.get("TWITTER_HANDLE", "").strip()
     if not handle:
-        raise AdapterConfigError(
-            "Skipping twitter: missing TWITTER_HANDLE in environment."
-        )
+        raise AdapterConfigError("Skipping twitter: missing TWITTER_HANDLE in environment.")
 
     return TwitterAdapter(handle=handle, bearer_token=bearer_token)
 

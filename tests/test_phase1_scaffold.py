@@ -24,4 +24,3 @@ def test_cli_app_runs() -> None:
     result = runner.invoke(app, ["--help"])
     assert result.exit_code == 0
     assert "Track follower and following counts" in result.stdout
-
