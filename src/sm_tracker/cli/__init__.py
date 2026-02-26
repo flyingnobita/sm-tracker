@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 import os
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
@@ -72,6 +72,7 @@ def track(
 ) -> None:
     """Fetch counts and persist a snapshot."""
     selected = _normalized_platforms(platform or [])
+    _warn_threads_token_expiry_if_needed(selected)
     LOGGER.info("track command started selected_platforms=%s", selected)
     if not selected:
         LOGGER.warning("track command aborted: no platforms selected")
@@ -138,6 +139,7 @@ def show(
 ) -> None:
     """Show latest snapshot with deltas."""
     selected = _normalized_platforms(platform or [])
+    _warn_threads_token_expiry_if_needed(selected)
     selected_set = set(selected)
     LOGGER.info("show command started selected_platforms=%s", selected)
 
@@ -194,6 +196,7 @@ def history(
 ) -> None:
     """Show historical snapshots."""
     selected = _normalized_platforms(platform or [])
+    _warn_threads_token_expiry_if_needed(selected)
     selected_set = set(selected)
     LOGGER.info("history command started selected_platforms=%s limit=%s", selected, limit)
 
@@ -379,3 +382,48 @@ def _extract_threads_code_from_callback_url(callback_url: str) -> str:
     if code.endswith("#_"):
         code = code[:-2]
     return code
+
+
+def _warn_threads_token_expiry_if_needed(
+    selected_platforms: Sequence[str],
+    *,
+    env: Mapping[str, str] | None = None,
+    now_utc: datetime | None = None,
+) -> None:
+    if "threads" not in set(selected_platforms):
+        return
+
+    env_map = os.environ if env is None else env
+    raw_expiry = env_map.get("THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC", "").strip()
+    if not raw_expiry:
+        return
+
+    try:
+        normalized = raw_expiry
+        if normalized.endswith("Z"):
+            normalized = normalized[:-1] + "+00:00"
+        expires_at = datetime.fromisoformat(normalized)
+        if expires_at.tzinfo is None:
+            expires_at = expires_at.replace(tzinfo=UTC)
+        else:
+            expires_at = expires_at.astimezone(UTC)
+    except ValueError:
+        typer.echo(
+            "Threads access token expiry is invalid. "
+            "Run `sm-tracker auth -p threads` to refresh it."
+        )
+        return
+
+    current_time = datetime.now(UTC) if now_utc is None else now_utc
+    if expires_at <= current_time:
+        typer.echo(
+            "Threads access token is expired. "
+            "Run `sm-tracker auth -p threads` to refresh it."
+        )
+        return
+
+    if expires_at <= current_time + timedelta(days=7):
+        typer.echo(
+            f"Threads access token expires soon ({expires_at.isoformat()}). "
+            "Run `sm-tracker auth -p threads` to refresh it."
+        )

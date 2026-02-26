@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -11,7 +12,7 @@ import pytest
 from pytest import MonkeyPatch
 from typer.testing import CliRunner
 
-from sm_tracker.cli import app
+from sm_tracker.cli import _warn_threads_token_expiry_if_needed, app
 from sm_tracker.platforms import AdapterConfigError
 from sm_tracker.platforms.threads import ThreadsAdapter, create_threads_adapter
 
@@ -176,3 +177,40 @@ def test_threads_live_credentials_fetch_counts() -> None:
     assert counts.follower_count >= 0
     assert counts.following_count is not None
     assert counts.following_count >= 0
+
+
+def test_warn_threads_token_expired(capsys: pytest.CaptureFixture[str]) -> None:
+    now = datetime(2026, 2, 26, 0, 0, tzinfo=UTC)
+    env = {
+        "THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC": "2026-02-25T00:00:00Z",
+    }
+    _warn_threads_token_expiry_if_needed(["threads"], env=env, now_utc=now)
+
+    captured = capsys.readouterr()
+    assert "Threads access token is expired." in captured.out
+    assert "Run `sm-tracker auth -p threads` to refresh it." in captured.out
+
+
+def test_warn_threads_token_expiring_soon(capsys: pytest.CaptureFixture[str]) -> None:
+    now = datetime(2026, 2, 26, 0, 0, tzinfo=UTC)
+    expires_soon = (now + timedelta(days=2)).isoformat().replace("+00:00", "Z")
+    env = {
+        "THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC": expires_soon,
+    }
+    _warn_threads_token_expiry_if_needed(["threads"], env=env, now_utc=now)
+
+    captured = capsys.readouterr()
+    assert "Threads access token expires soon" in captured.out
+    assert "Run `sm-tracker auth -p threads` to refresh it." in captured.out
+
+
+def test_warn_threads_token_not_soon_no_output(capsys: pytest.CaptureFixture[str]) -> None:
+    now = datetime(2026, 2, 26, 0, 0, tzinfo=UTC)
+    expires_later = (now + timedelta(days=14)).isoformat().replace("+00:00", "Z")
+    env = {
+        "THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC": expires_later,
+    }
+    _warn_threads_token_expiry_if_needed(["threads"], env=env, now_utc=now)
+
+    captured = capsys.readouterr()
+    assert captured.out == ""
