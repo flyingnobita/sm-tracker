@@ -63,8 +63,7 @@ def test_twitter_adapter_fetch_counts(monkeypatch: MonkeyPatch) -> None:
     assert fake_client.calls == [("alice", ("public_metrics",))]
 
 
-def test_track_and_show_twitter_end_to_end(monkeypatch: MonkeyPatch, tmp_path: Path) -> None:
-    _ = tmp_path
+def test_track_and_show_twitter_end_to_end(monkeypatch: MonkeyPatch) -> None:
     runner = CliRunner()
     env = {
         "TWITTER_BEARER_TOKEN": "token",

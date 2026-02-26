@@ -62,8 +62,7 @@ def test_mastodon_adapter_fetch_counts(monkeypatch: MonkeyPatch) -> None:
     assert counts.following_count == 41
 
 
-def test_track_and_show_mastodon_end_to_end(monkeypatch: MonkeyPatch, tmp_path: Path) -> None:
-    _ = tmp_path
+def test_track_and_show_mastodon_end_to_end(monkeypatch: MonkeyPatch) -> None:
     runner = CliRunner()
     env = {
         "MASTODON_ACCESS_TOKEN": "token",
