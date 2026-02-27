@@ -43,6 +43,7 @@ SUPPORTED_PLATFORM_NAMES: tuple[str, ...] = (
     "mastodon",
     "threads",
     "twitter",
+    "instagram",
 )
 
 

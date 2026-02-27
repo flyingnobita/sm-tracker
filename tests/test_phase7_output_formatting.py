@@ -89,7 +89,9 @@ def test_show_first_snapshot_displays_na_delta(monkeypatch: MonkeyPatch) -> None
     assert "Following: 50 (N/A)" in show_result.stdout
 
 
-def test_show_following_na_for_platforms_without_following(monkeypatch: MonkeyPatch) -> None:
+def test_show_following_na_for_platforms_without_following(
+    monkeypatch: MonkeyPatch,
+) -> None:
     runner = CliRunner()
     env = {
         "BLUESKY_HANDLE": "alice.bsky.social",
@@ -149,7 +151,9 @@ def test_history_table_includes_delta_column(monkeypatch: MonkeyPatch) -> None:
     assert "twitter | 104 | 25 | +4" in history_result.stdout
 
 
-def test_track_warns_and_keeps_partial_snapshot_on_fetch_error(monkeypatch: MonkeyPatch) -> None:
+def test_track_warns_and_keeps_partial_snapshot_on_fetch_error(
+    monkeypatch: MonkeyPatch,
+) -> None:
     runner = CliRunner()
     env = {
         "TWITTER_BEARER_TOKEN": "token",
@@ -246,7 +250,7 @@ def test_json_and_csv_flags_are_mutually_exclusive() -> None:
 
 
 def test_formatter_functions_render_null_and_empty_values() -> None:
-    rows = [
+    rows: list[dict[str, str | int | None]] = [
         {
             "snapshot_id": 42,
             "snapshot_timestamp": "2025-02-26T08:00:00",
