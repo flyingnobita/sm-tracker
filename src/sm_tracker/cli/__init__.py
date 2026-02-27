@@ -27,7 +27,13 @@ from sm_tracker.config import (
     ConfigError,
     load_config,
 )
-from sm_tracker.db import fetch_history, fetch_latest, init_schema, insert_count, insert_snapshot
+from sm_tracker.db import (
+    fetch_history,
+    fetch_latest,
+    init_schema,
+    insert_count,
+    insert_snapshot,
+)
 from sm_tracker.db.connection import connect
 from sm_tracker.db.queries import CountRow
 from sm_tracker.logging import setup_logging
@@ -51,11 +57,22 @@ ENV_FIELD_SPECS: list[tuple[str, str, bool]] = [
     ("MASTODON_ACCESS_TOKEN", "Mastodon access token", True),
     ("MASTODON_INSTANCE", "Mastodon instance (for example mastodon.social)", True),
     ("THREADS_APP_ID", "Threads app ID (optional, needed for auth command)", False),
-    ("THREADS_APP_SECRET", "Threads app secret (optional, needed for auth command)", False),
+    (
+        "THREADS_APP_SECRET",
+        "Threads app secret (optional, needed for auth command)",
+        False,
+    ),
     ("THREADS_REDIRECT_URI", "Threads redirect URI", False),
     ("THREADS_ACCESS_TOKEN", "Threads access token", True),
     ("THREADS_USER_ID", "Threads user ID", True),
-    ("THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC", "Threads token expiry UTC (ISO, optional)", False),
+    (
+        "THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC",
+        "Threads token expiry UTC (ISO, optional)",
+        False,
+    ),
+    ("YOUTUBE_API_KEY", "YouTube API key", True),
+    ("YOUTUBE_CHANNEL_ID", "YouTube channel ID (optional if handle provided)", False),
+    ("YOUTUBE_HANDLE", "YouTube handle (optional if channel ID provided)", False),
 ]
 
 
@@ -547,7 +564,9 @@ def _history_follower_deltas(rows: list[CountRow]) -> list[str]:
     return deltas
 
 
-def _history_rows_with_deltas(rows: list[CountRow]) -> list[dict[str, str | int | None]]:
+def _history_rows_with_deltas(
+    rows: list[CountRow],
+) -> list[dict[str, str | int | None]]:
     deltas = _history_follower_deltas(rows)
     structured: list[dict[str, str | int | None]] = []
     for row, delta in zip(rows, deltas, strict=False):
@@ -731,7 +750,9 @@ def _run_config_wizard(config_path: Path) -> tuple[str, str, str, int, str]:
     return profile, db_path, logs_path, retention_int, normalized_level
 
 
-def _read_existing_profile_settings(config_path: Path) -> tuple[str, str, str, int, str]:
+def _read_existing_profile_settings(
+    config_path: Path,
+) -> tuple[str, str, str, int, str]:
     if not config_path.exists():
         return "dev", "", "", 0, ""
 
@@ -781,10 +802,19 @@ def _validate_required_env_values(env_values: Mapping[str, str]) -> list[str]:
         "farcaster": ["FARCASTER_API_KEY", "FARCASTER_USERNAME"],
         "mastodon": ["MASTODON_ACCESS_TOKEN", "MASTODON_INSTANCE"],
         "threads": ["THREADS_ACCESS_TOKEN", "THREADS_USER_ID"],
+        "youtube": ["YOUTUBE_API_KEY"],
     }
     warnings: list[str] = []
     for platform, keys in missing_by_platform.items():
         missing = [key for key in keys if not env_values.get(key, "").strip()]
+
+        if platform == "youtube":
+            if (
+                not env_values.get("YOUTUBE_CHANNEL_ID", "").strip()
+                and not env_values.get("YOUTUBE_HANDLE", "").strip()
+            ):
+                missing.append("YOUTUBE_CHANNEL_ID or YOUTUBE_HANDLE")
+
         if missing:
             warnings.append(f"{platform}: missing {', '.join(missing)}")
     return warnings
