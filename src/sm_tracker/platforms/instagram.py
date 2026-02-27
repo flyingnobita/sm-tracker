@@ -1,51 +1,77 @@
-"""Instagram platform adapter."""
+"""Instagram platform adapter using Graph API."""
 
 from __future__ import annotations
 
+import json
+import urllib.error
+import urllib.request
 from collections.abc import Mapping
 from dataclasses import dataclass
-
-import instaloader
 
 from sm_tracker.platforms import AdapterConfigError, PlatformCounts
 
 
 @dataclass(frozen=True)
 class InstagramAdapter:
-    """Fetch Instagram follower/following counts for a public profile."""
+    """Fetch Instagram follower/following counts via Graph API."""
 
-    username: str
+    account_id: str
+    access_token: str
+    username: str | None = None
     name: str = "instagram"
 
     def fetch_counts(self) -> PlatformCounts:
-        # Using instaloader to fetch public profile info
-        # See: https://instaloader.github.io/module/structures.html#instaloader.Profile
-        L = instaloader.Instaloader(quiet=True)
-        L.context._session.headers.update(
-            {
-                "User-Agent": (
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-                )
-            }
-        )
+        base_url = f"https://graph.facebook.com/v19.0/{self.account_id}"
+
+        if self.username:
+            # Business Discovery API for a specific username
+            fields = (
+                f"business_discovery.username({self.username}){{followers_count,follows_count}}"
+            )
+        else:
+            # Own account insights
+            fields = "followers_count,follows_count"
+
+        url = f"{base_url}?fields={fields}&access_token={self.access_token}"
+
         try:
-            profile = instaloader.Profile.from_username(L.context, self.username)
-        except Exception as exc:  # instaloader often throws on rate limits or missing profiles
-            # Wrap to a runtime error to provide better visibility upstream
-            raise RuntimeError(f"Failed to fetch profile '{self.username}': {exc}") from exc
+            req = urllib.request.Request(url)
+            with urllib.request.urlopen(req) as response:
+                data = json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            error_body = exc.read().decode("utf-8")
+            raise RuntimeError(f"Instagram API Error ({exc.code}): {error_body}") from exc
+        except Exception as exc:
+            raise RuntimeError(f"Failed to fetch Instagram counts: {exc}") from exc
+
+        if self.username:
+            if "business_discovery" not in data:
+                raise RuntimeError(f"Missing business_discovery data for '{self.username}'")
+            stats = data["business_discovery"]
+        else:
+            stats = data
 
         return PlatformCounts(
             platform=self.name,
-            follower_count=profile.followers,
-            following_count=profile.followees,
+            follower_count=stats.get("followers_count", 0),
+            following_count=stats.get("follows_count", 0),
         )
 
 
 def create_instagram_adapter(env: Mapping[str, str]) -> InstagramAdapter:
     """Create an Instagram adapter from env vars."""
-    username = env.get("INSTAGRAM_USERNAME", "").strip()
-    if not username:
-        raise AdapterConfigError("Skipping instagram: missing INSTAGRAM_USERNAME in environment.")
+    account_id = env.get("INSTAGRAM_ACCOUNT_ID", "").strip()
+    access_token = env.get("INSTAGRAM_ACCESS_TOKEN", "").strip()
+    username = env.get("INSTAGRAM_USERNAME", "").strip() or None
 
-    return InstagramAdapter(username=username)
+    if not account_id or not access_token:
+        raise AdapterConfigError(
+            "Skipping instagram: missing INSTAGRAM_ACCOUNT_ID "
+            "or INSTAGRAM_ACCESS_TOKEN in environment."
+        )
+
+    return InstagramAdapter(
+        account_id=account_id,
+        access_token=access_token,
+        username=username,
+    )
