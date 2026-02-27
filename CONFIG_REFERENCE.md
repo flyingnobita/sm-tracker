@@ -41,6 +41,22 @@
 - `THREADS_APP_SECRET` (optional, needed for `auth`)
 - `THREADS_REDIRECT_URI` (optional, default: `https://localhost/callback`)
 
+### Facebook
+
+To collect Page metrics, you need a **Page Access Token**. You have two options for configuring this:
+
+**Option 1: Direct Page Token (Recommended)**
+
+1. Provide `FACEBOOK_PAGE_ACCESS_TOKEN` in your `.env`.
+2. `FACEBOOK_ID` can optionally be omitted, as the app will automatically fetch the ID of the page the token belongs to.
+
+**Option 2: Automatic Token Exchange**
+
+1. Generate a generic **User Access Token** in the Meta App Dashboard.
+2. Provide this via `FACEBOOK_ACCESS_TOKEN`.
+3. You MUST provide the specific `FACEBOOK_ID` of your page.
+4. The tracker will seamlessly use the User Token to query the Graph API and extract the correct Page Access Token for your `FACEBOOK_ID` in the background.
+
 ## `config.toml` reference
 
 ### Required shape

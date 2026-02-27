@@ -45,7 +45,10 @@ def test_track_all_scope_targets_supported_platforms(monkeypatch: MonkeyPatch) -
     result = runner.invoke(app, ["track", "--all"], env={})
 
     assert result.exit_code == 0
-    assert "Tracking snapshot for: bluesky, farcaster, mastodon, threads, twitter" in result.stdout
+    assert (
+        "Tracking snapshot for: bluesky, facebook, farcaster, mastodon, threads, twitter"
+        in result.stdout
+    )
 
 
 def test_scope_flags_are_mutually_exclusive() -> None:
@@ -69,7 +72,10 @@ def test_track_defaults_to_all_scope(monkeypatch: MonkeyPatch) -> None:
     result = runner.invoke(app, ["track"], env={})
 
     assert result.exit_code == 0
-    assert "Tracking snapshot for: bluesky, farcaster, mastodon, threads, twitter" in result.stdout
+    assert (
+        "Tracking snapshot for: bluesky, facebook, farcaster, mastodon, threads, twitter"
+        in result.stdout
+    )
 
 
 def test_show_empty_state_message() -> None:
