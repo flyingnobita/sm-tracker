@@ -44,6 +44,7 @@ SUPPORTED_PLATFORM_NAMES: tuple[str, ...] = (
     "threads",
     "twitter",
     "instagram",
+    "youtube",
 )
 
 
@@ -57,6 +58,7 @@ def resolve_adapters(
     from sm_tracker.platforms.mastodon import create_mastodon_adapter
     from sm_tracker.platforms.threads import create_threads_adapter
     from sm_tracker.platforms.twitter import create_twitter_adapter
+    from sm_tracker.platforms.youtube import create_youtube_adapter
 
     env_map = os.environ if env is None else env
     factories: dict[str, Callable[[Mapping[str, str]], PlatformAdapter]] = {
@@ -66,6 +68,7 @@ def resolve_adapters(
         "threads": create_threads_adapter,
         "twitter": create_twitter_adapter,
         "instagram": create_instagram_adapter,
+        "youtube": create_youtube_adapter,
     }
     adapters: list[PlatformAdapter] = []
     warnings: list[str] = []
