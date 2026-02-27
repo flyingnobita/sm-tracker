@@ -116,6 +116,17 @@ Refresh Threads credentials via OAuth when needed:
 uv run sm-tracker auth -p threads
 ```
 
+#### Facebook
+
+Option 1: Direct Page Token (Recommended)
+
+- `FACEBOOK_PAGE_ACCESS_TOKEN`
+
+Option 2: Automatic Token Exchange
+
+- `FACEBOOK_ACCESS_TOKEN` (User Access Token)
+- `FACEBOOK_ID` (The numeric ID of the Page)
+
 ### 📁 4) File locations
 
 - Database path: from `config.toml` (`[paths.<profile>].db`)

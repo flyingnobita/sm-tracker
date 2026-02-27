@@ -1,5 +1,6 @@
 # Changelog
 
+- Feb-27, 2026 - 04:18 PM +08 - Implemented Facebook Tracker support, updated `SUPPORTED_PLATFORM_NAMES`, fixed related tests, and added Facebook credentials to environment configuration.
 - Feb-26, 2026 - 10:48 PM +08 - Added structured output flags (`--json`, `--csv`) to `track`, `show`, and `history`, with formatter helpers, CSV/JSON behavior tests, and updated README/config reference docs.
 - Feb-26, 2026 - 08:50 PM +08 - Disabled automatic GitHub Actions CI triggers by changing `CI` workflow to `workflow_dispatch` only (manual run).
 - Feb-26, 2026 - 08:32 PM +08 - Updated quality workflow to keep CI non-mutating: added `lint-check` task (`ruff check` + `ruff format --check`), switched CI lint job to use it, and kept local autofix behavior in `lint`.
