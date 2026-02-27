@@ -53,6 +53,7 @@ def resolve_adapters(
     """Build adapters for selected platform names and collect warnings."""
     from sm_tracker.platforms.bluesky import create_bluesky_adapter
     from sm_tracker.platforms.farcaster import create_farcaster_adapter
+    from sm_tracker.platforms.instagram import create_instagram_adapter
     from sm_tracker.platforms.mastodon import create_mastodon_adapter
     from sm_tracker.platforms.threads import create_threads_adapter
     from sm_tracker.platforms.twitter import create_twitter_adapter
@@ -64,6 +65,7 @@ def resolve_adapters(
         "mastodon": create_mastodon_adapter,
         "threads": create_threads_adapter,
         "twitter": create_twitter_adapter,
+        "instagram": create_instagram_adapter,
     }
     adapters: list[PlatformAdapter] = []
     warnings: list[str] = []
