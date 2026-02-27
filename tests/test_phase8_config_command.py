@@ -27,6 +27,9 @@ def _guided_input_for_full_setup() -> str:
                 "threads-token",
                 "12345",
                 "",
+                "youtube-key",
+                "UC12345",
+                "",
                 "dev",
                 "./data-dev.db",
                 "./logs-dev",
@@ -42,6 +45,9 @@ def _guided_input_with_empty_required_values() -> str:
     return (
         "\n".join(
             [
+                "",
+                "",
+                "",
                 "",
                 "",
                 "",
@@ -81,6 +87,8 @@ def test_config_command_guided_flow_creates_env_and_config() -> None:
     assert "TWITTER_BEARER_TOKEN=twitter-token" in env_contents
     assert "BLUESKY_HANDLE=alice.bsky.social" in env_contents
     assert "THREADS_ACCESS_TOKEN=threads-token" in env_contents
+    assert "YOUTUBE_API_KEY=youtube-key" in env_contents
+    assert "YOUTUBE_CHANNEL_ID=UC12345" in env_contents
     assert 'profile = "dev"' in config_contents
     assert 'db = "./data-dev.db"' in config_contents
     assert 'logs = "./logs-dev"' in config_contents
@@ -101,6 +109,7 @@ def test_config_command_shows_validation_warnings_for_missing_required_env_value
     assert "farcaster: missing FARCASTER_API_KEY, FARCASTER_USERNAME" in result.stdout
     assert "mastodon: missing MASTODON_ACCESS_TOKEN, MASTODON_INSTANCE" in result.stdout
     assert "threads: missing THREADS_ACCESS_TOKEN, THREADS_USER_ID" in result.stdout
+    assert "youtube: missing YOUTUBE_API_KEY, YOUTUBE_CHANNEL_ID or YOUTUBE_HANDLE" in result.stdout
     assert "TWITTER_BEARER_TOKEN=" not in env_contents
 
 
