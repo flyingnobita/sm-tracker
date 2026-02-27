@@ -39,6 +39,7 @@ class PlatformAdapter(Protocol):
 
 SUPPORTED_PLATFORM_NAMES: tuple[str, ...] = (
     "bluesky",
+    "facebook",
     "farcaster",
     "mastodon",
     "threads",
@@ -51,6 +52,7 @@ def resolve_adapters(
 ) -> tuple[list[PlatformAdapter], list[str]]:
     """Build adapters for selected platform names and collect warnings."""
     from sm_tracker.platforms.bluesky import create_bluesky_adapter
+    from sm_tracker.platforms.facebook import create_facebook_adapter
     from sm_tracker.platforms.farcaster import create_farcaster_adapter
     from sm_tracker.platforms.mastodon import create_mastodon_adapter
     from sm_tracker.platforms.threads import create_threads_adapter
@@ -59,6 +61,7 @@ def resolve_adapters(
     env_map = os.environ if env is None else env
     factories: dict[str, Callable[[Mapping[str, str]], PlatformAdapter]] = {
         "bluesky": create_bluesky_adapter,
+        "facebook": create_facebook_adapter,
         "farcaster": create_farcaster_adapter,
         "mastodon": create_mastodon_adapter,
         "threads": create_threads_adapter,
