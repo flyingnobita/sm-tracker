@@ -2,6 +2,43 @@
 
 This guide provides instructions on how to set up API credentials and tokens for the various platforms supported by `sm-tracker`.
 
+## Threads
+
+The Threads API uses OAuth 2.0. To track Threads follower counts, you must create a Meta App and generate a long-lived access token.
+
+### Step 1: Create a Meta App
+
+1. Go to the [Meta Developer Portal](https://developers.facebook.com/).
+2. Create a new App. Select **"Other"** as the Use Case, then select **"None"** (or Business).
+3. In the App Dashboard, go to **App Settings > Basic** and note down your **App ID** (`THREADS_APP_ID`) and **App Secret** (`THREADS_APP_SECRET`).
+
+### Step 2: Configure OAuth Settings
+
+1. In the App Dashboard, click **Add Product** and select **Threads API**.
+2. Go to the **Threads API > Settings** section in the left sidebar.
+3. In the **Valid OAuth Redirect URIs** field, enter exactly `https://localhost/callback`.
+4. Click **Save Changes**.
+
+### Step 3: Run the Auth Command
+
+Use the built-in CLI command to handle the OAuth flow and generate a long-lived token.
+
+1. Ensure your `.env` file has the `THREADS_APP_ID` and `THREADS_APP_SECRET` populated. (You can also leave `THREADS_REDIRECT_URI=https://localhost/callback` as the default).
+2. Run the interactive auth command:
+
+    ```bash
+    sm-tracker auth --platform threads
+    ```
+
+3. The CLI will provide a URL. Open this URL in your web browser and authorize the app.
+4. You will be redirected to an empty `https://localhost/callback` page that looks broken (this is expected).
+5. Copy the _entire_ URL from your browser's address bar (it will contain a `?code=...` parameter).
+6. Paste that full URL back into the CLI prompt.
+7. The CLI will automatically exchange the code for a short-lived token, then exchange _that_ for a 60-day long-lived token.
+8. The final `THREADS_ACCESS_TOKEN`, `THREADS_USER_ID`, and `THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC` will be securely saved to your `.env` file.
+
+_Note: Since the long-lived token expires after 60 days, you will need to re-run the `auth --platform threads` command whenever you see expiry warnings._
+
 ## Facebook and Instagram
 
 The Meta Graph API uses different types of access tokens for Facebook and Instagram integration. This section explains the token hierarchy, how to set up your Meta App, and how to authenticate.
