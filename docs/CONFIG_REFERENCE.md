@@ -43,21 +43,39 @@
 - `THREADS_APP_SECRET` (optional, needed for `auth`)
 - `THREADS_REDIRECT_URI` (optional, default: `https://localhost/callback`)
 
-### Facebook
+### Meta (Facebook & Instagram)
+
+The Meta Graph API uses a token hierarchy. See [`CREDENTIAL_SETUP_GUIDE.md`](CREDENTIAL_SETUP_GUIDE.md) for a full step-by-step setup and token exchange tutorial.
+
+- `META_APP_ID` (optional, needed for `auth` command)
+- `META_APP_SECRET` (optional, needed for `auth` command)
+- `META_USER_TOKEN_SHORT_LIVED` (optional, needed for `auth` command)
+
+#### Facebook
 
 To collect Page metrics, you need a **Page Access Token**. You have two options for configuring this:
 
 **Option 1: Direct Page Token (Recommended)**
 
-1. Provide `FACEBOOK_PAGE_ACCESS_TOKEN` in your `.env`.
-2. `FACEBOOK_ID` can optionally be omitted, as the app will automatically fetch the ID of the page the token belongs to.
+- `FACEBOOK_PAGE_ACCESS_TOKEN` (Generated seamlessly via `sm-tracker auth -p facebook`)
+- `FACEBOOK_ID` is optional when using the Page Token, as it is automatically discovered.
 
-**Option 2: Automatic Token Exchange**
+**Option 2: Automatic Token Exchange at Runtime**
 
-1. Generate a generic **User Access Token** in the Meta App Dashboard.
-2. Provide this via `FACEBOOK_ACCESS_TOKEN`.
-3. You MUST provide the specific `FACEBOOK_ID` of your page.
-4. The tracker will seamlessly use the User Token to query the Graph API and extract the correct Page Access Token for your `FACEBOOK_ID` in the background.
+- `FACEBOOK_ACCESS_TOKEN` (User Access Token)
+- `FACEBOOK_ID` (Required if using User Token)
+
+#### Instagram
+
+- `LONG_LIVED_USER_TOKEN` (Required. Generated seamlessly via `sm-tracker auth -p instagram`)
+- `INSTAGRAM_ACCOUNT_ID` (Required)
+- `INSTAGRAM_USERNAME` (Optional, use to track a competitor account)
+
+### YouTube
+
+- `YOUTUBE_API_KEY` (Required, must have YouTube Data API v3 enabled)
+- `YOUTUBE_CHANNEL_ID` (Required unless handle is provided)
+- `YOUTUBE_HANDLE` (Required unless channel ID is provided; e.g. `@Google`)
 
 ## `config.toml` reference
 

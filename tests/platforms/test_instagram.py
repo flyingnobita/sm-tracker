@@ -14,7 +14,7 @@ from sm_tracker.platforms.instagram import InstagramAdapter, create_instagram_ad
 def test_create_instagram_adapter_success() -> None:
     env = {
         "INSTAGRAM_ACCOUNT_ID": "12345",
-        "INSTAGRAM_ACCESS_TOKEN": "abcde",
+        "LONG_LIVED_USER_TOKEN": "abcde",
         "INSTAGRAM_USERNAME": "testuser",
     }
     adapter = create_instagram_adapter(env)
@@ -27,7 +27,7 @@ def test_create_instagram_adapter_success() -> None:
 def test_create_instagram_adapter_no_username() -> None:
     env = {
         "INSTAGRAM_ACCOUNT_ID": "12345",
-        "INSTAGRAM_ACCESS_TOKEN": "abcde",
+        "LONG_LIVED_USER_TOKEN": "abcde",
     }
     adapter = create_instagram_adapter(env)
     assert adapter.username is None
@@ -37,14 +37,14 @@ def test_create_instagram_adapter_missing_config() -> None:
     env: dict[str, str] = {"INSTAGRAM_ACCOUNT_ID": "123"}
     with pytest.raises(
         AdapterConfigError,
-        match="missing INSTAGRAM_ACCOUNT_ID or INSTAGRAM_ACCESS_TOKEN",
+        match="missing INSTAGRAM_ACCOUNT_ID or LONG_LIVED_USER_TOKEN",
     ):
         create_instagram_adapter(env)
 
-    env = {"INSTAGRAM_ACCESS_TOKEN": "abc"}
+    env = {"LONG_LIVED_USER_TOKEN": "abc"}
     with pytest.raises(
         AdapterConfigError,
-        match="missing INSTAGRAM_ACCOUNT_ID or INSTAGRAM_ACCESS_TOKEN",
+        match="missing INSTAGRAM_ACCOUNT_ID or LONG_LIVED_USER_TOKEN",
     ):
         create_instagram_adapter(env)
 

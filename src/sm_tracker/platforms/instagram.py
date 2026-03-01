@@ -61,13 +61,13 @@ class InstagramAdapter:
 def create_instagram_adapter(env: Mapping[str, str]) -> InstagramAdapter:
     """Create an Instagram adapter from env vars."""
     account_id = env.get("INSTAGRAM_ACCOUNT_ID", "").strip()
-    access_token = env.get("INSTAGRAM_ACCESS_TOKEN", "").strip()
+    access_token = env.get("LONG_LIVED_USER_TOKEN", "").strip()
     username = env.get("INSTAGRAM_USERNAME", "").strip() or None
 
     if not account_id or not access_token:
         raise AdapterConfigError(
             "Skipping instagram: missing INSTAGRAM_ACCOUNT_ID "
-            "or INSTAGRAM_ACCESS_TOKEN in environment."
+            "or LONG_LIVED_USER_TOKEN in environment."
         )
 
     return InstagramAdapter(

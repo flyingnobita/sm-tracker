@@ -6,6 +6,7 @@ import csv
 import json
 import logging
 import os
+import urllib.request
 from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime, timedelta
 from io import StringIO
@@ -44,7 +45,7 @@ app = typer.Typer(
 )
 LOGGER = logging.getLogger("sm_tracker.cli")
 
-_AUTH_SUPPORTED_PLATFORMS: frozenset[str] = frozenset({"threads"})
+_AUTH_SUPPORTED_PLATFORMS: frozenset[str] = frozenset({"threads", "instagram", "facebook"})
 
 ENV_FIELD_SPECS: list[tuple[str, str, bool]] = [
     ("TWITTER_CONSUMER_KEY", "Twitter consumer key", True),
@@ -73,10 +74,13 @@ ENV_FIELD_SPECS: list[tuple[str, str, bool]] = [
         False,
     ),
     ("INSTAGRAM_ACCOUNT_ID", "Instagram account ID", True),
-    ("INSTAGRAM_ACCESS_TOKEN", "Instagram access token", True),
+    ("LONG_LIVED_USER_TOKEN", "Instagram access token", True),
     ("FACEBOOK_ID", "Facebook ID", True),
     ("FACEBOOK_ACCESS_TOKEN", "Facebook user access token", True),
     ("FACEBOOK_PAGE_ACCESS_TOKEN", "Facebook page access token (optional)", False),
+    ("META_APP_ID", "Meta App ID (for auth)", False),
+    ("META_APP_SECRET", "Meta App Secret (for auth)", False),
+    ("META_USER_TOKEN_SHORT_LIVED", "Meta Short-Lived User Token (for auth)", False),
     ("YOUTUBE_API_KEY", "YouTube API key", True),
     ("YOUTUBE_CHANNEL_ID", "YouTube channel ID (optional if handle provided)", False),
     ("YOUTUBE_HANDLE", "YouTube handle (optional if channel ID provided)", False),
@@ -458,7 +462,7 @@ def auth_command(
         ...,
         "--platform",
         "-p",
-        help="Target platform for auth flow (currently: threads).",
+        help="Target platform for auth flow (currently: threads, instagram, facebook).",
     ),
 ) -> None:
     """Run platform OAuth flow and save credentials to .env."""
@@ -470,7 +474,15 @@ def auth_command(
         raise typer.Exit(code=1)
 
     load_dotenv()
+    env_path = Path(".env")
 
+    if selected_platform == "threads":
+        _run_threads_auth(env_path)
+    elif selected_platform in ("instagram", "facebook"):
+        _run_meta_auth(env_path, selected_platform)
+
+
+def _run_threads_auth(env_path: Path) -> None:
     app_id = os.getenv("THREADS_APP_ID", "").strip()
     app_secret = os.getenv("THREADS_APP_SECRET", "").strip()
     redirect_uri = os.getenv("THREADS_REDIRECT_URI", "https://localhost/callback").strip()
@@ -519,7 +531,6 @@ def auth_command(
         expires_at_iso = expires_at_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
         typer.echo(f"Expires at (UTC): {expires_at_iso}")
 
-        env_path = Path(".env")
         if not env_path.exists():
             typer.echo("Could not find .env in current working directory.")
             raise typer.Exit(code=1)
@@ -530,6 +541,97 @@ def auth_command(
         typer.echo("Saved THREADS_ACCESS_TOKEN, THREADS_USER_ID, and expiry time to .env")
     finally:
         client.close()
+
+
+def _run_meta_auth(env_path: Path, platform: str) -> None:
+    from dotenv import set_key
+
+    if not env_path.exists():
+        env_path.touch()
+
+    # Initial load of variables from env
+    app_id = os.getenv("META_APP_ID", "").strip()
+    app_secret = os.getenv("META_APP_SECRET", "").strip()
+    short_token = os.getenv("META_USER_TOKEN_SHORT_LIVED", "").strip()
+
+    while True:
+        if not app_id:
+            app_id = typer.prompt("Enter your Meta App ID").strip()
+            set_key(str(env_path), "META_APP_ID", app_id)
+
+        if not app_secret:
+            app_secret = typer.prompt("Enter your Meta App Secret", hide_input=True).strip()
+            set_key(str(env_path), "META_APP_SECRET", app_secret)
+
+        if not short_token:
+            short_token = typer.prompt(
+                "Enter your fresh Short-Lived User Token", hide_input=True
+            ).strip()
+            set_key(str(env_path), "META_USER_TOKEN_SHORT_LIVED", short_token)
+
+        typer.echo("Exchanging for long-lived user token...")
+        url_exchange = (
+            f"https://graph.facebook.com/v19.0/oauth/access_token"
+            f"?grant_type=fb_exchange_token&client_id={app_id}"
+            f"&client_secret={app_secret}&fb_exchange_token={short_token}"
+        )
+        req_exchange = urllib.request.Request(url_exchange)
+
+        try:
+            with urllib.request.urlopen(req_exchange) as response:
+                data = json.loads(response.read().decode())
+                long_user_token = data.get("access_token")
+                typer.echo("Got long-lived user token successfully.")
+                break  # Exit the while loop on success
+        except urllib.error.HTTPError as e:
+            error_data = {}
+            try:
+                error_data = json.loads(e.read().decode())
+            except json.JSONDecodeError:
+                pass
+
+            error_msg = error_data.get("error", {}).get("message", "Unknown error")
+            typer.echo(f"Failed to get long-lived user token: HTTP Error {e.code}: {e.reason}")
+            typer.echo(f"Details: {error_msg}")
+
+            # Reset values to prompt again on next loop
+            typer.echo("\nPlease provide new credentials:")
+            app_id = ""
+            app_secret = ""
+            short_token = ""
+        except Exception as e:
+            typer.echo(f"An unexpected error occurred: {e}")
+            raise typer.Exit(code=1) from e
+
+    if platform == "instagram":
+        set_key(str(env_path), "LONG_LIVED_USER_TOKEN", long_user_token)
+        typer.echo("Saved LONG_LIVED_USER_TOKEN to .env")
+
+    elif platform == "facebook":
+        typer.echo("Fetching long-lived page tokens...")
+        url_pages = f"https://graph.facebook.com/v19.0/me/accounts?access_token={long_user_token}"
+        req_pages = urllib.request.Request(url_pages)
+        try:
+            with urllib.request.urlopen(req_pages) as response:
+                pages_data = json.loads(response.read().decode())
+
+                if pages_data.get("data") and len(pages_data["data"]) > 0:
+                    long_page_token = pages_data["data"][0].get("access_token")
+                    page_name = pages_data["data"][0].get("name")
+                    typer.echo(f"Got long-lived page token for '{page_name}'.")
+                    set_key(str(env_path), "FACEBOOK_PAGE_ACCESS_TOKEN", long_page_token)
+                    typer.echo("Saved FACEBOOK_PAGE_ACCESS_TOKEN to .env")
+                else:
+                    typer.echo(
+                        "No pages found for this user. "
+                        "Make sure you granted 'pages_read_engagement' and 'pages_show_list'."
+                    )
+                    raise typer.Exit(code=1)
+        except Exception as e:
+            typer.echo(f"Failed to get page tokens: {e}")
+            if hasattr(e, "read"):
+                typer.echo(e.read().decode())
+            raise typer.Exit(code=1) from e
 
 
 @app.command(name="help")
@@ -818,7 +920,7 @@ def _validate_required_env_values(env_values: Mapping[str, str]) -> list[str]:
         "farcaster": ["FARCASTER_API_KEY", "FARCASTER_USERNAME"],
         "mastodon": ["MASTODON_ACCESS_TOKEN", "MASTODON_INSTANCE"],
         "threads": ["THREADS_ACCESS_TOKEN", "THREADS_USER_ID"],
-        "instagram": ["INSTAGRAM_ACCOUNT_ID", "INSTAGRAM_ACCESS_TOKEN"],
+        "instagram": ["INSTAGRAM_ACCOUNT_ID", "LONG_LIVED_USER_TOKEN"],
         "facebook": ["FACEBOOK_ACCESS_TOKEN", "FACEBOOK_ID"],
         "youtube": ["YOUTUBE_API_KEY"],
     }

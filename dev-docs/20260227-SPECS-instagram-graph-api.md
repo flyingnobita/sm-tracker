@@ -14,7 +14,7 @@ This specification outlines the migration to the official **Meta Graph API**, wh
 4. **Target Account Identification:** The API requires a Meta Graph Object ID for the Instagram Business Account, which is distinct from a public Instagram username or standard user ID.
 5. **Environment Variables (`.env`)**:
     - `INSTAGRAM_ACCOUNT_ID`: (Required) The internal Meta Graph ID of the connected Instagram Professional account.
-    - `INSTAGRAM_ACCESS_TOKEN`: (Required) The User Access Token generated via the Facebook Developer portal.
+    - `LONG_LIVED_USER_TOKEN`: (Required) The User Access Token generated via the Facebook Developer portal.
     - `INSTAGRAM_USERNAME`: (Optional) If provided, the tracker will use the `business_discovery` edge to fetch data for this competitor handle. If omitted, it fetches data for the authenticated `INSTAGRAM_ACCOUNT_ID`.
 
 ## Implementation Details
@@ -24,13 +24,13 @@ This specification outlines the migration to the official **Meta Graph API**, wh
 **1. Fetching Own Account Data (No `INSTAGRAM_USERNAME`)**
 
 ```http
-GET https://graph.facebook.com/v19.0/{INSTAGRAM_ACCOUNT_ID}?fields=followers_count,follows_count&access_token={INSTAGRAM_ACCESS_TOKEN}
+GET https://graph.facebook.com/v19.0/{INSTAGRAM_ACCOUNT_ID}?fields=followers_count,follows_count&access_token={LONG_LIVED_USER_TOKEN}
 ```
 
 **2. Fetching Competitor Data (Using `INSTAGRAM_USERNAME`)**
 
 ```http
-GET https://graph.facebook.com/v19.0/{INSTAGRAM_ACCOUNT_ID}?fields=business_discovery.username({INSTAGRAM_USERNAME}){followers_count,follows_count}&access_token={INSTAGRAM_ACCESS_TOKEN}
+GET https://graph.facebook.com/v19.0/{INSTAGRAM_ACCOUNT_ID}?fields=business_discovery.username({INSTAGRAM_USERNAME}){followers_count,follows_count}&access_token={LONG_LIVED_USER_TOKEN}
 ```
 
 ### Response Handling

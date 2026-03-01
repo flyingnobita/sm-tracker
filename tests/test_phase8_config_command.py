@@ -35,6 +35,9 @@ def _guided_input_for_full_setup() -> str:
                 "fb-id",
                 "fb-token",
                 "",
+                "",
+                "",
+                "",
                 "youtube-key",
                 "UC12345",
                 "",
@@ -50,7 +53,7 @@ def _guided_input_for_full_setup() -> str:
 
 
 def _guided_input_with_empty_required_values() -> str:
-    return "\n" * 30
+    return "\n" * 40
 
 
 def test_config_command_guided_flow_creates_env_and_config() -> None:
@@ -94,7 +97,7 @@ def test_config_command_shows_validation_warnings_for_missing_required_env_value
     assert "farcaster: missing FARCASTER_API_KEY, FARCASTER_USERNAME" in result.stdout
     assert "mastodon: missing MASTODON_ACCESS_TOKEN, MASTODON_INSTANCE" in result.stdout
     assert "threads: missing THREADS_ACCESS_TOKEN, THREADS_USER_ID" in result.stdout
-    assert "instagram: missing INSTAGRAM_ACCOUNT_ID, INSTAGRAM_ACCESS_TOKEN" in result.stdout
+    assert "instagram: missing INSTAGRAM_ACCOUNT_ID, LONG_LIVED_USER_TOKEN" in result.stdout
     assert "facebook: missing FACEBOOK_ACCESS_TOKEN, FACEBOOK_ID" in result.stdout
     assert "youtube: missing YOUTUBE_API_KEY, YOUTUBE_CHANNEL_ID or YOUTUBE_HANDLE" in result.stdout
     assert "TWITTER_CONSUMER_KEY=" not in env_contents

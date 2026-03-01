@@ -5,12 +5,14 @@ from __future__ import annotations
 import os
 
 import pytest
+from dotenv import load_dotenv
 
 from sm_tracker.platforms.facebook import create_facebook_adapter
 
 
 @pytest.mark.integration
 def test_facebook_fetch_counts() -> None:
+    load_dotenv(override=True)
     page_access_token = os.environ.get("FACEBOOK_PAGE_ACCESS_TOKEN", "").strip()
     if not page_access_token:
         pytest.skip("FACEBOOK_PAGE_ACCESS_TOKEN not set")

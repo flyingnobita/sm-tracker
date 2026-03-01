@@ -12,9 +12,9 @@ from sm_tracker.platforms.instagram import create_instagram_adapter
 @pytest.mark.integration
 def test_instagram_fetch_counts() -> None:
     account_id = os.environ.get("INSTAGRAM_ACCOUNT_ID", "").strip()
-    access_token = os.environ.get("INSTAGRAM_ACCESS_TOKEN", "").strip()
+    access_token = os.environ.get("LONG_LIVED_USER_TOKEN", "").strip()
     if not account_id or not access_token:
-        pytest.skip("INSTAGRAM_ACCOUNT_ID and INSTAGRAM_ACCESS_TOKEN not set")
+        pytest.skip("INSTAGRAM_ACCOUNT_ID and LONG_LIVED_USER_TOKEN not set")
 
     adapter = create_instagram_adapter(dict(os.environ))
     counts = adapter.fetch_counts()
