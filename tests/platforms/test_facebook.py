@@ -11,21 +11,21 @@ from typer.testing import CliRunner
 
 from sm_tracker.cli import app
 from sm_tracker.platforms import AdapterConfigError
-from sm_tracker.platforms.facebook import FacebookAdapter, create_facebook_adapter
+from sm_tracker.platforms.facebook import FacebookAdapter
 
 
-def test_create_facebook_adapter_requires_access_token() -> None:
+def test_from_env_facebook_requires_access_token() -> None:
     try:
-        create_facebook_adapter({"FACEBOOK_ID": "12345"})
+        FacebookAdapter.from_env({"FACEBOOK_ID": "12345"})
     except AdapterConfigError as exc:
         assert "missing FACEBOOK_PAGE_ACCESS_TOKEN or FACEBOOK_ACCESS_TOKEN" in str(exc)
     else:
         raise AssertionError("Expected AdapterConfigError for missing tokens.")
 
 
-def test_create_facebook_adapter_requires_target_id() -> None:
+def test_from_env_facebook_requires_target_id() -> None:
     try:
-        create_facebook_adapter({"FACEBOOK_ACCESS_TOKEN": "secret"})
+        FacebookAdapter.from_env({"FACEBOOK_ACCESS_TOKEN": "secret"})
     except AdapterConfigError as exc:
         assert "FACEBOOK_ID is required when using FACEBOOK_ACCESS_TOKEN" in str(exc)
     else:
@@ -84,12 +84,10 @@ def test_track_and_show_facebook_end_to_end(monkeypatch: MonkeyPatch, tmp_path: 
         ]
     )
 
-    import sm_tracker.platforms.facebook as fb_module
-
     monkeypatch.setattr(
-        fb_module,
-        "_fetch_page_token",
-        lambda _token, _id: "mock_page_token",
+        FacebookAdapter,
+        "from_env",
+        classmethod(lambda cls, e: cls(target_id="12345", access_token="mock_page_token")),
     )
 
     monkeypatch.setattr(
@@ -129,6 +127,7 @@ level = "INFO"
     assert "Date | Platform | Followers | Following | Delta" in history_result.stdout
 
 
+@pytest.mark.integration
 def test_facebook_live_credentials_fetch_counts() -> None:
     """Opt-in live test that validates Facebook credentials against the real API."""
     access_token = os.getenv("FACEBOOK_ACCESS_TOKEN", "").strip()

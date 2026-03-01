@@ -12,7 +12,7 @@ from typer.testing import CliRunner
 
 from sm_tracker.cli import app
 from sm_tracker.platforms import AdapterConfigError
-from sm_tracker.platforms.bluesky import BlueskyAdapter, create_bluesky_adapter
+from sm_tracker.platforms.bluesky import BlueskyAdapter
 
 
 class _FakeClient:
@@ -28,9 +28,9 @@ class _FakeClient:
         return self.profile
 
 
-def test_create_bluesky_adapter_requires_handle() -> None:
+def test_from_env_bluesky_requires_handle() -> None:
     try:
-        create_bluesky_adapter({})
+        BlueskyAdapter.from_env({})
     except AdapterConfigError as exc:
         assert "missing BLUESKY_HANDLE" in str(exc)
     else:

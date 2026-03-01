@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from sm_tracker.platforms.bluesky import create_bluesky_adapter
+from sm_tracker.platforms.bluesky import BlueskyAdapter
 
 
 @pytest.mark.integration
@@ -15,7 +15,7 @@ def test_bluesky_fetch_counts() -> None:
     if not handle:
         pytest.skip("BLUESKY_HANDLE not set")
 
-    adapter = create_bluesky_adapter(dict(os.environ))
+    adapter = BlueskyAdapter.from_env(dict(os.environ))
     counts = adapter.fetch_counts()
 
     assert counts.platform == "bluesky"

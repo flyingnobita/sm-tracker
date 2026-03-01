@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from sm_tracker.platforms.farcaster import create_farcaster_adapter
+from sm_tracker.platforms.farcaster import FarcasterAdapter
 
 
 @pytest.mark.integration
@@ -16,7 +16,7 @@ def test_farcaster_fetch_counts() -> None:
     if not api_key or not username:
         pytest.skip("FARCASTER_API_KEY and FARCASTER_USERNAME not set")
 
-    adapter = create_farcaster_adapter(dict(os.environ))
+    adapter = FarcasterAdapter.from_env(dict(os.environ))
     counts = adapter.fetch_counts()
 
     assert counts.platform == "farcaster"

@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from sm_tracker.platforms.twitter import create_twitter_adapter
+from sm_tracker.platforms.twitter import TwitterAdapter
 
 
 @pytest.mark.integration
@@ -22,7 +22,7 @@ def test_twitter_fetch_counts() -> None:
             "TWITTER_ACCESS_TOKEN_SECRET, and TWITTER_HANDLE not all set"
         )
 
-    adapter = create_twitter_adapter(dict(os.environ))
+    adapter = TwitterAdapter.from_env(dict(os.environ))
     counts = adapter.fetch_counts()
 
     assert counts.platform == "twitter"

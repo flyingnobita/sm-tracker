@@ -7,7 +7,7 @@ import os
 import pytest
 from dotenv import load_dotenv
 
-from sm_tracker.platforms.facebook import create_facebook_adapter
+from sm_tracker.platforms.facebook import FacebookAdapter
 
 
 @pytest.mark.integration
@@ -17,7 +17,7 @@ def test_facebook_fetch_counts() -> None:
     if not page_access_token:
         pytest.skip("FACEBOOK_PAGE_ACCESS_TOKEN not set")
 
-    adapter = create_facebook_adapter(dict(os.environ))
+    adapter = FacebookAdapter.from_env(dict(os.environ))
     counts = adapter.fetch_counts()
 
     assert counts.platform == "facebook"

@@ -9,20 +9,23 @@ from typing import Any
 from urllib.parse import quote
 from urllib.request import Request, urlopen
 
-from sm_tracker.platforms import AdapterConfigError, PlatformCounts
+from sm_tracker.platforms import AdapterConfigError, BaseAdapter, PlatformCounts
 from sm_tracker.platforms.utils import extract_int
 
 GRAPH_API_VERSION = "v19.0"
 
 
 @dataclass(frozen=True)
-class FacebookAdapter:
+class FacebookAdapter(BaseAdapter):
     """Fetch Facebook follower counts for one target ID (Page, Group, or User)."""
 
     target_id: str | None = None
     access_token: str | None = field(default=None, repr=False)
     user_token: str | None = field(default=None, repr=False)
-    name: str = "facebook"
+
+    @property
+    def name(self) -> str:
+        return "facebook"
 
     def _build_request(self, target_id: str, access_token: str) -> Request:
         target_encoded = quote(target_id, safe="")
@@ -101,11 +104,37 @@ class FacebookAdapter:
             following_count=None,  # Facebook API rarely exposes "following"
         )
 
+    @classmethod
+    def from_env(cls, env: Mapping[str, str]) -> FacebookAdapter:
+        """Create a Facebook adapter from env vars.
+
+        If FACEBOOK_PAGE_ACCESS_TOKEN is provided, it is used directly.
+        Otherwise, if FACEBOOK_ACCESS_TOKEN (User Token) and FACEBOOK_ID are provided,
+        it automatically exchanges them for a Page Token in fetch_counts.
+        """
+        page_token = env.get("FACEBOOK_PAGE_ACCESS_TOKEN", "").strip()
+        target_id = env.get("FACEBOOK_ID", "").strip()
+        user_token = env.get("FACEBOOK_ACCESS_TOKEN", "").strip()
+
+        if not page_token and not user_token:
+            raise AdapterConfigError(
+                "Skipping facebook: missing FACEBOOK_PAGE_ACCESS_TOKEN or FACEBOOK_ACCESS_TOKEN."
+            )
+
+        if user_token and not page_token and not target_id:
+            raise AdapterConfigError(
+                "Skipping facebook: FACEBOOK_ID is required when using FACEBOOK_ACCESS_TOKEN."
+            )
+
+        return cls(
+            target_id=target_id if target_id else None,
+            access_token=page_token if page_token else None,
+            user_token=user_token if user_token else None,
+        )
+
 
 def _fetch_page_token(user_token: str, target_id: str) -> str:
     """Exchange a User Access Token for a specific Page Access Token."""
-    # Build URL to fetch accounts (pages) managed by this user
-    # We ask for a high limit to ensure we find the page if they manage many
     url = f"https://graph.facebook.com/{GRAPH_API_VERSION}/me/accounts?limit=100"
     request = Request(
         url,
@@ -130,32 +159,4 @@ def _fetch_page_token(user_token: str, target_id: str) -> str:
     raise AdapterConfigError(
         f"Could not find Page Access Token for ID {target_id}. "
         "Ensure the User Token has administrative access to this page."
-    )
-
-
-def create_facebook_adapter(env: Mapping[str, str]) -> FacebookAdapter:
-    """Create a Facebook adapter from env vars.
-
-    If FACEBOOK_PAGE_ACCESS_TOKEN is provided, it is used directly.
-    Otherwise, if FACEBOOK_ACCESS_TOKEN (User Token) and FACEBOOK_ID are provided,
-    it automatically exchanges them for a Page Token in fetch_counts.
-    """
-    page_token = env.get("FACEBOOK_PAGE_ACCESS_TOKEN", "").strip()
-    target_id = env.get("FACEBOOK_ID", "").strip()
-    user_token = env.get("FACEBOOK_ACCESS_TOKEN", "").strip()
-
-    if not page_token and not user_token:
-        raise AdapterConfigError(
-            "Skipping facebook: missing FACEBOOK_PAGE_ACCESS_TOKEN or FACEBOOK_ACCESS_TOKEN."
-        )
-
-    if user_token and not page_token and not target_id:
-        raise AdapterConfigError(
-            "Skipping facebook: FACEBOOK_ID is required when using FACEBOOK_ACCESS_TOKEN."
-        )
-
-    return FacebookAdapter(
-        target_id=target_id if target_id else None,
-        access_token=page_token if page_token else None,
-        user_token=user_token if user_token else None,
     )

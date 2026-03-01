@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import logging
 import os
-from collections.abc import Callable, Mapping, Sequence
+from abc import ABC, abstractmethod
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Any
 
 LOGGER = logging.getLogger(__name__)
 
@@ -24,17 +25,22 @@ class PlatformCounts:
     following_count: int | None
 
 
-class PlatformAdapter(Protocol):
-    """Common interface each platform adapter must implement."""
+class BaseAdapter(ABC):
+    """Common abstract base class each platform adapter must implement."""
 
     @property
+    @abstractmethod
     def name(self) -> str:
         """Platform identifier (for example, `bluesky`)."""
-        ...
 
+    @abstractmethod
     def fetch_counts(self) -> PlatformCounts:
         """Fetch the latest counts for the configured account."""
-        ...
+
+    @classmethod
+    @abstractmethod
+    def from_env(cls, env: Mapping[str, str]) -> BaseAdapter:
+        """Create an adapter instance from environment variables."""
 
 
 SUPPORTED_PLATFORM_NAMES: tuple[str, ...] = (
@@ -51,29 +57,29 @@ SUPPORTED_PLATFORM_NAMES: tuple[str, ...] = (
 
 def resolve_adapters(
     selected_platforms: Sequence[str], env: Mapping[str, str] | None = None
-) -> tuple[list[PlatformAdapter], list[str]]:
+) -> tuple[list[BaseAdapter], list[str]]:
     """Build adapters for selected platform names and collect warnings."""
-    from sm_tracker.platforms.bluesky import create_bluesky_adapter
-    from sm_tracker.platforms.facebook import create_facebook_adapter
-    from sm_tracker.platforms.farcaster import create_farcaster_adapter
-    from sm_tracker.platforms.instagram import create_instagram_adapter
-    from sm_tracker.platforms.mastodon import create_mastodon_adapter
-    from sm_tracker.platforms.threads import create_threads_adapter
-    from sm_tracker.platforms.twitter import create_twitter_adapter
-    from sm_tracker.platforms.youtube import create_youtube_adapter
+    from sm_tracker.platforms.bluesky import BlueskyAdapter
+    from sm_tracker.platforms.facebook import FacebookAdapter
+    from sm_tracker.platforms.farcaster import FarcasterAdapter
+    from sm_tracker.platforms.instagram import InstagramAdapter
+    from sm_tracker.platforms.mastodon import MastodonAdapter
+    from sm_tracker.platforms.threads import ThreadsAdapter
+    from sm_tracker.platforms.twitter import TwitterAdapter
+    from sm_tracker.platforms.youtube import YouTubeAdapter
 
     env_map = os.environ if env is None else env
-    factories: dict[str, Callable[[Mapping[str, str]], PlatformAdapter]] = {
-        "bluesky": create_bluesky_adapter,
-        "facebook": create_facebook_adapter,
-        "farcaster": create_farcaster_adapter,
-        "mastodon": create_mastodon_adapter,
-        "threads": create_threads_adapter,
-        "twitter": create_twitter_adapter,
-        "instagram": create_instagram_adapter,
-        "youtube": create_youtube_adapter,
+    factories: dict[str, Any] = {
+        "bluesky": BlueskyAdapter,
+        "facebook": FacebookAdapter,
+        "farcaster": FarcasterAdapter,
+        "mastodon": MastodonAdapter,
+        "threads": ThreadsAdapter,
+        "twitter": TwitterAdapter,
+        "instagram": InstagramAdapter,
+        "youtube": YouTubeAdapter,
     }
-    adapters: list[PlatformAdapter] = []
+    adapters: list[BaseAdapter] = []
     warnings: list[str] = []
     seen: set[str] = set()
 
@@ -88,7 +94,7 @@ def resolve_adapters(
             continue
 
         try:
-            adapters.append(factory(env_map))
+            adapters.append(factory.from_env(env_map))
         except AdapterConfigError as exc:
             LOGGER.debug("Adapter not configured for %s: %s", name, exc)
             warnings.append(str(exc))
@@ -98,7 +104,7 @@ def resolve_adapters(
 
 __all__ = [
     "AdapterConfigError",
-    "PlatformAdapter",
+    "BaseAdapter",
     "PlatformCounts",
     "SUPPORTED_PLATFORM_NAMES",
     "resolve_adapters",

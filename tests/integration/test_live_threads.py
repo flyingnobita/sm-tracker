@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from sm_tracker.platforms.threads import create_threads_adapter
+from sm_tracker.platforms.threads import ThreadsAdapter
 
 
 @pytest.mark.integration
@@ -16,7 +16,7 @@ def test_threads_fetch_counts() -> None:
     if not access_token or not user_id:
         pytest.skip("THREADS_ACCESS_TOKEN and THREADS_USER_ID not set")
 
-    adapter = create_threads_adapter(dict(os.environ))
+    adapter = ThreadsAdapter.from_env(dict(os.environ))
     counts = adapter.fetch_counts()
 
     assert counts.platform == "threads"

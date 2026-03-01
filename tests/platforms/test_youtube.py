@@ -9,46 +9,46 @@ from unittest.mock import Mock, patch
 import pytest
 
 from sm_tracker.platforms import AdapterConfigError, PlatformCounts
-from sm_tracker.platforms.youtube import YouTubeAdapter, create_youtube_adapter
+from sm_tracker.platforms.youtube import YouTubeAdapter
 
 
-def test_create_youtube_adapter_with_handle() -> None:
+def test_from_env_youtube_with_handle() -> None:
     env = {
         "YOUTUBE_API_KEY": "test_key",
         "YOUTUBE_HANDLE": "@test_channel",
     }
-    adapter = create_youtube_adapter(env)
+    adapter = YouTubeAdapter.from_env(env)
     assert adapter.api_key == "test_key"
     assert adapter.handle == "@test_channel"
     assert adapter.channel_id is None
     assert adapter.name == "youtube"
 
 
-def test_create_youtube_adapter_with_channel_id() -> None:
+def test_from_env_youtube_with_channel_id() -> None:
     env = {
         "YOUTUBE_API_KEY": "test_key",
         "YOUTUBE_CHANNEL_ID": "UC_test_id",
     }
-    adapter = create_youtube_adapter(env)
+    adapter = YouTubeAdapter.from_env(env)
     assert adapter.api_key == "test_key"
     assert adapter.channel_id == "UC_test_id"
     assert adapter.handle is None
 
 
-def test_create_youtube_adapter_missing_api_key() -> None:
+def test_from_env_youtube_missing_api_key() -> None:
     env = {
         "YOUTUBE_HANDLE": "@test_channel",
     }
     with pytest.raises(AdapterConfigError, match="missing YOUTUBE_API_KEY"):
-        create_youtube_adapter(env)
+        YouTubeAdapter.from_env(env)
 
 
-def test_create_youtube_adapter_missing_handle_and_id() -> None:
+def test_from_env_youtube_missing_handle_and_id() -> None:
     env = {
         "YOUTUBE_API_KEY": "test_key",
     }
     with pytest.raises(AdapterConfigError, match="missing YOUTUBE_CHANNEL_ID or YOUTUBE_HANDLE"):
-        create_youtube_adapter(env)
+        YouTubeAdapter.from_env(env)
 
 
 def test_youtube_adapter_post_init_validation() -> None:

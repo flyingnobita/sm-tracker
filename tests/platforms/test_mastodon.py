@@ -12,7 +12,7 @@ from typer.testing import CliRunner
 
 from sm_tracker.cli import app
 from sm_tracker.platforms import AdapterConfigError
-from sm_tracker.platforms.mastodon import MastodonAdapter, create_mastodon_adapter
+from sm_tracker.platforms.mastodon import MastodonAdapter
 
 
 class _FakeMastodonClient:
@@ -23,18 +23,18 @@ class _FakeMastodonClient:
         return self.account
 
 
-def test_create_mastodon_adapter_requires_access_token() -> None:
+def test_from_env_mastodon_requires_access_token() -> None:
     try:
-        create_mastodon_adapter({"MASTODON_INSTANCE": "mastodon.social"})
+        MastodonAdapter.from_env({"MASTODON_INSTANCE": "mastodon.social"})
     except AdapterConfigError as exc:
         assert "missing MASTODON_ACCESS_TOKEN" in str(exc)
     else:
         raise AssertionError("Expected AdapterConfigError for missing MASTODON_ACCESS_TOKEN.")
 
 
-def test_create_mastodon_adapter_requires_instance() -> None:
+def test_from_env_mastodon_requires_instance() -> None:
     try:
-        create_mastodon_adapter({"MASTODON_ACCESS_TOKEN": "token"})
+        MastodonAdapter.from_env({"MASTODON_ACCESS_TOKEN": "token"})
     except AdapterConfigError as exc:
         assert "missing MASTODON_INSTANCE" in str(exc)
     else:

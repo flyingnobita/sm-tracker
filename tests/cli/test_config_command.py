@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from typer.testing import CliRunner
@@ -82,24 +83,35 @@ def test_config_command_guided_flow_creates_env_and_config() -> None:
 
 
 def test_config_command_shows_validation_warnings_for_missing_required_env_values() -> None:
-    runner = CliRunner()
-    with runner.isolated_filesystem():
-        result = runner.invoke(app, ["config"], input=_guided_input_with_empty_required_values())
-        env_contents = Path(".env").read_text(encoding="utf-8")
+    original_env = dict(os.environ)
+    os.environ.clear()
+    try:
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            result = runner.invoke(
+                app, ["config"], input=_guided_input_with_empty_required_values()
+            )
+            env_contents = Path(".env").read_text(encoding="utf-8")
 
-    assert result.exit_code == 0
-    assert "Validation warnings:" in result.stdout
-    assert (
-        "twitter: missing TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET, TWITTER_HANDLE"  # noqa: E501
-        in result.stdout
-    )
-    assert "bluesky: missing BLUESKY_HANDLE" in result.stdout
-    assert "farcaster: missing FARCASTER_API_KEY, FARCASTER_USERNAME" in result.stdout
-    assert "mastodon: missing MASTODON_ACCESS_TOKEN, MASTODON_INSTANCE" in result.stdout
-    assert "threads: missing THREADS_ACCESS_TOKEN, THREADS_USER_ID" in result.stdout
-    assert "instagram: missing INSTAGRAM_ACCOUNT_ID, LONG_LIVED_USER_TOKEN" in result.stdout
-    assert "facebook: missing FACEBOOK_ACCESS_TOKEN, FACEBOOK_ID" in result.stdout
-    assert "youtube: missing YOUTUBE_API_KEY, YOUTUBE_CHANNEL_ID or YOUTUBE_HANDLE" in result.stdout
+        assert result.exit_code == 0
+        assert "Validation warnings:" in result.stdout
+        assert (
+            "twitter: missing TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET, TWITTER_HANDLE"  # noqa: E501
+            in result.stdout
+        )
+        assert "bluesky: missing BLUESKY_HANDLE" in result.stdout
+        assert "farcaster: missing FARCASTER_API_KEY, FARCASTER_USERNAME" in result.stdout
+        assert "mastodon: missing MASTODON_ACCESS_TOKEN, MASTODON_INSTANCE" in result.stdout
+        assert "threads: missing THREADS_ACCESS_TOKEN, THREADS_USER_ID" in result.stdout
+        assert "instagram: missing INSTAGRAM_ACCOUNT_ID, LONG_LIVED_USER_TOKEN" in result.stdout
+        assert "facebook: missing FACEBOOK_ACCESS_TOKEN, FACEBOOK_ID" in result.stdout
+        assert (
+            "youtube: missing YOUTUBE_API_KEY, YOUTUBE_CHANNEL_ID or YOUTUBE_HANDLE"
+            in result.stdout
+        )
+    finally:
+        os.environ.clear()
+        os.environ.update(original_env)
     assert "TWITTER_CONSUMER_KEY=" not in env_contents
 
 

@@ -9,18 +9,21 @@ from typing import Any
 from urllib.parse import quote
 from urllib.request import Request, urlopen
 
-from sm_tracker.platforms import AdapterConfigError, PlatformCounts
+from sm_tracker.platforms import AdapterConfigError, BaseAdapter, PlatformCounts
 from sm_tracker.platforms.utils import extract_int
 
 
 @dataclass(frozen=True)
-class YouTubeAdapter:
+class YouTubeAdapter(BaseAdapter):
     """Fetch YouTube subscriber counts for a channel handle or ID."""
 
     api_key: str = field(repr=False)
     handle: str | None = None
     channel_id: str | None = None
-    name: str = "youtube"
+
+    @property
+    def name(self) -> str:
+        return "youtube"
 
     def __post_init__(self) -> None:
         if not self.handle and not self.channel_id:
@@ -74,23 +77,23 @@ class YouTubeAdapter:
             following_count=None,
         )
 
+    @classmethod
+    def from_env(cls, env: Mapping[str, str]) -> YouTubeAdapter:
+        """Create a YouTube adapter from env vars."""
+        api_key = env.get("YOUTUBE_API_KEY", "").strip()
+        if not api_key:
+            raise AdapterConfigError("Skipping youtube: missing YOUTUBE_API_KEY in environment.")
 
-def create_youtube_adapter(env: Mapping[str, str]) -> YouTubeAdapter:
-    """Create a YouTube adapter from env vars."""
-    api_key = env.get("YOUTUBE_API_KEY", "").strip()
-    if not api_key:
-        raise AdapterConfigError("Skipping youtube: missing YOUTUBE_API_KEY in environment.")
+        channel_id = env.get("YOUTUBE_CHANNEL_ID", "").strip()
+        handle = env.get("YOUTUBE_HANDLE", "").strip()
 
-    channel_id = env.get("YOUTUBE_CHANNEL_ID", "").strip()
-    handle = env.get("YOUTUBE_HANDLE", "").strip()
+        if not channel_id and not handle:
+            raise AdapterConfigError(
+                "Skipping youtube: missing YOUTUBE_CHANNEL_ID or YOUTUBE_HANDLE in environment."
+            )
 
-    if not channel_id and not handle:
-        raise AdapterConfigError(
-            "Skipping youtube: missing YOUTUBE_CHANNEL_ID or YOUTUBE_HANDLE in environment."
+        return cls(
+            api_key=api_key,
+            channel_id=channel_id if channel_id else None,
+            handle=handle if handle else None,
         )
-
-    return YouTubeAdapter(
-        api_key=api_key,
-        channel_id=channel_id if channel_id else None,
-        handle=handle if handle else None,
-    )

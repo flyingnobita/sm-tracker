@@ -8,17 +8,20 @@ import urllib.request
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 
-from sm_tracker.platforms import AdapterConfigError, PlatformCounts
+from sm_tracker.platforms import AdapterConfigError, BaseAdapter, PlatformCounts
 
 
 @dataclass(frozen=True)
-class InstagramAdapter:
+class InstagramAdapter(BaseAdapter):
     """Fetch Instagram follower/following counts via Graph API."""
 
     account_id: str
     access_token: str = field(repr=False)
     username: str | None = None
-    name: str = "instagram"
+
+    @property
+    def name(self) -> str:
+        return "instagram"
 
     def fetch_counts(self) -> PlatformCounts:
         base_url = f"https://graph.facebook.com/v19.0/{self.account_id}"
@@ -57,21 +60,21 @@ class InstagramAdapter:
             following_count=stats.get("follows_count", 0),
         )
 
+    @classmethod
+    def from_env(cls, env: Mapping[str, str]) -> InstagramAdapter:
+        """Create an Instagram adapter from env vars."""
+        account_id = env.get("INSTAGRAM_ACCOUNT_ID", "").strip()
+        access_token = env.get("LONG_LIVED_USER_TOKEN", "").strip()
+        username = env.get("INSTAGRAM_USERNAME", "").strip() or None
 
-def create_instagram_adapter(env: Mapping[str, str]) -> InstagramAdapter:
-    """Create an Instagram adapter from env vars."""
-    account_id = env.get("INSTAGRAM_ACCOUNT_ID", "").strip()
-    access_token = env.get("LONG_LIVED_USER_TOKEN", "").strip()
-    username = env.get("INSTAGRAM_USERNAME", "").strip() or None
+        if not account_id or not access_token:
+            raise AdapterConfigError(
+                "Skipping instagram: missing INSTAGRAM_ACCOUNT_ID "
+                "or LONG_LIVED_USER_TOKEN in environment."
+            )
 
-    if not account_id or not access_token:
-        raise AdapterConfigError(
-            "Skipping instagram: missing INSTAGRAM_ACCOUNT_ID "
-            "or LONG_LIVED_USER_TOKEN in environment."
+        return cls(
+            account_id=account_id,
+            access_token=access_token,
+            username=username,
         )
-
-    return InstagramAdapter(
-        account_id=account_id,
-        access_token=access_token,
-        username=username,
-    )

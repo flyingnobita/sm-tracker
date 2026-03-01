@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from sm_tracker.platforms.youtube import create_youtube_adapter
+from sm_tracker.platforms.youtube import YouTubeAdapter
 
 
 @pytest.mark.integration
@@ -19,7 +19,7 @@ def test_youtube_fetch_counts() -> None:
     if not api_key or not has_target:
         pytest.skip("YOUTUBE_API_KEY and one of YOUTUBE_HANDLE/YOUTUBE_CHANNEL_ID not set")
 
-    adapter = create_youtube_adapter(dict(os.environ))
+    adapter = YouTubeAdapter.from_env(dict(os.environ))
     counts = adapter.fetch_counts()
 
     assert counts.platform == "youtube"

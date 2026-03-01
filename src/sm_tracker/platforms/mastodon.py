@@ -7,17 +7,20 @@ from dataclasses import dataclass, field
 
 from mastodon import Mastodon
 
-from sm_tracker.platforms import AdapterConfigError, PlatformCounts
+from sm_tracker.platforms import AdapterConfigError, BaseAdapter, PlatformCounts
 from sm_tracker.platforms.utils import extract_int
 
 
 @dataclass(frozen=True)
-class MastodonAdapter:
+class MastodonAdapter(BaseAdapter):
     """Fetch Mastodon follower/following counts for one account."""
 
     access_token: str = field(repr=False)
     instance: str
-    name: str = "mastodon"
+
+    @property
+    def name(self) -> str:
+        return "mastodon"
 
     def _build_client(self) -> Mastodon:
         return Mastodon(
@@ -35,18 +38,20 @@ class MastodonAdapter:
             following_count=following_count,
         )
 
+    @classmethod
+    def from_env(cls, env: Mapping[str, str]) -> MastodonAdapter:
+        """Create a Mastodon adapter from env vars."""
+        access_token = env.get("MASTODON_ACCESS_TOKEN", "").strip()
+        if not access_token:
+            raise AdapterConfigError(
+                "Skipping mastodon: missing MASTODON_ACCESS_TOKEN in environment."
+            )
 
-def create_mastodon_adapter(env: Mapping[str, str]) -> MastodonAdapter:
-    """Create a Mastodon adapter from env vars."""
-    access_token = env.get("MASTODON_ACCESS_TOKEN", "").strip()
-    if not access_token:
-        raise AdapterConfigError("Skipping mastodon: missing MASTODON_ACCESS_TOKEN in environment.")
+        instance = env.get("MASTODON_INSTANCE", "").strip()
+        if not instance:
+            raise AdapterConfigError("Skipping mastodon: missing MASTODON_INSTANCE in environment.")
 
-    instance = env.get("MASTODON_INSTANCE", "").strip()
-    if not instance:
-        raise AdapterConfigError("Skipping mastodon: missing MASTODON_INSTANCE in environment.")
-
-    return MastodonAdapter(access_token=access_token, instance=instance)
+        return cls(access_token=access_token, instance=instance)
 
 
 def _normalized_instance_url(instance: str) -> str:

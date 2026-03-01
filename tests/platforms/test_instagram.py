@@ -8,45 +8,45 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from sm_tracker.platforms import AdapterConfigError
-from sm_tracker.platforms.instagram import InstagramAdapter, create_instagram_adapter
+from sm_tracker.platforms.instagram import InstagramAdapter
 
 
-def test_create_instagram_adapter_success() -> None:
+def test_from_env_instagram_success() -> None:
     env = {
         "INSTAGRAM_ACCOUNT_ID": "12345",
         "LONG_LIVED_USER_TOKEN": "abcde",
         "INSTAGRAM_USERNAME": "testuser",
     }
-    adapter = create_instagram_adapter(env)
+    adapter = InstagramAdapter.from_env(env)
     assert adapter.account_id == "12345"
     assert adapter.access_token == "abcde"
     assert adapter.username == "testuser"
     assert adapter.name == "instagram"
 
 
-def test_create_instagram_adapter_no_username() -> None:
+def test_from_env_instagram_no_username() -> None:
     env = {
         "INSTAGRAM_ACCOUNT_ID": "12345",
         "LONG_LIVED_USER_TOKEN": "abcde",
     }
-    adapter = create_instagram_adapter(env)
+    adapter = InstagramAdapter.from_env(env)
     assert adapter.username is None
 
 
-def test_create_instagram_adapter_missing_config() -> None:
+def test_from_env_instagram_missing_config() -> None:
     env: dict[str, str] = {"INSTAGRAM_ACCOUNT_ID": "123"}
     with pytest.raises(
         AdapterConfigError,
         match="missing INSTAGRAM_ACCOUNT_ID or LONG_LIVED_USER_TOKEN",
     ):
-        create_instagram_adapter(env)
+        InstagramAdapter.from_env(env)
 
     env = {"LONG_LIVED_USER_TOKEN": "abc"}
     with pytest.raises(
         AdapterConfigError,
         match="missing INSTAGRAM_ACCOUNT_ID or LONG_LIVED_USER_TOKEN",
     ):
-        create_instagram_adapter(env)
+        InstagramAdapter.from_env(env)
 
 
 @patch("urllib.request.urlopen")

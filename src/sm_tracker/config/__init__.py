@@ -33,15 +33,27 @@ class AppConfig:
     log_retention_days: int
     log_level: str
     config_path: Path
+    env: dict[str, str]
+
+
+def read_env_file(env_path: Path | None = None) -> dict[str, str]:
+    """Read `.env` variables without mutating os.environ directly, but merge with it."""
+    from dotenv import dotenv_values
+
+    path_to_read = env_path or Path.cwd() / ".env"
+    env_vars = {}
+    if path_to_read.exists():
+        env_vars.update({k: v for k, v in dotenv_values(path_to_read).items() if v is not None})
+
+    env_vars.update(dict(os.environ))
+    return env_vars
 
 
 def load_env_file(env_path: Path | None = None) -> None:
     """Load `.env` into process environment if present."""
-    if env_path is None:
-        load_dotenv(override=False)
-        return
-
-    load_dotenv(dotenv_path=env_path, override=False)
+    path_to_load = env_path or Path.cwd() / ".env"
+    if path_to_load.exists():
+        load_dotenv(dotenv_path=path_to_load, override=False)
 
 
 def resolve_profile(config_data: Mapping[str, Any], profile_override: str | None = None) -> str:
@@ -134,6 +146,8 @@ def load_config(
 ) -> AppConfig:
     """Load `.env`, parse `config.toml`, and return resolved app config."""
     load_env_file(env_path=env_path)
+    env_vars = read_env_file(env_path=env_path)
+
     resolved_config_path = config_path or find_config_file()
     if not resolved_config_path.exists():
         raise ConfigError(f"Config file not found: {resolved_config_path}")
@@ -158,4 +172,5 @@ def load_config(
         log_retention_days=retention_days,
         log_level=log_level,
         config_path=resolved_config_path,
+        env=env_vars,
     )

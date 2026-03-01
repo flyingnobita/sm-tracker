@@ -12,9 +12,10 @@ import pytest
 from pytest import MonkeyPatch
 from typer.testing import CliRunner
 
-from sm_tracker.cli import _warn_threads_token_expiry_if_needed, app
+from sm_tracker.cli import app
+from sm_tracker.cli.auth import warn_threads_token_expiry_if_needed
 from sm_tracker.platforms import AdapterConfigError
-from sm_tracker.platforms.threads import ThreadsAdapter, create_threads_adapter
+from sm_tracker.platforms.threads import ThreadsAdapter
 
 
 class _FakeThreadsUsers:
@@ -64,18 +65,18 @@ class _FakeThreadsClient:
         self.closed = True
 
 
-def test_create_threads_adapter_requires_access_token() -> None:
+def test_from_env_threads_requires_access_token() -> None:
     try:
-        create_threads_adapter({"THREADS_USER_ID": "123"})
+        ThreadsAdapter.from_env({"THREADS_USER_ID": "123"})
     except AdapterConfigError as exc:
         assert "missing THREADS_ACCESS_TOKEN" in str(exc)
     else:
         raise AssertionError("Expected AdapterConfigError for missing THREADS_ACCESS_TOKEN.")
 
 
-def test_create_threads_adapter_requires_user_id() -> None:
+def test_from_env_threads_requires_user_id() -> None:
     try:
-        create_threads_adapter({"THREADS_ACCESS_TOKEN": "token"})
+        ThreadsAdapter.from_env({"THREADS_ACCESS_TOKEN": "token"})
     except AdapterConfigError as exc:
         assert "missing THREADS_USER_ID" in str(exc)
     else:
@@ -183,7 +184,7 @@ def test_warn_threads_token_expired(capsys: pytest.CaptureFixture[str]) -> None:
     env = {
         "THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC": "2026-02-25T00:00:00Z",
     }
-    _warn_threads_token_expiry_if_needed(["threads"], env=env, now_utc=now)
+    warn_threads_token_expiry_if_needed(["threads"], env=env, now_utc=now)
 
     captured = capsys.readouterr()
     assert "Threads access token is expired." in captured.out
@@ -196,7 +197,7 @@ def test_warn_threads_token_expiring_soon(capsys: pytest.CaptureFixture[str]) ->
     env = {
         "THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC": expires_soon,
     }
-    _warn_threads_token_expiry_if_needed(["threads"], env=env, now_utc=now)
+    warn_threads_token_expiry_if_needed(["threads"], env=env, now_utc=now)
 
     captured = capsys.readouterr()
     assert "Threads access token expires soon" in captured.out
@@ -209,7 +210,7 @@ def test_warn_threads_token_not_soon_no_output(capsys: pytest.CaptureFixture[str
     env = {
         "THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC": expires_later,
     }
-    _warn_threads_token_expiry_if_needed(["threads"], env=env, now_utc=now)
+    warn_threads_token_expiry_if_needed(["threads"], env=env, now_utc=now)
 
     captured = capsys.readouterr()
     assert captured.out == ""

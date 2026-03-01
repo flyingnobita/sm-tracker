@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from sm_tracker.platforms.mastodon import create_mastodon_adapter
+from sm_tracker.platforms.mastodon import MastodonAdapter
 
 
 @pytest.mark.integration
@@ -16,7 +16,7 @@ def test_mastodon_fetch_counts() -> None:
     if not access_token or not instance:
         pytest.skip("MASTODON_ACCESS_TOKEN and MASTODON_INSTANCE not set")
 
-    adapter = create_mastodon_adapter(dict(os.environ))
+    adapter = MastodonAdapter.from_env(dict(os.environ))
     counts = adapter.fetch_counts()
 
     assert counts.platform == "mastodon"

@@ -9,17 +9,20 @@ from typing import Any
 from urllib.parse import quote
 from urllib.request import Request, urlopen
 
-from sm_tracker.platforms import AdapterConfigError, PlatformCounts
+from sm_tracker.platforms import AdapterConfigError, BaseAdapter, PlatformCounts
 from sm_tracker.platforms.utils import extract_int
 
 
 @dataclass(frozen=True)
-class FarcasterAdapter:
+class FarcasterAdapter(BaseAdapter):
     """Fetch Farcaster follower/following counts for one username."""
 
     username: str
     api_key: str = field(repr=False)
-    name: str = "farcaster"
+
+    @property
+    def name(self) -> str:
+        return "farcaster"
 
     def _build_request(self) -> Request:
         username_encoded = quote(self.username, safe="")
@@ -52,30 +55,34 @@ class FarcasterAdapter:
             following_count=following_count,
         )
 
+    @classmethod
+    def from_env(cls, env: Mapping[str, str]) -> FarcasterAdapter:
+        """Create a Farcaster adapter from env vars."""
+        api_key = env.get("FARCASTER_API_KEY", "").strip()
+        if not api_key:
+            # Backward-compatible fallback for older configs.
+            api_key = env.get("FARCASTER_MNEMONIC", "").strip()
+            if api_key:
+                import warnings
 
-def create_farcaster_adapter(env: Mapping[str, str]) -> FarcasterAdapter:
-    """Create a Farcaster adapter from env vars."""
-    api_key = env.get("FARCASTER_API_KEY", "").strip()
-    if not api_key:
-        # Backward-compatible fallback for older configs.
-        api_key = env.get("FARCASTER_MNEMONIC", "").strip()
-        if api_key:
-            import warnings
-
-            warnings.warn(
-                "FARCASTER_MNEMONIC is deprecated and will be removed in a future version. "
-                "Please use FARCASTER_API_KEY instead.",
-                DeprecationWarning,
-                stacklevel=2,
+                warnings.warn(
+                    "FARCASTER_MNEMONIC is deprecated and will be removed in a future version. "
+                    "Please use FARCASTER_API_KEY instead.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+        if not api_key:
+            raise AdapterConfigError(
+                "Skipping farcaster: missing FARCASTER_API_KEY in environment."
             )
-    if not api_key:
-        raise AdapterConfigError("Skipping farcaster: missing FARCASTER_API_KEY in environment.")
 
-    username = env.get("FARCASTER_USERNAME", "").strip()
-    if not username:
-        raise AdapterConfigError("Skipping farcaster: missing FARCASTER_USERNAME in environment.")
+        username = env.get("FARCASTER_USERNAME", "").strip()
+        if not username:
+            raise AdapterConfigError(
+                "Skipping farcaster: missing FARCASTER_USERNAME in environment."
+            )
 
-    return FarcasterAdapter(username=username, api_key=api_key)
+        return cls(username=username, api_key=api_key)
 
 
 def _extract_user_object(payload: Mapping[str, Any]) -> Mapping[str, Any]:

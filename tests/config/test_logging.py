@@ -59,10 +59,16 @@ def test_setup_logging_uses_timed_rotation_settings(tmp_path: Path) -> None:
 
 def test_cli_bootstrap_creates_configured_log_file(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr(
-        "sm_tracker.cli.resolve_adapters",
-        lambda _platforms: ([], ["Skipping twitter: missing TWITTER_BEARER_TOKEN in environment."]),
+        "sm_tracker.cli.track.resolve_adapters",
+        lambda _platforms, env=None: (
+            [],
+            ["Skipping twitter: missing TWITTER_BEARER_TOKEN in environment."],
+        ),
     )
     runner = CliRunner()
+    import logging
+
+    logging.getLogger("sm_tracker").handlers.clear()
     with runner.isolated_filesystem():
         Path("config.toml").write_text(
             (

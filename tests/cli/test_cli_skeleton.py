@@ -19,7 +19,9 @@ def test_cli_root_help_lists_expected_commands() -> None:
 
 
 def test_track_platform_flag_is_repeatable(monkeypatch: MonkeyPatch) -> None:
-    monkeypatch.setattr("sm_tracker.cli.resolve_adapters", lambda _platforms: ([], []))
+    monkeypatch.setattr(
+        "sm_tracker.cli.track.resolve_adapters", lambda _platforms, env=None: ([], [])
+    )
     runner = CliRunner()
     result = runner.invoke(
         app,
@@ -40,7 +42,9 @@ def test_track_rejects_unknown_platform() -> None:
 
 
 def test_track_all_scope_targets_supported_platforms(monkeypatch: MonkeyPatch) -> None:
-    monkeypatch.setattr("sm_tracker.cli.resolve_adapters", lambda _platforms: ([], []))
+    monkeypatch.setattr(
+        "sm_tracker.cli.track.resolve_adapters", lambda _platforms, env=None: ([], [])
+    )
     runner = CliRunner()
     result = runner.invoke(app, ["track", "--all"], env={})
 
@@ -67,7 +71,9 @@ def test_scope_flags_are_mutually_exclusive() -> None:
 
 
 def test_track_defaults_to_all_scope(monkeypatch: MonkeyPatch) -> None:
-    monkeypatch.setattr("sm_tracker.cli.resolve_adapters", lambda _platforms: ([], []))
+    monkeypatch.setattr(
+        "sm_tracker.cli.track.resolve_adapters", lambda _platforms, env=None: ([], [])
+    )
     runner = CliRunner()
     result = runner.invoke(app, ["track"], env={})
 

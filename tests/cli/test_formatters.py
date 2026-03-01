@@ -10,7 +10,8 @@ from typing import Any
 from pytest import MonkeyPatch
 from typer.testing import CliRunner
 
-from sm_tracker.cli import _format_delta, _format_rows_csv, _format_rows_json, app
+from sm_tracker.cli import app
+from sm_tracker.cli.formatters import _format_delta, _format_rows_csv, _format_rows_json
 from sm_tracker.platforms.bluesky import BlueskyAdapter
 from sm_tracker.platforms.twitter import TwitterAdapter
 

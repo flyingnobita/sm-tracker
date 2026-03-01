@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from sm_tracker.platforms.instagram import create_instagram_adapter
+from sm_tracker.platforms.instagram import InstagramAdapter
 
 
 @pytest.mark.integration
@@ -16,7 +16,7 @@ def test_instagram_fetch_counts() -> None:
     if not account_id or not access_token:
         pytest.skip("INSTAGRAM_ACCOUNT_ID and LONG_LIVED_USER_TOKEN not set")
 
-    adapter = create_instagram_adapter(dict(os.environ))
+    adapter = InstagramAdapter.from_env(dict(os.environ))
     counts = adapter.fetch_counts()
 
     assert counts.platform == "instagram"

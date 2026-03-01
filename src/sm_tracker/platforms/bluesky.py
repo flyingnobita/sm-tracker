@@ -8,17 +8,20 @@ from typing import Any
 
 from atproto import Client  # type: ignore[import-untyped]
 
-from sm_tracker.platforms import AdapterConfigError, PlatformCounts
+from sm_tracker.platforms import AdapterConfigError, BaseAdapter, PlatformCounts
 from sm_tracker.platforms.utils import extract_int
 
 
 @dataclass(frozen=True)
-class BlueskyAdapter:
+class BlueskyAdapter(BaseAdapter):
     """Fetch Bluesky follower/following counts for one handle."""
 
     handle: str
     app_password: str | None = field(default=None, repr=False)
-    name: str = "bluesky"
+
+    @property
+    def name(self) -> str:
+        return "bluesky"
 
     def _build_client(self) -> Client:
         return Client()
@@ -40,13 +43,13 @@ class BlueskyAdapter:
             following_count=following_count,
         )
 
+    @classmethod
+    def from_env(cls, env: Mapping[str, str]) -> BlueskyAdapter:
+        """Create a Bluesky adapter from env vars."""
+        handle = env.get("BLUESKY_HANDLE", "").strip()
+        if not handle:
+            raise AdapterConfigError("Skipping bluesky: missing BLUESKY_HANDLE in environment.")
 
-def create_bluesky_adapter(env: Mapping[str, str]) -> BlueskyAdapter:
-    """Create a Bluesky adapter from env vars."""
-    handle = env.get("BLUESKY_HANDLE", "").strip()
-    if not handle:
-        raise AdapterConfigError("Skipping bluesky: missing BLUESKY_HANDLE in environment.")
-
-    app_password_raw = env.get("BLUESKY_APP_PASSWORD")
-    app_password = app_password_raw.strip() if app_password_raw else None
-    return BlueskyAdapter(handle=handle, app_password=app_password)
+        app_password_raw = env.get("BLUESKY_APP_PASSWORD")
+        app_password = app_password_raw.strip() if app_password_raw else None
+        return cls(handle=handle, app_password=app_password)

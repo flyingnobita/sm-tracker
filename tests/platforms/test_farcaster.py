@@ -11,29 +11,29 @@ from typer.testing import CliRunner
 
 from sm_tracker.cli import app
 from sm_tracker.platforms import AdapterConfigError
-from sm_tracker.platforms.farcaster import FarcasterAdapter, create_farcaster_adapter
+from sm_tracker.platforms.farcaster import FarcasterAdapter
 
 
-def test_create_farcaster_adapter_requires_api_key() -> None:
+def test_from_env_farcaster_requires_api_key() -> None:
     try:
-        create_farcaster_adapter({"FARCASTER_USERNAME": "alice"})
+        FarcasterAdapter.from_env({"FARCASTER_USERNAME": "alice"})
     except AdapterConfigError as exc:
         assert "missing FARCASTER_API_KEY" in str(exc)
     else:
         raise AssertionError("Expected AdapterConfigError for missing FARCASTER_API_KEY.")
 
 
-def test_create_farcaster_adapter_requires_username() -> None:
+def test_from_env_farcaster_requires_username() -> None:
     try:
-        create_farcaster_adapter({"FARCASTER_API_KEY": "secret"})
+        FarcasterAdapter.from_env({"FARCASTER_API_KEY": "secret"})
     except AdapterConfigError as exc:
         assert "missing FARCASTER_USERNAME" in str(exc)
     else:
         raise AssertionError("Expected AdapterConfigError for missing FARCASTER_USERNAME.")
 
 
-def test_create_farcaster_adapter_uses_legacy_mnemonic_fallback() -> None:
-    adapter = create_farcaster_adapter(
+def test_from_env_farcaster_uses_legacy_mnemonic_fallback() -> None:
+    adapter = FarcasterAdapter.from_env(
         {
             "FARCASTER_MNEMONIC": "legacy-secret",
             "FARCASTER_USERNAME": "alice",

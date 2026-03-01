@@ -13,7 +13,7 @@ from typer.testing import CliRunner
 
 from sm_tracker.cli import app
 from sm_tracker.platforms import AdapterConfigError
-from sm_tracker.platforms.twitter import TwitterAdapter, create_twitter_adapter
+from sm_tracker.platforms.twitter import TwitterAdapter
 
 _FAKE_ENV = {
     "TWITTER_CONSUMER_KEY": "ck",
@@ -36,50 +36,50 @@ class _FakeTwitterClient:
         )
 
 
-def test_create_twitter_adapter_requires_consumer_key() -> None:
+def test_from_env_twitter_requires_consumer_key() -> None:
     env = {k: v for k, v in _FAKE_ENV.items() if k != "TWITTER_CONSUMER_KEY"}
     try:
-        create_twitter_adapter(env)
+        TwitterAdapter.from_env(env)
     except AdapterConfigError as exc:
         assert "missing TWITTER_CONSUMER_KEY" in str(exc)
     else:
         raise AssertionError("Expected AdapterConfigError for missing TWITTER_CONSUMER_KEY.")
 
 
-def test_create_twitter_adapter_requires_consumer_secret() -> None:
+def test_from_env_twitter_requires_consumer_secret() -> None:
     env = {k: v for k, v in _FAKE_ENV.items() if k != "TWITTER_CONSUMER_SECRET"}
     try:
-        create_twitter_adapter(env)
+        TwitterAdapter.from_env(env)
     except AdapterConfigError as exc:
         assert "missing TWITTER_CONSUMER_SECRET" in str(exc)
     else:
         raise AssertionError("Expected AdapterConfigError for missing TWITTER_CONSUMER_SECRET.")
 
 
-def test_create_twitter_adapter_requires_access_token() -> None:
+def test_from_env_twitter_requires_access_token() -> None:
     env = {k: v for k, v in _FAKE_ENV.items() if k != "TWITTER_ACCESS_TOKEN"}
     try:
-        create_twitter_adapter(env)
+        TwitterAdapter.from_env(env)
     except AdapterConfigError as exc:
         assert "missing TWITTER_ACCESS_TOKEN" in str(exc)
     else:
         raise AssertionError("Expected AdapterConfigError for missing TWITTER_ACCESS_TOKEN.")
 
 
-def test_create_twitter_adapter_requires_access_token_secret() -> None:
+def test_from_env_twitter_requires_access_token_secret() -> None:
     env = {k: v for k, v in _FAKE_ENV.items() if k != "TWITTER_ACCESS_TOKEN_SECRET"}
     try:
-        create_twitter_adapter(env)
+        TwitterAdapter.from_env(env)
     except AdapterConfigError as exc:
         assert "missing TWITTER_ACCESS_TOKEN_SECRET" in str(exc)
     else:
         raise AssertionError("Expected AdapterConfigError for missing TWITTER_ACCESS_TOKEN_SECRET.")
 
 
-def test_create_twitter_adapter_requires_handle() -> None:
+def test_from_env_twitter_requires_handle() -> None:
     env = {k: v for k, v in _FAKE_ENV.items() if k != "TWITTER_HANDLE"}
     try:
-        create_twitter_adapter(env)
+        TwitterAdapter.from_env(env)
     except AdapterConfigError as exc:
         assert "missing TWITTER_HANDLE" in str(exc)
     else:
@@ -159,6 +159,7 @@ level = "INFO"
     assert "twitter" in history_result.stdout
 
 
+@pytest.mark.integration
 def test_twitter_live_credentials_fetch_counts() -> None:
     """Opt-in live test that validates Twitter credentials against the real API."""
     consumer_key = os.getenv("TWITTER_CONSUMER_KEY", "").strip()

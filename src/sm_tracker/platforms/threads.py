@@ -8,17 +8,20 @@ from typing import Any
 
 from threads import ThreadsClient
 
-from sm_tracker.platforms import AdapterConfigError, PlatformCounts
+from sm_tracker.platforms import AdapterConfigError, BaseAdapter, PlatformCounts
 from sm_tracker.platforms.utils import coerce_int, extract_int
 
 
 @dataclass(frozen=True)
-class ThreadsAdapter:
+class ThreadsAdapter(BaseAdapter):
     """Fetch Threads follower/following counts for one user id."""
 
     access_token: str = field(repr=False)
     user_id: str
-    name: str = "threads"
+
+    @property
+    def name(self) -> str:
+        return "threads"
 
     def _build_client(self) -> ThreadsClient:
         return ThreadsClient(access_token=self.access_token)
@@ -39,18 +42,20 @@ class ThreadsAdapter:
             following_count=following_count,
         )
 
+    @classmethod
+    def from_env(cls, env: Mapping[str, str]) -> ThreadsAdapter:
+        """Create a Threads adapter from env vars."""
+        access_token = env.get("THREADS_ACCESS_TOKEN", "").strip()
+        if not access_token:
+            raise AdapterConfigError(
+                "Skipping threads: missing THREADS_ACCESS_TOKEN in environment."
+            )
 
-def create_threads_adapter(env: Mapping[str, str]) -> ThreadsAdapter:
-    """Create a Threads adapter from env vars."""
-    access_token = env.get("THREADS_ACCESS_TOKEN", "").strip()
-    if not access_token:
-        raise AdapterConfigError("Skipping threads: missing THREADS_ACCESS_TOKEN in environment.")
+        user_id = env.get("THREADS_USER_ID", "").strip()
+        if not user_id:
+            raise AdapterConfigError("Skipping threads: missing THREADS_USER_ID in environment.")
 
-    user_id = env.get("THREADS_USER_ID", "").strip()
-    if not user_id:
-        raise AdapterConfigError("Skipping threads: missing THREADS_USER_ID in environment.")
-
-    return ThreadsAdapter(access_token=access_token, user_id=user_id)
+        return cls(access_token=access_token, user_id=user_id)
 
 
 def _extract_metric(user_insights: Any, key: str) -> int | None:
