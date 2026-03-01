@@ -21,7 +21,8 @@ def extract_int(data: Any, *keys: str) -> int | None:
             try:
                 return int(value)
             except (ValueError, TypeError):
-                return None
+                continue
+
     return None
 
 

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 import tweepy  # type: ignore[import-untyped]
@@ -17,12 +17,18 @@ class TwitterAdapter:
     """Fetch Twitter/X follower/following counts for one handle."""
 
     handle: str
-    bearer_token: str
+    consumer_key: str = field(repr=False)
+    consumer_secret: str = field(repr=False)
+    access_token: str = field(repr=False)
+    access_token_secret: str = field(repr=False)
     name: str = "twitter"
 
     def _build_client(self) -> tweepy.Client:
         return tweepy.Client(
-            bearer_token=self.bearer_token,
+            consumer_key=self.consumer_key,
+            consumer_secret=self.consumer_secret,
+            access_token=self.access_token,
+            access_token_secret=self.access_token_secret,
             wait_on_rate_limit=True,
         )
 
@@ -31,6 +37,7 @@ class TwitterAdapter:
         response = client.get_user(
             username=self.handle,
             user_fields=["public_metrics"],
+            user_auth=True,
         )
         metrics = _extract_public_metrics(response)
         follower_count = coerce_int(metrics.get("followers_count"))
@@ -44,15 +51,37 @@ class TwitterAdapter:
 
 def create_twitter_adapter(env: Mapping[str, str]) -> TwitterAdapter:
     """Create a Twitter adapter from env vars."""
-    bearer_token = env.get("TWITTER_BEARER_TOKEN", "").strip()
-    if not bearer_token:
-        raise AdapterConfigError("Skipping twitter: missing TWITTER_BEARER_TOKEN in environment.")
+    consumer_key = env.get("TWITTER_CONSUMER_KEY", "").strip()
+    if not consumer_key:
+        raise AdapterConfigError("Skipping twitter: missing TWITTER_CONSUMER_KEY in environment.")
+
+    consumer_secret = env.get("TWITTER_CONSUMER_SECRET", "").strip()
+    if not consumer_secret:
+        raise AdapterConfigError(
+            "Skipping twitter: missing TWITTER_CONSUMER_SECRET in environment."
+        )
+
+    access_token = env.get("TWITTER_ACCESS_TOKEN", "").strip()
+    if not access_token:
+        raise AdapterConfigError("Skipping twitter: missing TWITTER_ACCESS_TOKEN in environment.")
+
+    access_token_secret = env.get("TWITTER_ACCESS_TOKEN_SECRET", "").strip()
+    if not access_token_secret:
+        raise AdapterConfigError(
+            "Skipping twitter: missing TWITTER_ACCESS_TOKEN_SECRET in environment."
+        )
 
     handle = env.get("TWITTER_HANDLE", "").strip()
     if not handle:
         raise AdapterConfigError("Skipping twitter: missing TWITTER_HANDLE in environment.")
 
-    return TwitterAdapter(handle=handle, bearer_token=bearer_token)
+    return TwitterAdapter(
+        handle=handle,
+        consumer_key=consumer_key,
+        consumer_secret=consumer_secret,
+        access_token=access_token,
+        access_token_secret=access_token_secret,
+    )
 
 
 def _extract_public_metrics(response: Any) -> Mapping[str, Any]:

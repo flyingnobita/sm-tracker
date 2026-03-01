@@ -37,7 +37,7 @@ def test_facebook_adapter_fetch_counts_page(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr(
         FacebookAdapter,
         "_request_graph_payload",
-        lambda _self: {
+        lambda _self, _id, _token: {
             "id": "12345",
             "followers_count": 120,
             "fan_count": 115,  # fan_count usually means likes
@@ -56,7 +56,7 @@ def test_facebook_adapter_fetch_counts_group(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr(
         FacebookAdapter,
         "_request_graph_payload",
-        lambda _self: {
+        lambda _self, _id, _token: {
             "id": "group123",
             "member_count": 500,
         },
@@ -95,9 +95,8 @@ def test_track_and_show_facebook_end_to_end(monkeypatch: MonkeyPatch, tmp_path: 
     monkeypatch.setattr(
         FacebookAdapter,
         "_request_graph_payload",
-        lambda _self: next(payload_sequence),
+        lambda _self, _id, _token: next(payload_sequence),
     )
-
     with runner.isolated_filesystem():
         Path("config.toml").write_text(
             """

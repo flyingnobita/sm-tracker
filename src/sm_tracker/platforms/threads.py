@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 from threads import ThreadsClient
@@ -16,7 +16,7 @@ from sm_tracker.platforms.utils import coerce_int, extract_int
 class ThreadsAdapter:
     """Fetch Threads follower/following counts for one user id."""
 
-    access_token: str
+    access_token: str = field(repr=False)
     user_id: str
     name: str = "threads"
 

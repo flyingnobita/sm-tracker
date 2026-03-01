@@ -31,8 +31,8 @@ class _FakeTwitterClient:
     def __init__(self, metrics: dict[str, Any]) -> None:
         self.metrics = metrics
 
-    def get_user(self, *, username: str, user_fields: list[str]) -> object:
-        _ = (username, user_fields)
+    def get_user(self, *, username: str, user_fields: list[str], user_auth: bool = False) -> object:
+        _ = (username, user_fields, user_auth)
         return SimpleNamespace(
             data=SimpleNamespace(public_metrics=self.metrics),
         )
@@ -67,7 +67,10 @@ def test_format_delta_rules() -> None:
 def test_show_first_snapshot_displays_na_delta(monkeypatch: MonkeyPatch) -> None:
     runner = CliRunner()
     env = {
-        "TWITTER_BEARER_TOKEN": "token",
+        "TWITTER_CONSUMER_KEY": "token",
+        "TWITTER_CONSUMER_SECRET": "token",
+        "TWITTER_ACCESS_TOKEN": "token",
+        "TWITTER_ACCESS_TOKEN_SECRET": "token",
         "TWITTER_HANDLE": "alice",
     }
     monkeypatch.setattr(
@@ -118,7 +121,10 @@ def test_show_following_na_for_platforms_without_following(
 def test_history_table_includes_delta_column(monkeypatch: MonkeyPatch) -> None:
     runner = CliRunner()
     env = {
-        "TWITTER_BEARER_TOKEN": "token",
+        "TWITTER_CONSUMER_KEY": "token",
+        "TWITTER_CONSUMER_SECRET": "token",
+        "TWITTER_ACCESS_TOKEN": "token",
+        "TWITTER_ACCESS_TOKEN_SECRET": "token",
         "TWITTER_HANDLE": "alice",
     }
     metrics_sequence = iter(
@@ -156,7 +162,10 @@ def test_track_warns_and_keeps_partial_snapshot_on_fetch_error(
 ) -> None:
     runner = CliRunner()
     env = {
-        "TWITTER_BEARER_TOKEN": "token",
+        "TWITTER_CONSUMER_KEY": "token",
+        "TWITTER_CONSUMER_SECRET": "token",
+        "TWITTER_ACCESS_TOKEN": "token",
+        "TWITTER_ACCESS_TOKEN_SECRET": "token",
         "TWITTER_HANDLE": "alice",
         "BLUESKY_HANDLE": "alice.bsky.social",
     }
@@ -188,7 +197,10 @@ def test_track_warns_and_keeps_partial_snapshot_on_fetch_error(
 def test_show_json_output(monkeypatch: MonkeyPatch) -> None:
     runner = CliRunner()
     env = {
-        "TWITTER_BEARER_TOKEN": "token",
+        "TWITTER_CONSUMER_KEY": "token",
+        "TWITTER_CONSUMER_SECRET": "token",
+        "TWITTER_ACCESS_TOKEN": "token",
+        "TWITTER_ACCESS_TOKEN_SECRET": "token",
         "TWITTER_HANDLE": "alice",
     }
     metrics_sequence = iter(
@@ -220,7 +232,10 @@ def test_show_json_output(monkeypatch: MonkeyPatch) -> None:
 def test_history_csv_output_includes_header(monkeypatch: MonkeyPatch) -> None:
     runner = CliRunner()
     env = {
-        "TWITTER_BEARER_TOKEN": "token",
+        "TWITTER_CONSUMER_KEY": "token",
+        "TWITTER_CONSUMER_SECRET": "token",
+        "TWITTER_ACCESS_TOKEN": "token",
+        "TWITTER_ACCESS_TOKEN_SECRET": "token",
         "TWITTER_HANDLE": "alice",
     }
     monkeypatch.setattr(

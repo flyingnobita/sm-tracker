@@ -67,11 +67,12 @@ def find_config_file(project_dir: Path | None = None) -> Path:
     if project_config.exists():
         return project_config
 
-    user_config = Path("~/.config/sm-tracker/config.toml").expanduser()
+    xdg_config_home = os.environ.get("XDG_CONFIG_HOME", "~/.config")
+    user_config = Path(xdg_config_home).expanduser() / "sm-tracker" / "config.toml"
     if user_config.exists():
         return user_config
 
-    raise ConfigError("Could not find config.toml in project directory or ~/.config/sm-tracker/.")
+    raise ConfigError(f"Could not find config.toml in project directory or {user_config.parent}/.")
 
 
 def _as_table(root: Mapping[str, Any], key: str) -> Mapping[str, Any]:

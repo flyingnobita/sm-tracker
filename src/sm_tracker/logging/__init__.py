@@ -21,7 +21,9 @@ def setup_logging(
     logs_path.mkdir(parents=True, exist_ok=True)
 
     logger = logging.getLogger(logger_name)
-    logger.handlers.clear()
+    if logger.handlers:
+        return logger
+
     logger.propagate = False
     logger.setLevel(getattr(logging, level.upper(), logging.INFO))
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 from urllib.parse import quote
 from urllib.request import Request, urlopen
@@ -18,7 +18,7 @@ class FarcasterAdapter:
     """Fetch Farcaster follower/following counts for one username."""
 
     username: str
-    api_key: str
+    api_key: str = field(repr=False)
     name: str = "farcaster"
 
     def _build_request(self) -> Request:
@@ -59,6 +59,15 @@ def create_farcaster_adapter(env: Mapping[str, str]) -> FarcasterAdapter:
     if not api_key:
         # Backward-compatible fallback for older configs.
         api_key = env.get("FARCASTER_MNEMONIC", "").strip()
+        if api_key:
+            import warnings
+
+            warnings.warn(
+                "FARCASTER_MNEMONIC is deprecated and will be removed in a future version. "
+                "Please use FARCASTER_API_KEY instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
     if not api_key:
         raise AdapterConfigError("Skipping farcaster: missing FARCASTER_API_KEY in environment.")
 

@@ -45,3 +45,7 @@ packages = ["sm_tracker"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+addopts = "--ignore=tests/integration"
+markers = [
+    "integration: live credential tests requiring real API access (run with: pytest tests/integration/)",
+]

@@ -6,7 +6,7 @@ import json
 import urllib.error
 import urllib.request
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from sm_tracker.platforms import AdapterConfigError, PlatformCounts
 
@@ -16,7 +16,7 @@ class InstagramAdapter:
     """Fetch Instagram follower/following counts via Graph API."""
 
     account_id: str
-    access_token: str
+    access_token: str = field(repr=False)
     username: str | None = None
     name: str = "instagram"
 

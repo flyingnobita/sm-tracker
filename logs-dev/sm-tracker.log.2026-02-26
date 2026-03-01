@@ -1,0 +1,911 @@
+2026-02-26T01:05:44 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:05:44 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T01:05:44 - sm_tracker.cli - WARNING - Skipping unsupported platform: twitter
+2026-02-26T01:05:46 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T01:05:46 - sm_tracker.cli - INFO - track command finished tracked_platforms=['bluesky']
+2026-02-26T01:05:46 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:05:46 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T01:05:46 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T01:05:46 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T01:05:46 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T01:05:46 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T01:05:46 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T01:05:46 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:23:43 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:23:43 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T01:23:43 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T01:23:43 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T01:23:43 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T01:23:43 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:23:43 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T01:23:43 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T01:23:43 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T01:23:43 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T01:23:43 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T01:23:43 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T01:23:43 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:24:01 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:24:01 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T01:24:01 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T01:24:01 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T01:24:01 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T01:24:01 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:24:01 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T01:24:01 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T01:24:01 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T01:24:01 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T01:24:01 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T01:24:01 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T01:24:01 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:29:52 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:29:52 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter']
+2026-02-26T01:29:54 - sm_tracker.cli - INFO - captured counts platform=twitter followers=1094 following=1222
+2026-02-26T01:29:54 - sm_tracker.cli - INFO - track command finished tracked_platforms=['twitter']
+2026-02-26T01:30:00 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:30:00 - sm_tracker.cli - INFO - history command started selected_platforms=['twitter'] limit=20
+2026-02-26T01:30:00 - sm_tracker.cli - INFO - history command finished rows_rendered=1
+2026-02-26T01:40:50 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:40:50 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:40:50 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T01:40:51 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T01:40:51 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T01:40:51 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T01:40:51 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:40:51 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T01:40:51 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T01:40:51 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T01:40:51 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T01:40:51 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T01:40:51 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T01:40:51 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:41:19 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:45:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:45:08 - sm_tracker.cli - INFO - track command started selected_platforms=['mastodon']
+2026-02-26T01:45:10 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T01:45:10 - sm_tracker.cli - INFO - track command finished tracked_platforms=['mastodon']
+2026-02-26T01:45:54 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:45:54 - sm_tracker.cli - INFO - track command started selected_platforms=['mastodon']
+2026-02-26T01:45:55 - sm_tracker.cli - WARNING - Skipping mastodon: missing MASTODON_ACCESS_TOKEN in environment.
+2026-02-26T01:45:55 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['mastodon']
+2026-02-26T01:46:04 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:46:04 - sm_tracker.cli - INFO - track command started selected_platforms=['mastodon']
+2026-02-26T01:46:05 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T01:46:05 - sm_tracker.cli - INFO - track command finished tracked_platforms=['mastodon']
+2026-02-26T01:48:00 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:48:00 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T01:48:00 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T01:48:00 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T01:48:00 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T01:48:00 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T01:48:00 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T01:48:00 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T01:48:00 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T01:48:00 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T01:48:00 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T01:48:00 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T01:48:00 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T02:18:38 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T02:18:38 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T02:18:38 - sm_tracker.cli - INFO - history command finished rows_rendered=9
+2026-02-26T09:10:18 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T09:10:18 - sm_tracker.cli - INFO - track command started selected_platforms=['farcaster']
+2026-02-26T09:10:19 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T09:10:19 - sm_tracker.cli - INFO - track command finished tracked_platforms=['farcaster']
+2026-02-26T09:10:25 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T09:10:25 - sm_tracker.cli - INFO - history command started selected_platforms=['farcaster'] limit=20
+2026-02-26T09:10:25 - sm_tracker.cli - INFO - history command finished rows_rendered=1
+2026-02-26T11:12:25 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:12:25 - sm_tracker.cli - INFO - track command started selected_platforms=['threads']
+2026-02-26T11:12:27 - sm_tracker.cli - ERROR - Skipping threads: fetch failed
+Traceback (most recent call last):
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/src/sm_tracker/cli/__init__.py", line 98, in track
+    counts = adapter.fetch_counts()
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/src/sm_tracker/platforms/threads.py", line 28, in fetch_counts
+    profile = client.users.get(
+        user_id=self.user_id,
+        fields=["follower_count", "following_count"],
+    )
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/.venv/lib/python3.14/site-packages/threads/_sync/users.py", line 88, in get
+    raise_for_error(data, response.status_code)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/.venv/lib/python3.14/site-packages/threads/exceptions.py", line 138, in raise_for_error
+    raise ThreadsAPIError(message, **common_kwargs)
+threads.exceptions.ThreadsAPIError: Tried accessing nonexisting field (follower_count) | status_code=500 | error_code=100 | fbtrace_id=AZ0EA1tV7dXe2CNVN2gktir
+2026-02-26T11:12:27 - sm_tracker.cli - WARNING - track command completed with zero successful adapter fetches
+2026-02-26T11:12:27 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:12:27 - sm_tracker.cli - INFO - show command started selected_platforms=['threads']
+2026-02-26T11:12:27 - sm_tracker.cli - INFO - show command: no snapshots found
+2026-02-26T11:13:50 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:13:50 - sm_tracker.cli - INFO - track command started selected_platforms=['threads']
+2026-02-26T11:13:51 - sm_tracker.cli - ERROR - Skipping threads: fetch failed
+Traceback (most recent call last):
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/src/sm_tracker/cli/__init__.py", line 98, in track
+    counts = adapter.fetch_counts()
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/src/sm_tracker/platforms/threads.py", line 28, in fetch_counts
+    profile = client.users.get(
+        user_id=self.user_id,
+        fields=["following_count"],
+    )
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/.venv/lib/python3.14/site-packages/threads/_sync/users.py", line 88, in get
+    raise_for_error(data, response.status_code)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/.venv/lib/python3.14/site-packages/threads/exceptions.py", line 138, in raise_for_error
+    raise ThreadsAPIError(message, **common_kwargs)
+threads.exceptions.ThreadsAPIError: Tried accessing nonexisting field (following_count) | status_code=500 | error_code=100 | fbtrace_id=AS7QyzZr7XrhBnlPbK23RUV
+2026-02-26T11:13:51 - sm_tracker.cli - WARNING - track command completed with zero successful adapter fetches
+2026-02-26T11:15:53 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:15:53 - sm_tracker.cli - INFO - track command started selected_platforms=['threads']
+2026-02-26T11:15:55 - sm_tracker.cli - ERROR - Skipping threads: fetch failed
+Traceback (most recent call last):
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/src/sm_tracker/cli/__init__.py", line 98, in track
+    counts = adapter.fetch_counts()
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/src/sm_tracker/platforms/threads.py", line 28, in fetch_counts
+    profile = client.users.get(
+        user_id=self.user_id,
+        fields=["following_count"],
+    )
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/.venv/lib/python3.14/site-packages/threads/_sync/users.py", line 88, in get
+    raise_for_error(data, response.status_code)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/.venv/lib/python3.14/site-packages/threads/exceptions.py", line 138, in raise_for_error
+    raise ThreadsAPIError(message, **common_kwargs)
+threads.exceptions.ThreadsAPIError: Tried accessing nonexisting field (following_count) | status_code=500 | error_code=100 | fbtrace_id=AXcSCOO_iH59XFtdJe6QV7j
+2026-02-26T11:15:55 - sm_tracker.cli - WARNING - track command completed with zero successful adapter fetches
+2026-02-26T11:15:55 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:15:55 - sm_tracker.cli - INFO - show command started selected_platforms=['threads']
+2026-02-26T11:15:55 - sm_tracker.cli - INFO - show command: no snapshots found
+2026-02-26T11:25:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:25:08 - sm_tracker.cli - INFO - track command started selected_platforms=['threads']
+2026-02-26T11:25:10 - sm_tracker.cli - ERROR - Skipping threads: fetch failed
+Traceback (most recent call last):
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/src/sm_tracker/cli/__init__.py", line 98, in track
+    counts = adapter.fetch_counts()
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/src/sm_tracker/platforms/threads.py", line 28, in fetch_counts
+    profile = client.users.get(
+        user_id=self.user_id,
+        fields=["follower_count", "following_count"],
+    )
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/.venv/lib/python3.14/site-packages/threads/_sync/users.py", line 88, in get
+    raise_for_error(data, response.status_code)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/.venv/lib/python3.14/site-packages/threads/exceptions.py", line 138, in raise_for_error
+    raise ThreadsAPIError(message, **common_kwargs)
+threads.exceptions.ThreadsAPIError: Tried accessing nonexisting field (follower_count) | status_code=500 | error_code=100 | fbtrace_id=AFbah-B3huAxCFVWBBmFtyN
+2026-02-26T11:25:10 - sm_tracker.cli - WARNING - track command completed with zero successful adapter fetches
+2026-02-26T11:25:10 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:25:10 - sm_tracker.cli - INFO - show command started selected_platforms=['threads']
+2026-02-26T11:25:10 - sm_tracker.cli - INFO - show command: no snapshots found
+2026-02-26T11:26:55 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:26:55 - sm_tracker.cli - INFO - track command started selected_platforms=['threads']
+2026-02-26T11:26:57 - sm_tracker.cli - ERROR - Skipping threads: fetch failed
+Traceback (most recent call last):
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/src/sm_tracker/cli/__init__.py", line 98, in track
+    counts = adapter.fetch_counts()
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/src/sm_tracker/platforms/threads.py", line 28, in fetch_counts
+    profile = client.users.get(
+        user_id=self.user_id,
+        fields=["following_count"],
+    )
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/.venv/lib/python3.14/site-packages/threads/_sync/users.py", line 88, in get
+    raise_for_error(data, response.status_code)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/flyingnobita/Data/Projects/Personal/sm-tracker/.venv/lib/python3.14/site-packages/threads/exceptions.py", line 138, in raise_for_error
+    raise ThreadsAPIError(message, **common_kwargs)
+threads.exceptions.ThreadsAPIError: Tried accessing nonexisting field (following_count) | status_code=500 | error_code=100 | fbtrace_id=AGqCsTfz8yC0_M2sQ76USIt
+2026-02-26T11:26:57 - sm_tracker.cli - WARNING - track command completed with zero successful adapter fetches
+2026-02-26T11:30:17 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:30:17 - sm_tracker.cli - INFO - track command started selected_platforms=['threads']
+2026-02-26T11:30:19 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=0
+2026-02-26T11:30:19 - sm_tracker.cli - INFO - track command finished tracked_platforms=['threads']
+2026-02-26T11:30:20 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:30:20 - sm_tracker.cli - INFO - show command started selected_platforms=['threads']
+2026-02-26T11:30:20 - sm_tracker.cli - INFO - show command finished rows_rendered=1
+2026-02-26T11:49:48 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:49:48 - sm_tracker.cli - INFO - track command started selected_platforms=['threads']
+2026-02-26T11:49:51 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=0
+2026-02-26T11:49:51 - sm_tracker.cli - INFO - track command finished tracked_platforms=['threads']
+2026-02-26T11:54:11 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:54:52 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:54:52 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:55:07 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:55:11 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T11:55:23 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:04:24 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:04:24 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:04:24 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T12:04:24 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T12:04:24 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:04:24 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:04:24 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T12:04:24 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T12:04:24 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T12:04:24 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T12:04:24 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T12:04:24 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T12:04:24 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:08:49 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:08:49 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:08:49 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T12:08:49 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T12:08:49 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:08:49 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:08:49 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T12:08:49 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T12:08:49 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T12:08:49 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T12:08:49 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T12:08:49 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T12:08:49 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:09:44 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:09:44 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:09:44 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T12:09:44 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T12:09:44 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:09:44 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:09:44 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T12:09:44 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T12:09:44 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T12:09:44 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T12:09:44 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T12:09:44 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T12:09:44 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:14:03 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:14:03 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:14:03 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T12:14:03 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T12:14:03 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:14:03 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:14:03 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T12:14:03 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T12:14:03 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T12:14:03 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T12:14:03 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T12:14:03 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T12:14:03 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:23:27 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:23:27 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:23:27 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T12:23:27 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T12:23:27 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:23:27 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:23:27 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T12:23:27 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T12:23:27 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T12:23:27 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T12:23:27 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T12:23:27 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T12:23:27 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:34:53 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:34:53 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:34:53 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T12:34:53 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T12:34:53 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:34:53 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:34:53 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T12:34:53 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T12:34:53 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T12:34:53 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T12:34:53 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T12:34:53 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T12:34:53 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:41:48 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:44:27 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:44:27 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:44:27 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T12:44:27 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T12:44:27 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:44:27 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:44:27 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T12:44:27 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T12:44:27 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T12:44:27 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T12:44:27 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T12:44:27 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T12:44:27 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:45:11 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:45:11 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:45:11 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T12:45:11 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T12:45:11 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T12:45:11 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T12:45:11 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T12:45:11 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T12:45:11 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T12:45:11 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T12:45:11 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T12:45:11 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T12:45:11 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:32:18 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:32:21 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:32:25 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:32:28 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:32:34 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:32:40 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:32:40 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T14:32:40 - sm_tracker.cli - INFO - show command finished rows_rendered=1
+2026-02-26T14:32:47 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:32:52 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:32:52 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T14:32:52 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T14:32:55 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:33:02 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:33:02 - sm_tracker.cli - INFO - track command started selected_platforms=['--help']
+2026-02-26T14:33:03 - sm_tracker.cli - WARNING - Skipping unsupported platform: --help
+2026-02-26T14:33:03 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['--help']
+2026-02-26T14:33:15 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:33:15 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T14:33:15 - sm_tracker.cli - INFO - show command finished rows_rendered=1
+2026-02-26T14:33:18 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:33:23 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:33:23 - sm_tracker.cli - INFO - show command started selected_platforms=['threads']
+2026-02-26T14:33:23 - sm_tracker.cli - INFO - show command finished rows_rendered=1
+2026-02-26T14:33:30 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:33:30 - sm_tracker.cli - INFO - show command started selected_platforms=['farcaster']
+2026-02-26T14:33:30 - sm_tracker.cli - INFO - show command: selected platforms have no snapshot rows
+2026-02-26T14:33:35 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:33:35 - sm_tracker.cli - INFO - show command started selected_platforms=['--help']
+2026-02-26T14:33:35 - sm_tracker.cli - INFO - show command: selected platforms have no snapshot rows
+2026-02-26T14:34:02 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:34:02 - sm_tracker.cli - INFO - show command started selected_platforms=['farcaster']
+2026-02-26T14:34:02 - sm_tracker.cli - INFO - show command: selected platforms have no snapshot rows
+2026-02-26T14:34:05 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:34:05 - sm_tracker.cli - INFO - show command started selected_platforms=['twitter']
+2026-02-26T14:34:05 - sm_tracker.cli - INFO - show command: selected platforms have no snapshot rows
+2026-02-26T14:34:09 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:34:09 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T14:34:09 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T14:41:19 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:41:19 - sm_tracker.cli - INFO - track command started selected_platforms=['farcaster']
+2026-02-26T14:41:20 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T14:41:20 - sm_tracker.cli - INFO - track command finished tracked_platforms=['farcaster']
+2026-02-26T14:41:33 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T14:41:33 - sm_tracker.cli - INFO - history command started selected_platforms=['farcaster'] limit=20
+2026-02-26T14:41:33 - sm_tracker.cli - INFO - history command finished rows_rendered=2
+2026-02-26T15:18:31 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:18:31 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T15:18:31 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T15:18:31 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T15:18:31 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T15:18:31 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:18:31 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T15:18:31 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T15:18:31 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T15:18:31 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T15:18:31 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T15:18:31 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T15:18:31 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:19:23 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:19:23 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T15:19:24 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T15:19:24 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T15:19:24 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T15:19:24 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:19:24 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T15:19:24 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T15:19:24 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T15:19:24 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T15:19:24 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T15:19:24 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T15:19:24 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:33:00 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:33:00 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T15:33:00 - sm_tracker.cli - INFO - history command finished rows_rendered=13
+2026-02-26T15:33:05 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:33:05 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T15:33:05 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T15:33:10 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:33:10 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T15:33:14 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T15:33:14 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T15:33:15 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T15:33:16 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=0
+2026-02-26T15:33:16 - sm_tracker.cli - INFO - captured counts platform=twitter followers=1093 following=1222
+2026-02-26T15:33:16 - sm_tracker.cli - INFO - track command finished tracked_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T15:33:24 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:33:24 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T15:33:24 - sm_tracker.cli - INFO - show command finished rows_rendered=5
+2026-02-26T15:33:36 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:33:46 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:33:46 - sm_tracker.cli - INFO - track command started selected_platforms=[]
+2026-02-26T15:33:46 - sm_tracker.cli - WARNING - track command aborted: no platforms selected
+2026-02-26T15:33:54 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:33:54 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T15:33:54 - sm_tracker.cli - INFO - show command finished rows_rendered=5
+2026-02-26T15:33:57 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:33:57 - sm_tracker.cli - INFO - show command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T15:33:57 - sm_tracker.cli - INFO - show command finished rows_rendered=5
+2026-02-26T15:34:09 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:34:09 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T15:34:09 - sm_tracker.cli - INFO - history command finished rows_rendered=18
+2026-02-26T15:34:12 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:43:39 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:43:39 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T15:43:39 - sm_tracker.cli - INFO - history command finished rows_rendered=18
+2026-02-26T15:43:42 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:44:12 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:44:25 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:44:35 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:44:35 - sm_tracker.cli - INFO - show command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T15:44:35 - sm_tracker.cli - INFO - show command finished rows_rendered=5
+2026-02-26T15:44:39 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:45:47 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:46:12 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:57:21 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T15:57:23 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:25:54 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:25:54 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T16:25:54 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T16:25:54 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T16:25:54 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T16:25:54 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:25:54 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T16:25:56 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T16:25:57 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T16:25:58 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T16:25:58 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=0
+2026-02-26T16:25:59 - sm_tracker.cli - INFO - captured counts platform=twitter followers=1093 following=1222
+2026-02-26T16:25:59 - sm_tracker.cli - INFO - track command finished tracked_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T16:25:59 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:25:59 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:25:59 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:25:59 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:25:59 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T16:26:01 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T16:26:02 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T16:26:02 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T16:26:03 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=0
+2026-02-26T16:26:03 - sm_tracker.cli - INFO - captured counts platform=twitter followers=1093 following=1222
+2026-02-26T16:26:03 - sm_tracker.cli - INFO - track command finished tracked_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T16:26:03 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T16:26:03 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T16:26:03 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T16:26:03 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T16:26:03 - sm_tracker.cli - INFO - show command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T16:26:03 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T16:26:03 - sm_tracker.cli - INFO - history command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter'] limit=20
+2026-02-26T16:26:03 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T16:26:03 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:26:03 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:26:03 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:26:03 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:26:19 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:26:19 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T16:26:19 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T16:26:19 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T16:26:19 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T16:26:19 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:26:19 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T16:26:22 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T16:26:23 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T16:26:24 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T16:26:24 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=0
+2026-02-26T16:30:06 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:30:06 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T16:30:08 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T16:30:08 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T16:30:08 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T16:30:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:30:08 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T16:30:10 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T16:30:11 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T16:30:11 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T16:30:12 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=0
+2026-02-26T16:32:16 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:32:16 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T16:32:20 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T16:32:21 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T16:32:22 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T16:32:22 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=0
+2026-02-26T16:34:01 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:34:01 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T16:34:01 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T16:34:01 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T16:34:01 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T16:34:01 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:34:01 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:34:01 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:34:01 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:34:01 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T16:34:03 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T16:34:04 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T16:34:05 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T16:34:06 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=0
+2026-02-26T16:40:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:40:41 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T16:40:41 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T16:40:41 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T16:40:41 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T16:40:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:40:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:40:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:40:41 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T16:40:41 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T16:40:41 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T16:40:41 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T16:40:41 - sm_tracker.cli - INFO - show command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T16:40:41 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T16:40:41 - sm_tracker.cli - INFO - history command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter'] limit=20
+2026-02-26T16:40:41 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T16:40:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:40:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:40:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:40:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:41:50 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:41:50 - sm_tracker.cli - INFO - track command started selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T16:41:50 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknownone
+2026-02-26T16:41:50 - sm_tracker.cli - WARNING - Skipping unsupported platform: unknown-two
+2026-02-26T16:41:50 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['unknownone', 'unknown-two']
+2026-02-26T16:41:50 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:41:50 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:41:50 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:41:50 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T16:41:50 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T16:41:50 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T16:41:50 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T16:41:50 - sm_tracker.cli - INFO - show command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T16:41:50 - sm_tracker.cli - WARNING - show command aborted: config unavailable
+2026-02-26T16:41:50 - sm_tracker.cli - INFO - history command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter'] limit=20
+2026-02-26T16:41:50 - sm_tracker.cli - WARNING - history command aborted: config unavailable
+2026-02-26T16:41:50 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:41:50 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:41:50 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:41:50 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:04 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:04 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T16:50:04 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['twitter', 'bluesky']
+2026-02-26T16:50:04 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:04 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:04 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:04 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:04 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T16:50:04 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T16:50:04 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T16:50:04 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T16:50:04 - sm_tracker.cli - INFO - show command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T16:50:04 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T16:50:04 - sm_tracker.cli - INFO - history command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter'] limit=20
+2026-02-26T16:50:04 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T16:50:04 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:04 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:04 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:04 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:49 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:49 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T16:50:49 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['twitter', 'bluesky']
+2026-02-26T16:50:49 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:49 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:49 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:49 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:49 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T16:50:49 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T16:50:49 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T16:50:49 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T16:50:49 - sm_tracker.cli - INFO - show command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T16:50:49 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T16:50:49 - sm_tracker.cli - INFO - history command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter'] limit=20
+2026-02-26T16:50:49 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T16:50:49 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:49 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:49 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:50:49 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:55:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:55:08 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T16:55:08 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['twitter', 'bluesky']
+2026-02-26T16:55:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:55:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:55:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:55:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:55:08 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T16:55:08 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T16:55:08 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T16:55:08 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T16:55:08 - sm_tracker.cli - INFO - show command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T16:55:08 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T16:55:08 - sm_tracker.cli - INFO - history command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter'] limit=20
+2026-02-26T16:55:08 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T16:55:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:55:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:55:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T16:55:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:03:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:03:08 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T17:03:08 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['twitter', 'bluesky']
+2026-02-26T17:03:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:03:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:03:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:03:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:03:08 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T17:03:08 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T17:03:08 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T17:03:08 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T17:03:08 - sm_tracker.cli - INFO - show command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T17:03:08 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T17:03:08 - sm_tracker.cli - INFO - history command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter'] limit=20
+2026-02-26T17:03:08 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T17:03:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:03:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:03:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:03:08 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:11:11 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:11:11 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:11:11 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:11:11 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:11:11 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:11:11 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:18:30 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:18:30 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T17:18:30 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['twitter', 'bluesky']
+2026-02-26T17:18:30 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:18:30 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:18:30 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T17:18:33 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T17:18:33 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T17:18:34 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T17:18:35 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T17:18:35 - sm_tracker.cli - INFO - captured counts platform=twitter followers=1093 following=1222
+2026-02-26T17:18:35 - sm_tracker.cli - INFO - track command finished tracked_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T17:18:35 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:18:35 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:18:35 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:18:35 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:18:35 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T17:18:38 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T17:18:39 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T17:18:39 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T17:18:40 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T17:18:41 - sm_tracker.cli - INFO - captured counts platform=twitter followers=1093 following=1222
+2026-02-26T17:18:41 - sm_tracker.cli - INFO - track command finished tracked_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T17:18:41 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T17:18:41 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T17:18:41 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T17:18:41 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T17:18:41 - sm_tracker.cli - INFO - show command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T17:18:41 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T17:18:41 - sm_tracker.cli - INFO - history command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter'] limit=20
+2026-02-26T17:18:41 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T17:18:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:18:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:18:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:18:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:19:26 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:19:26 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T17:19:26 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['twitter', 'bluesky']
+2026-02-26T17:19:26 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:19:26 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:19:26 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T17:19:28 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T17:19:29 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T17:19:30 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T17:19:31 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T17:23:34 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:23:34 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T17:23:34 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['twitter', 'bluesky']
+2026-02-26T17:23:34 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:23:34 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:23:34 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T17:23:37 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T17:23:37 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T17:23:38 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T17:23:39 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T17:26:44 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:26:44 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T17:26:44 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['twitter', 'bluesky']
+2026-02-26T17:26:44 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:26:44 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:26:44 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T17:26:46 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T17:26:47 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T17:26:48 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T17:26:49 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T17:29:58 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:29:58 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T17:29:58 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['twitter', 'bluesky']
+2026-02-26T17:29:58 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:29:58 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:29:58 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T17:30:00 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T17:30:01 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T17:30:01 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T17:30:02 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T17:33:13 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:33:13 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T17:33:13 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['twitter', 'bluesky']
+2026-02-26T17:33:13 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:33:13 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:33:13 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T17:33:16 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T17:33:17 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T17:33:17 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T17:33:18 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T17:33:36 - sm_tracker.cli - INFO - captured counts platform=twitter followers=1093 following=1222
+2026-02-26T17:33:36 - sm_tracker.cli - INFO - track command finished tracked_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T17:33:36 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:33:36 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:33:36 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:33:36 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:33:36 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T17:33:39 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T17:33:39 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T17:33:40 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T17:33:40 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T17:33:41 - sm_tracker.cli - INFO - captured counts platform=twitter followers=1093 following=1222
+2026-02-26T17:33:41 - sm_tracker.cli - INFO - track command finished tracked_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T17:33:41 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T17:33:41 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T17:33:41 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T17:33:41 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T17:33:41 - sm_tracker.cli - INFO - show command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T17:33:41 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T17:33:41 - sm_tracker.cli - INFO - history command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter'] limit=20
+2026-02-26T17:33:41 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T17:33:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:33:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:33:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T17:33:41 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T20:33:52 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T20:33:52 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T20:33:52 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['twitter', 'bluesky']
+2026-02-26T20:33:52 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T20:33:52 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T20:33:52 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T20:33:55 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T20:33:55 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T20:33:56 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T20:33:57 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T20:33:57 - sm_tracker.cli - INFO - captured counts platform=twitter followers=1093 following=1222
+2026-02-26T20:33:57 - sm_tracker.cli - INFO - track command finished tracked_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T20:33:57 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T20:33:57 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T20:33:57 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T20:33:57 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T20:33:57 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T20:34:00 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T20:34:00 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T20:34:01 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T20:34:02 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T20:34:03 - sm_tracker.cli - INFO - captured counts platform=twitter followers=1093 following=1222
+2026-02-26T20:34:03 - sm_tracker.cli - INFO - track command finished tracked_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T20:34:03 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T20:34:03 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T20:34:03 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T20:34:03 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T20:34:03 - sm_tracker.cli - INFO - show command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T20:34:03 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T20:34:03 - sm_tracker.cli - INFO - history command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter'] limit=20
+2026-02-26T20:34:03 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T20:34:03 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T20:34:03 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T20:34:03 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T20:34:03 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T20:56:10 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T20:56:10 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T20:56:14 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T20:56:15 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T20:56:15 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T20:56:16 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T20:56:17 - sm_tracker.cli - INFO - captured counts platform=twitter followers=1093 following=1222
+2026-02-26T20:56:17 - sm_tracker.cli - INFO - track command finished tracked_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T20:56:27 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T20:56:27 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T20:56:27 - sm_tracker.cli - INFO - show command finished rows_rendered=5
+2026-02-26T22:41:50 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:41:56 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:42:06 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:42:11 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:42:11 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T22:42:11 - sm_tracker.cli - INFO - show command finished rows_rendered=5
+2026-02-26T22:42:16 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:42:16 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T22:42:16 - sm_tracker.cli - INFO - history command finished rows_rendered=20
+2026-02-26T22:42:21 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:42:21 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T22:42:25 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T22:42:25 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T22:42:26 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T22:42:27 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T22:42:28 - sm_tracker.cli - INFO - captured counts platform=twitter followers=1093 following=1222
+2026-02-26T22:42:40 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:42:40 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T22:42:40 - sm_tracker.cli - INFO - history command finished rows_rendered=20
+2026-02-26T22:42:42 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:42:42 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T22:42:42 - sm_tracker.cli - INFO - history command finished rows_rendered=20
+2026-02-26T22:42:58 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:42:58 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T22:42:58 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['twitter', 'bluesky']
+2026-02-26T22:42:58 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:42:58 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:42:58 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T22:43:00 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T22:43:00 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T22:43:01 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T22:43:02 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T22:43:02 - sm_tracker.cli - INFO - captured counts platform=twitter followers=1093 following=1222
+2026-02-26T22:43:02 - sm_tracker.cli - INFO - track command finished tracked_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T22:43:02 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:43:02 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:43:02 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:43:02 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:43:02 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T22:43:05 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T22:43:05 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T22:43:06 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T22:43:07 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T22:43:07 - sm_tracker.cli - INFO - captured counts platform=twitter followers=1093 following=1222
+2026-02-26T22:43:07 - sm_tracker.cli - INFO - track command finished tracked_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T22:43:07 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T22:43:07 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T22:43:07 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T22:43:07 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T22:43:07 - sm_tracker.cli - INFO - show command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T22:43:07 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T22:43:07 - sm_tracker.cli - INFO - history command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter'] limit=20
+2026-02-26T22:43:07 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T22:43:07 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:43:07 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:43:07 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:43:07 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:43:10 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:43:10 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T22:43:10 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['twitter', 'bluesky']
+2026-02-26T22:43:10 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:43:10 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:43:10 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T22:43:13 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T22:43:14 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T22:43:14 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T22:43:15 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T22:44:02 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:44:02 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:44:02 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:44:02 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:44:02 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T22:44:04 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T22:44:04 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T22:44:04 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T22:44:04 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T22:44:04 - sm_tracker.cli - INFO - show command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T22:44:04 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T22:44:04 - sm_tracker.cli - INFO - history command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter'] limit=20
+2026-02-26T22:44:04 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T22:44:04 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:44:04 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:44:04 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:44:04 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:44:50 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:44:50 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T22:44:50 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['twitter', 'bluesky']
+2026-02-26T22:44:50 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:44:50 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:44:50 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T22:44:52 - sm_tracker.cli - INFO - captured counts platform=bluesky followers=13 following=15
+2026-02-26T22:44:53 - sm_tracker.cli - INFO - captured counts platform=farcaster followers=47 following=30
+2026-02-26T22:44:53 - sm_tracker.cli - INFO - captured counts platform=mastodon followers=9 following=16
+2026-02-26T22:44:54 - sm_tracker.cli - INFO - captured counts platform=threads followers=0 following=None
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - track command started selected_platforms=['twitter', 'bluesky']
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['twitter', 'bluesky']
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - track command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - track command finished with no adapters selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - show command started selected_platforms=[]
+2026-02-26T22:50:21 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - history command started selected_platforms=[] limit=20
+2026-02-26T22:50:21 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - show command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter']
+2026-02-26T22:50:21 - sm_tracker.cli - WARNING - show command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - history command started selected_platforms=['bluesky', 'farcaster', 'mastodon', 'threads', 'twitter'] limit=20
+2026-02-26T22:50:21 - sm_tracker.cli - WARNING - history command aborted: Could not find config.toml in project directory or ~/.config/sm-tracker/.
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T22:50:21 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev
+2026-02-26T23:33:13 - sm_tracker.cli - INFO - CLI logging initialized for profile=dev db_path=data-dev.db logs_path=logs-dev

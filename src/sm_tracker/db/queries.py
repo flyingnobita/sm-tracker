@@ -115,7 +115,7 @@ _FETCH_HISTORY_SQL = """
     ORDER BY s.timestamp DESC, s.id DESC, c.platform ASC
     """
 
-_FETCH_HISTORY_SQL_LIMITED = _FETCH_HISTORY_SQL + " LIMIT ?"
+_FETCH_HISTORY_SQL_LIMITED = _FETCH_HISTORY_SQL.rstrip() + " LIMIT ?"
 
 
 def fetch_history(client: ClientSync, *, limit: int | None = None) -> list[CountRow]:

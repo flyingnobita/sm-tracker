@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from mastodon import Mastodon
 
@@ -15,7 +15,7 @@ from sm_tracker.platforms.utils import extract_int
 class MastodonAdapter:
     """Fetch Mastodon follower/following counts for one account."""
 
-    access_token: str
+    access_token: str = field(repr=False)
     instance: str
     name: str = "mastodon"
 

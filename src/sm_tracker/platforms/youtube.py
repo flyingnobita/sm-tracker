@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 from urllib.parse import quote
 from urllib.request import Request, urlopen
@@ -17,7 +17,7 @@ from sm_tracker.platforms.utils import extract_int
 class YouTubeAdapter:
     """Fetch YouTube subscriber counts for a channel handle or ID."""
 
-    api_key: str
+    api_key: str = field(repr=False)
     handle: str | None = None
     channel_id: str | None = None
     name: str = "youtube"

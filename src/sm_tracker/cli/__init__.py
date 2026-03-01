@@ -6,7 +6,6 @@ import csv
 import json
 import logging
 import os
-import tomllib
 from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime, timedelta
 from io import StringIO
@@ -48,7 +47,10 @@ LOGGER = logging.getLogger("sm_tracker.cli")
 _AUTH_SUPPORTED_PLATFORMS: frozenset[str] = frozenset({"threads"})
 
 ENV_FIELD_SPECS: list[tuple[str, str, bool]] = [
-    ("TWITTER_BEARER_TOKEN", "Twitter bearer token", True),
+    ("TWITTER_CONSUMER_KEY", "Twitter consumer key", True),
+    ("TWITTER_CONSUMER_SECRET", "Twitter consumer secret", True),
+    ("TWITTER_ACCESS_TOKEN", "Twitter access token", True),
+    ("TWITTER_ACCESS_TOKEN_SECRET", "Twitter access token secret", True),
     ("TWITTER_HANDLE", "Twitter handle to track", True),
     ("BLUESKY_HANDLE", "Bluesky handle to track", True),
     ("BLUESKY_APP_PASSWORD", "Bluesky app password (optional)", False),
@@ -70,6 +72,11 @@ ENV_FIELD_SPECS: list[tuple[str, str, bool]] = [
         "Threads token expiry UTC (ISO, optional)",
         False,
     ),
+    ("INSTAGRAM_ACCOUNT_ID", "Instagram account ID", True),
+    ("INSTAGRAM_ACCESS_TOKEN", "Instagram access token", True),
+    ("FACEBOOK_ID", "Facebook ID", True),
+    ("FACEBOOK_ACCESS_TOKEN", "Facebook user access token", True),
+    ("FACEBOOK_PAGE_ACCESS_TOKEN", "Facebook page access token (optional)", False),
     ("YOUTUBE_API_KEY", "YouTube API key", True),
     ("YOUTUBE_CHANNEL_ID", "YouTube channel ID (optional if handle provided)", False),
     ("YOUTUBE_HANDLE", "YouTube handle (optional if channel ID provided)", False),
@@ -288,7 +295,13 @@ def show(
         return
 
     with connect(config.db_path) as client:
-        init_schema(client)
+        try:
+            init_schema(client)
+        except Exception:  # pragma: no cover
+            LOGGER.exception("show command failed to initialize database")
+            typer.echo("Failed to initialize database. Check logs for details.")
+            return
+
         latest = fetch_latest(client)
         if not latest:
             LOGGER.info("show command: no snapshots found")
@@ -362,7 +375,13 @@ def history(
         return
 
     with connect(config.db_path) as client:
-        init_schema(client)
+        try:
+            init_schema(client)
+        except Exception:  # pragma: no cover
+            LOGGER.exception("history command failed to initialize database")
+            typer.echo("Failed to initialize database. Check logs for details.")
+            return
+
         rows = fetch_history(client, limit=limit)
 
     if selected_set:
@@ -383,12 +402,16 @@ def history(
         LOGGER.info("history command finished rows_rendered=%s", len(rows))
         return
 
-    deltas = _history_follower_deltas(rows)
+    structured_rows = _history_rows_with_deltas(rows)
     typer.echo("Date | Platform | Followers | Following | Delta")
-    for row, delta in zip(rows, deltas, strict=False):
-        followers = "N/A" if row.follower_count is None else str(row.follower_count)
-        following = "N/A" if row.following_count is None else str(row.following_count)
-        typer.echo(f"{row.timestamp} | {row.platform} | {followers} | {following} | {delta}")
+    for s_row in structured_rows:
+        followers = "N/A" if s_row["follower_count"] is None else str(s_row["follower_count"])
+        following = "N/A" if s_row["following_count"] is None else str(s_row["following_count"])
+        delta = s_row["follower_delta"]
+        typer.echo(
+            f"{s_row['snapshot_timestamp']} | {s_row['platform']} | "
+            f"{followers} | {following} | {delta}"
+        )
     LOGGER.info("history command finished rows_rendered=%s", len(rows))
 
 
@@ -465,10 +488,7 @@ def auth_command(
             redirect_uri=redirect_uri,
             scopes=[
                 Scope.BASIC,
-                Scope.CONTENT_PUBLISH,
                 Scope.MANAGE_INSIGHTS,
-                Scope.READ_REPLIES,
-                Scope.MANAGE_REPLIES,
             ],
         )
         typer.echo(
@@ -548,8 +568,11 @@ def _previous_rows_by_platform(
     return previous
 
 
-def _history_follower_deltas(rows: list[CountRow]) -> list[str]:
-    deltas: list[str] = ["N/A"] * len(rows)
+def _history_rows_with_deltas(
+    rows: list[CountRow],
+) -> list[dict[str, str | int | None]]:
+    follower_deltas: list[str] = ["N/A"] * len(rows)
+    following_deltas: list[str] = ["N/A"] * len(rows)
     indexes_by_platform: dict[str, list[int]] = {}
 
     for idx, row in enumerate(rows):
@@ -558,18 +581,22 @@ def _history_follower_deltas(rows: list[CountRow]) -> list[str]:
     for platform_indexes in indexes_by_platform.values():
         for pos, current_index in enumerate(platform_indexes):
             older_index = platform_indexes[pos + 1] if pos + 1 < len(platform_indexes) else None
-            previous = rows[older_index].follower_count if older_index is not None else None
-            deltas[current_index] = _format_delta(rows[current_index].follower_count, previous)
+            if older_index is not None:
+                prev_follower = rows[older_index].follower_count
+                prev_following = rows[older_index].following_count
+            else:
+                prev_follower = None
+                prev_following = None
 
-    return deltas
+            follower_deltas[current_index] = _format_delta(
+                rows[current_index].follower_count, prev_follower
+            )
+            following_deltas[current_index] = _format_delta(
+                rows[current_index].following_count, prev_following
+            )
 
-
-def _history_rows_with_deltas(
-    rows: list[CountRow],
-) -> list[dict[str, str | int | None]]:
-    deltas = _history_follower_deltas(rows)
     structured: list[dict[str, str | int | None]] = []
-    for row, delta in zip(rows, deltas, strict=False):
+    for row, f_delta, fing_delta in zip(rows, follower_deltas, following_deltas, strict=False):
         structured.append(
             {
                 "snapshot_id": row.snapshot_id,
@@ -577,8 +604,8 @@ def _history_rows_with_deltas(
                 "platform": row.platform,
                 "follower_count": row.follower_count,
                 "following_count": row.following_count,
-                "follower_delta": delta,
-                "following_delta": None,
+                "follower_delta": f_delta,
+                "following_delta": fing_delta,
             }
         )
     return structured
@@ -620,7 +647,7 @@ def _format_rows_csv(rows: list[dict[str, str | int | None]], *, history_mode: b
     writer.writerow(
         [
             "snapshot_id",
-            "timestamp" if history_mode else "snapshot_timestamp",
+            "timestamp",
             "platform",
             "follower_count",
             "following_count",
@@ -679,7 +706,7 @@ def _run_env_wizard(env_path: Path) -> dict[str, str]:
     typer.echo("Configure .env values (press Enter to keep current value).")
     updated: dict[str, str] = dict(existing)
 
-    for key, prompt, required in ENV_FIELD_SPECS:
+    for key, prompt, _required in ENV_FIELD_SPECS:
         current = existing.get(key, "")
         default_value = current
         if key == "THREADS_REDIRECT_URI" and not default_value:
@@ -691,11 +718,8 @@ def _run_env_wizard(env_path: Path) -> dict[str, str]:
         ).strip()
         if value:
             updated[key] = value
-            continue
-        if required:
+        else:
             updated.pop(key, None)
-            continue
-        updated.pop(key, None)
 
     return updated
 
@@ -757,30 +781,16 @@ def _read_existing_profile_settings(
         return "dev", "", "", 0, ""
 
     try:
-        parsed = tomllib.loads(config_path.read_text(encoding="utf-8"))
-    except tomllib.TOMLDecodeError:
+        config = load_config(config_path=config_path)
+        return (
+            config.profile,
+            str(config.db_path),
+            str(config.logs_path),
+            config.log_retention_days,
+            config.log_level,
+        )
+    except ConfigError:
         return "dev", "", "", 0, ""
-
-    profile_raw = parsed.get("profile")
-    profile = profile_raw if isinstance(profile_raw, str) and profile_raw.strip() else "dev"
-
-    paths = parsed.get("paths", {})
-    logging_table = parsed.get("logging", {})
-    profile_paths = paths.get(profile, {}) if isinstance(paths, Mapping) else {}
-    profile_logging = logging_table.get(profile, {}) if isinstance(logging_table, Mapping) else {}
-
-    db = profile_paths.get("db", "") if isinstance(profile_paths, Mapping) else ""
-    logs = profile_paths.get("logs", "") if isinstance(profile_paths, Mapping) else ""
-    retention = (
-        profile_logging.get("retention_days", 0) if isinstance(profile_logging, Mapping) else 0
-    )
-    level = profile_logging.get("level", "") if isinstance(profile_logging, Mapping) else ""
-    resolved_db = db if isinstance(db, str) else ""
-    resolved_logs = logs if isinstance(logs, str) else ""
-    resolved_retention = retention if isinstance(retention, int) else 0
-    resolved_level = level if isinstance(level, str) else ""
-
-    return profile, resolved_db, resolved_logs, resolved_retention, resolved_level
 
 
 def _write_env_file(env_path: Path, values: Mapping[str, str]) -> None:
@@ -797,11 +807,19 @@ def _read_env_file(env_path: Path) -> dict[str, str]:
 
 def _validate_required_env_values(env_values: Mapping[str, str]) -> list[str]:
     missing_by_platform: dict[str, list[str]] = {
-        "twitter": ["TWITTER_BEARER_TOKEN", "TWITTER_HANDLE"],
+        "twitter": [
+            "TWITTER_CONSUMER_KEY",
+            "TWITTER_CONSUMER_SECRET",
+            "TWITTER_ACCESS_TOKEN",
+            "TWITTER_ACCESS_TOKEN_SECRET",
+            "TWITTER_HANDLE",
+        ],
         "bluesky": ["BLUESKY_HANDLE"],
         "farcaster": ["FARCASTER_API_KEY", "FARCASTER_USERNAME"],
         "mastodon": ["MASTODON_ACCESS_TOKEN", "MASTODON_INSTANCE"],
         "threads": ["THREADS_ACCESS_TOKEN", "THREADS_USER_ID"],
+        "instagram": ["INSTAGRAM_ACCOUNT_ID", "INSTAGRAM_ACCESS_TOKEN"],
+        "facebook": ["FACEBOOK_ACCESS_TOKEN", "FACEBOOK_ID"],
         "youtube": ["YOUTUBE_API_KEY"],
     }
     warnings: list[str] = []
@@ -893,7 +911,7 @@ def _warn_threads_token_expiry_if_needed(
     env: Mapping[str, str] | None = None,
     now_utc: datetime | None = None,
 ) -> None:
-    if "threads" not in set(selected_platforms):
+    if "threads" not in selected_platforms:
         return
 
     env_map = os.environ if env is None else env

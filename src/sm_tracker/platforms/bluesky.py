@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 from atproto import Client  # type: ignore[import-untyped]
@@ -17,7 +17,7 @@ class BlueskyAdapter:
     """Fetch Bluesky follower/following counts for one handle."""
 
     handle: str
-    app_password: str | None = None
+    app_password: str | None = field(default=None, repr=False)
     name: str = "bluesky"
 
     def _build_client(self) -> Client:
