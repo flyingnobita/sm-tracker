@@ -14,6 +14,8 @@
 
 ### Twitter/X
 
+> **Note:** The Twitter/X API requires a paid Basic tier subscription or higher. The Free tier is not sufficient.
+
 - `TWITTER_BEARER_TOKEN` (required)
 - `TWITTER_HANDLE` (required)
 

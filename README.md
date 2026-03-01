@@ -84,6 +84,8 @@ You can configure one or many platforms. Missing credentials skip only that plat
 
 #### Twitter/X
 
+> **Note:** The Twitter/X API requires a paid Basic tier subscription or higher. The Free tier is not sufficient.
+
 - `TWITTER_BEARER_TOKEN`
 - `TWITTER_HANDLE`
 
