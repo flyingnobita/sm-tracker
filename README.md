@@ -171,7 +171,34 @@ uv run sm-tracker auth -p instagram
 - `auth`: run OAuth/Token exchange flows for supported platforms (`threads`, `facebook`, `instagram`)
 - `help`: print CLI usage
 
+## 🧱 Tech Stack
+
+| Layer     | Technology       | Notes                                                                              |
+| --------- | ---------------- | ---------------------------------------------------------------------------------- |
+| CLI       | Typer            | Elegant command-line interfaces                                                    |
+| Storage   | libSQL           | SQLite-compatible, [tursodatabase/libsql](https://github.com/tursodatabase/libsql) |
+| Twitter   | Tweepy           | [tweepy/tweepy](https://github.com/tweepy/tweepy)                                  |
+| Bluesky   | atproto          | [bluesky-social/atproto](https://github.com/bluesky-social/atproto)                |
+| Farcaster | Direct API       | Warpcast API (`api.warpcast.com`)                                                  |
+| Mastodon  | Mastodon.py      | [halcy/Mastodon.py](https://github.com/halcy/Mastodon.py)                          |
+| Threads   | meta-threads-sdk | [MetaThreads/meta-threads-sdk](https://github.com/MetaThreads/meta-threads-sdk)    |
+| Meta      | Direct API       | Graph API for Facebook and Instagram tokens                                        |
+| YouTube   | Direct API       | YouTube Data API v3                                                                |
+
+**Python:** 3.12+ (required by meta-threads-sdk)
+
 ## 📝 Configuration
+
+Configuration is split into two files per best practice:
+
+| File          | Purpose                                        | Location                                          |
+| ------------- | ---------------------------------------------- | ------------------------------------------------- |
+| `.env`        | API keys, tokens, secrets, account identifiers | Project dir or loaded from process env            |
+| `config.toml` | Paths, retention, log level, non-sensitive     | `~/.config/sm-tracker/config.toml` or project dir |
+
+`.env` is never committed; `config.toml` may ship with defaults.
+
+### Quick Links
 
 - Credential template: [`.env.example`](.env.example)
 - App config template: [`config.toml.example`](config.toml.example)
