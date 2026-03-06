@@ -1,12 +1,12 @@
-profile = "dev"
+profile = "production"
 
 [paths.dev]
 db = "./data-dev.db"
 logs = "./logs-dev"
 
 [paths.production]
-db = "~/.local/share/sm-tracker/data.db"
-logs = "~/.local/share/sm-tracker/logs"
+db = "/home/rpi5/.openclaw/workspace/work/sm-tracker/data.db"
+logs = "/home/rpi5/.openclaw/workspace/logs/sm-tracker"
 
 [logging.dev]
 retention_days = 7
@@ -14,4 +14,4 @@ level = "DEBUG"
 
 [logging.production]
 retention_days = 14
-level = "INFO"
+level = "WARNING"
