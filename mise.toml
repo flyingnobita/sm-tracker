@@ -10,7 +10,6 @@ _.python.venv = { path = ".venv", create = true }
 [tools]
 python = "3.12"
 node = "lts"
-"github:astral-sh/uv" = "latest"
 
 [tasks]
 # Run before pushing to validate the full test suite.
