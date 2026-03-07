@@ -73,7 +73,14 @@ def resolve_profile(config_data: Mapping[str, Any], profile_override: str | None
 
 
 def find_config_file(project_dir: Path | None = None) -> Path:
-    """Locate `config.toml` in project dir, then user config directory."""
+    """Locate `config.toml` via SM_TRACKER_CONFIG env var, project dir, then user config directory."""
+    env_config = os.environ.get("SM_TRACKER_CONFIG")
+    if env_config:
+        p = Path(env_config).expanduser()
+        if p.exists():
+            return p
+        raise ConfigError(f"Config file set by SM_TRACKER_CONFIG not found: {p}")
+
     cwd = (project_dir or Path.cwd()).expanduser()
     project_config = cwd / "config.toml"
     if project_config.exists():

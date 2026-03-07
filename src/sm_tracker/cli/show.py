@@ -48,8 +48,8 @@ def show(
         config = load_config()
     except ConfigError as exc:
         LOGGER.warning("show command aborted: %s", exc)
-        typer.echo(f"Could not load configuration: {exc}")
-        return
+        typer.echo(f"Could not load configuration: {exc}", err=True)
+        raise typer.Exit(code=1)
 
     warn_threads_token_expiry_if_needed(selected, env=config.env)
 
