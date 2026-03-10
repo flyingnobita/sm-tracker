@@ -30,6 +30,7 @@ wheels/
 # Virtual environments
 .venv/
 venv/
+.venv-smoke/
 ENV/
 env/
 

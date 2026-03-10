@@ -1,6 +1,6 @@
 # Social Media Tracker (sm-tracker)
 
-![sm-tracker banner](https://raw.githubusercon¡™£¡tent.com/flyingnobita/sm-tracker/main/assets/sm-tracker-banner.jpeg)
+![sm-tracker banner](https://raw.githubusercontent.com/flyingnobita/sm-tracker/main/assets/sm-tracker-banner.jpeg)
 
 [![PyPI version](https://img.shields.io/pypi/v/sm-tracker.svg)](https://pypi.org/project/sm-tracker/)
 [![Python versions](https://img.shields.io/pypi/pyversions/sm-tracker.svg)](https://pypi.org/project/sm-tracker/)
