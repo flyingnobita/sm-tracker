@@ -2,6 +2,12 @@
 
 ![sm-tracker banner](https://raw.githubusercontent.com/flyingnobita/sm-tracker/main/assets/sm-tracker-banner.jpeg)
 
+[![PyPI version](https://img.shields.io/pypi/v/sm-tracker.svg)](https://pypi.org/project/sm-tracker/)
+[![Python versions](https://img.shields.io/pypi/pyversions/sm-tracker.svg)](https://pypi.org/project/sm-tracker/)
+[![License](https://img.shields.io/pypi/l/sm-tracker.svg)](https://github.com/flyingnobita/sm-tracker/blob/main/LICENSE)
+[![CI](https://github.com/flyingnobita/sm-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/flyingnobita/sm-tracker/actions/workflows/ci.yml)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/sm-tracker.svg)](https://pypi.org/project/sm-tracker/)
+
 `sm-tracker` is a CLI that tracks follower and following counts across 🐦 Twitter/X, 🦋 Bluesky, 🛰️ Farcaster, 🐘 Mastodon, 🧵 Threads, 📘 Facebook, 📸 Instagram, and 📺 YouTube.
 
 `sm-tracker` stores social-metric snapshots in libSQL (local SQLite-compatible by default), prints human-readable output by default, and supports JSON/CSV for scripts, cron jobs, and AI-agent automation.
