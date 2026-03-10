@@ -260,12 +260,21 @@ mise run release-check
 2. Add the release note to `CHANGELOG.md`.
 3. Run:
 
-```bash
-mise run release-build
-mise run release-check
-```
+    ```bash
+    mise run release-build
+    mise run release-check
+    ```
 
-1. Commit and push the release changes.
+4. Commit and push `main`.
+5. Run the `Release` workflow with target `testpypi` if you want a dry run.
+6. Push the release tag:
+
+    ```bash
+    git tag v0.1.3
+    git push origin v0.1.3
+    ```
+
+7. GitHub Actions will publish to PyPI and create the matching GitHub Release automatically.
 
 ### GitHub release
 
