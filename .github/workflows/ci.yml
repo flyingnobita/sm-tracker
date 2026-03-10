@@ -80,3 +80,22 @@ jobs:
 
       - name: Run secret scan
         run: mise run secret-scan
+
+  smoke-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up mise tools
+        uses: jdx/mise-action@v2
+        with:
+          install: true
+
+      - name: Build and smoke test wheel install
+        run: |
+          rm -rf dist .venv-smoke
+          uv build
+          uv venv .venv-smoke
+          uv pip install --python .venv-smoke/bin/python dist/*.whl
+          .venv-smoke/bin/sm-tracker help >/dev/null
+          .venv-smoke/bin/python -m sm_tracker help >/dev/null

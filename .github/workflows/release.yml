@@ -41,6 +41,14 @@ jobs:
       - name: Validate distributions
         run: uvx twine check dist/*
 
+      - name: Smoke test built wheel
+        run: |
+          rm -rf .venv-smoke
+          uv venv .venv-smoke
+          uv pip install --python .venv-smoke/bin/python dist/*.whl
+          .venv-smoke/bin/sm-tracker help >/dev/null
+          .venv-smoke/bin/python -m sm_tracker help >/dev/null
+
       - name: Upload distributions
         uses: actions/upload-artifact@v4
         with:
