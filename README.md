@@ -15,6 +15,19 @@
 
 ## ⚙️ Installation
 
+### Install from PyPI
+
+```bash
+uv tool install sm-tracker
+sm-tracker help
+```
+
+To upgrade later:
+
+```bash
+uv tool upgrade sm-tracker
+```
+
 ### Local development
 
 ```bash
@@ -22,16 +35,9 @@ uv sync
 uv run sm-tracker help
 ```
 
-### Install as a CLI tool
-
-```bash
-uv pip install -e .
-sm-tracker help
-```
-
 ## 🚀 Quickstart
 
-After `uv pip install -e .`, run:
+After installing `sm-tracker`, run:
 
 1. Create credentials and app config via guided setup:
 
@@ -64,13 +70,13 @@ Use this flow for a clean checkout to first successful snapshot.
 ### 📦 1) Install dependencies
 
 ```bash
-uv sync
+uv tool install sm-tracker
 ```
 
 ### 🛠️ 2) Run guided setup
 
 ```bash
-uv run sm-tracker config
+sm-tracker config
 ```
 
 The command will create or update:
@@ -118,7 +124,7 @@ Get API credentials from `https://warpcast.com/developer`.
 Refresh Threads credentials via OAuth when needed:
 
 ```bash
-uv run sm-tracker auth -p threads
+sm-tracker auth -p threads
 ```
 
 #### Meta (Facebook & Instagram)
@@ -128,9 +134,9 @@ See the full [Credentials Setup Guide](docs/CREDENTIAL_SETUP_GUIDE.md) for step-
 To configure either platform easily, use the interactive auth flow to exchange short-lived tokens for long-lived ones automatically:
 
 ```bash
-uv run sm-tracker auth -p facebook
+sm-tracker auth -p facebook
 # OR
-uv run sm-tracker auth -p instagram
+sm-tracker auth -p instagram
 ```
 
 **Facebook:**
