@@ -10,8 +10,10 @@ __pycache__/
 *.so
 .Python
 build/
+build-*/
 develop-eggs/
 dist/
+dist-*/
 downloads/
 eggs/
 .eggs/
@@ -58,7 +60,10 @@ Thumbs.db
 htmlcov/
 .pytest_cache/
 .mypy_cache/
+.ruff_cache/
 
 # Logs
 logs/
 *.log
+logs-dev/
+logs-prod/
