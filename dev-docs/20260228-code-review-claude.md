@@ -3,7 +3,7 @@
 Date: 2026-02-28
 
 **Project:** Social media follower/following count tracker
-**Version:** 0.1.0 (MVP)
+**Version Reviewed:** 0.1.0 (historical pre-release review)
 **Tech:** Python 3.12+, Typer CLI, libSQL, 8 platform adapters
 
 ---

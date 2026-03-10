@@ -1,7 +1,7 @@
 # Facebook Tracker Spec
 
 Date: 2026-02-27
-Status: Proposed
+Status: Accepted
 
 ## Context
 
