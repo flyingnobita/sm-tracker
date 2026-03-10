@@ -248,13 +248,28 @@ mise run release-build
 mise run release-check
 ```
 
-For automated publishing with GitHub Actions Trusted Publishing:
+### Manual release
 
-1. Configure Trusted Publishers on PyPI and TestPyPI for this repo, workflow file `.github/workflows/release.yml`, and environments `pypi` / `testpypi`.
-2. Bump `version` in `pyproject.toml` and update `CHANGELOG.md`.
-3. Commit the release changes.
-4. For a TestPyPI dry run, trigger the `Release` workflow manually with target `testpypi`.
-5. For a real PyPI release, push a tag like `v0.1.1` to GitHub. The same workflow will build, validate, and publish to PyPI automatically.
+1. Bump `version` in `pyproject.toml`.
+2. Add the release note to `CHANGELOG.md`.
+3. Run:
+
+```bash
+mise run release-build
+mise run release-check
+```
+
+1. Commit and push the release changes.
+
+### GitHub release
+
+1. Trigger the `Release` workflow manually with target `testpypi` to verify the package.
+2. Push a tag like `v0.1.2` to publish to PyPI:
+
+```bash
+git tag v0.1.2
+git push origin v0.1.2
+```
 
 Trusted Publishing references:
 
