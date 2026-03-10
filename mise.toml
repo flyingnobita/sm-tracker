@@ -40,6 +40,6 @@ precommit = "uv run pre-commit run --all-files"
 # Run as the one-shot local CI gate (lint + types + docs format + tests).
 check = "mise run lint-check && mise run typecheck && mise run format-check && mise run test"
 # Run before cutting a release to rebuild fresh distributions from a green tree.
-release-build = "mise run check && uv build --out-dir dist-release"
+release-build = "mise run check && rm -rf dist-release && uv build --out-dir dist-release"
 # Run after release-build to validate the release artifacts that will be uploaded.
 release-check = "uvx twine check ./dist-release/*"

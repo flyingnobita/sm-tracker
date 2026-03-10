@@ -1,5 +1,6 @@
 # Changelog
 
+- Mar-10, 2026 - 04:08 PM +08 - Bumped the package version to `0.1.2` to publish the updated post-PyPI installation instructions in the package README.
 - Mar-10, 2026 - 04:02 PM +08 - Automated future releases with a GitHub Actions trusted-publishing workflow, local `mise` release tasks, and README release instructions for TestPyPI and PyPI.
 - Mar-10, 2026 - 03:41 PM +08 - Bumped the package version to `0.1.1` so the PyPI project page can pick up the README banner rendering fix and latest metadata updates.
 - Mar-10, 2026 - 03:25 PM +08 - Switched the README banner image to an absolute GitHub raw URL so PyPI can render it correctly.
