@@ -1,9 +1,17 @@
 """Phase 4 CLI skeleton tests."""
 
+import re
+
 from pytest import MonkeyPatch
 from typer.testing import CliRunner
 
 from sm_tracker.cli import app
+
+
+def _normalize_terminal_output(text: str) -> str:
+    """Strip ANSI codes and collapse whitespace for stable CLI assertions."""
+    without_ansi = re.sub(r"\x1b\[[0-9;]*m", "", text)
+    return " ".join(without_ansi.split())
 
 
 def test_cli_root_help_lists_expected_commands() -> None:
@@ -65,9 +73,15 @@ def test_scope_flags_are_mutually_exclusive() -> None:
     assert track_result.exit_code != 0
     assert show_result.exit_code != 0
     assert history_result.exit_code != 0
-    assert "Use either --platform or --all, not both." in track_result.output
-    assert "Use either --platform or --all, not both." in show_result.output
-    assert "Use either --platform or --all, not both." in history_result.output
+    assert "Use either --platform or --all, not both." in _normalize_terminal_output(
+        track_result.output
+    )
+    assert "Use either --platform or --all, not both." in _normalize_terminal_output(
+        show_result.output
+    )
+    assert "Use either --platform or --all, not both." in _normalize_terminal_output(
+        history_result.output
+    )
 
 
 def test_track_defaults_to_all_scope(monkeypatch: MonkeyPatch) -> None:
@@ -130,20 +144,19 @@ def test_command_help_describes_default_all_scope() -> None:
     assert track_help.exit_code == 0
     assert show_help.exit_code == 0
     assert history_help.exit_code == 0
-    assert "If" in track_help.stdout
-    assert "omitted" in track_help.stdout
-    assert "all platforms" in track_help.stdout
-    assert "(same as --all)." in track_help.stdout
+    normalized_track_help = _normalize_terminal_output(track_help.stdout)
+    normalized_show_help = _normalize_terminal_output(show_help.stdout)
+    normalized_history_help = _normalize_terminal_output(history_help.stdout)
 
-    assert "If" in show_help.stdout
-    assert "omitted" in show_help.stdout
-    assert "all platforms" in show_help.stdout
-    assert "(same as --all)." in show_help.stdout
+    assert "Target platform(s)." in normalized_track_help
+    assert "all platforms are targeted" in normalized_track_help
+    assert "(same as --all)." in normalized_track_help
 
-    assert "If" in history_help.stdout
-    assert "omitted" in history_help.stdout
-    assert "all platforms" in history_help.stdout
-    assert "(same as --all)." in history_help.stdout
+    assert "Target platform(s)." in normalized_show_help
+    assert "(same as --all)." in normalized_show_help
+
+    assert "Target platform(s)." in normalized_history_help
+    assert "(same as --all)." in normalized_history_help
 
 
 def test_help_command_outputs_usage() -> None:

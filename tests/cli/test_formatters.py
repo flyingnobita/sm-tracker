@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -14,6 +15,12 @@ from sm_tracker.cli import app
 from sm_tracker.cli.formatters import _format_delta, _format_rows_csv, _format_rows_json
 from sm_tracker.platforms.bluesky import BlueskyAdapter
 from sm_tracker.platforms.twitter import TwitterAdapter
+
+
+def _normalize_terminal_output(text: str) -> str:
+    """Strip ANSI codes and collapse whitespace for stable CLI assertions."""
+    without_ansi = re.sub(r"\x1b\[[0-9;]*m", "", text)
+    return " ".join(without_ansi.split())
 
 
 class _FakeBlueskyClient:
@@ -262,7 +269,7 @@ def test_json_and_csv_flags_are_mutually_exclusive() -> None:
     runner = CliRunner()
     result = runner.invoke(app, ["show", "--json", "--csv"])
     assert result.exit_code != 0
-    assert "Use either --json or --csv, not both." in result.output
+    assert "Use either --json or --csv, not both." in _normalize_terminal_output(result.output)
 
 
 def test_formatter_functions_render_null_and_empty_values() -> None:
