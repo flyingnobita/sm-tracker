@@ -1,5 +1,6 @@
 # Changelog
 
+- Mar-10, 2026 - 05:02 PM +08 - Reconfigured CLI logging to replace stale handlers on startup, fixing GitHub Actions test failures caused by closed captured streams across repeated `CliRunner` invocations.
 - Mar-10, 2026 - 04:51 PM +08 - Updated `dev-docs` status fields to match the implemented Facebook and YouTube work, and clarified the historical `0.1.0` review labeling.
 - Mar-10, 2026 - 04:08 PM +08 - Bumped the package version to `0.1.2` to publish the updated post-PyPI installation instructions in the package README.
 - Mar-10, 2026 - 04:02 PM +08 - Automated future releases with a GitHub Actions trusted-publishing workflow, local `mise` release tasks, and README release instructions for TestPyPI and PyPI.

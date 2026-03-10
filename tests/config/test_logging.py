@@ -1,6 +1,7 @@
 """Phase 2 logging tests."""
 
 import importlib
+import io
 from logging import StreamHandler
 from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
@@ -56,6 +57,40 @@ def test_setup_logging_uses_timed_rotation_settings(tmp_path: Path) -> None:
         if isinstance(h, StreamHandler) and not isinstance(h, TimedRotatingFileHandler)
     ]
     assert len(console_handlers) == 1
+
+
+def test_setup_logging_replaces_stale_console_stream_handler(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    logger_name = "sm_tracker_stale_stream_test"
+    logger = setup_logging(
+        logs_path=tmp_path / "logs",
+        level="INFO",
+        retention_days=7,
+        logger_name=logger_name,
+    )
+
+    stale_stream = io.StringIO()
+    stale_console = next(
+        h
+        for h in logger.handlers
+        if isinstance(h, StreamHandler) and not isinstance(h, TimedRotatingFileHandler)
+    )
+    stale_console.setStream(stale_stream)
+    stale_stream.close()
+
+    reconfigured = setup_logging(
+        logs_path=tmp_path / "logs",
+        level="INFO",
+        retention_days=7,
+        logger_name=logger_name,
+    )
+    reconfigured.info("fresh console handler works")
+    for handler in reconfigured.handlers:
+        handler.flush()
+
+    captured = capsys.readouterr()
+    assert "fresh console handler works" in captured.err
 
 
 def test_cli_bootstrap_creates_configured_log_file(monkeypatch: MonkeyPatch) -> None:

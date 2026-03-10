@@ -21,8 +21,7 @@ def setup_logging(
     logs_path.mkdir(parents=True, exist_ok=True)
 
     logger = logging.getLogger(logger_name)
-    if logger.handlers:
-        return logger
+    _reset_handlers(logger)
 
     logger.propagate = False
     logger.setLevel(getattr(logging, level.upper(), logging.INFO))
@@ -45,3 +44,10 @@ def setup_logging(
     logger.addHandler(file_handler)
     logger.addHandler(console_handler)
     return logger
+
+
+def _reset_handlers(logger: logging.Logger) -> None:
+    """Detach and close any existing handlers before reconfiguring the logger."""
+    for handler in list(logger.handlers):
+        logger.removeHandler(handler)
+        handler.close()
