@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib
 import os
 from pathlib import Path
 
@@ -138,3 +139,35 @@ level = "INFO"
     assert result.exit_code == 0
     assert "Found existing configuration warnings:" in result.stdout
     assert "config.toml error:" in result.stdout
+
+
+def test_run_env_wizard_hides_existing_secret_defaults(monkeypatch) -> None:
+    config_module = importlib.import_module("sm_tracker.cli.config")
+    prompts: list[dict[str, object]] = []
+
+    def fake_prompt(text: str, **kwargs: object) -> str:
+        prompts.append({"text": text, **kwargs})
+        return str(kwargs.get("default", ""))
+
+    monkeypatch.setattr(
+        config_module,
+        "read_env_file",
+        lambda _env_path: {
+            "TWITTER_ACCESS_TOKEN": "secret-token",
+            "TWITTER_HANDLE": "alice",
+        },
+    )
+    monkeypatch.setattr(config_module.typer, "prompt", fake_prompt)
+
+    result = config_module._run_env_wizard(Path(".env"))
+
+    assert result["TWITTER_ACCESS_TOKEN"] == "secret-token"
+    assert result["TWITTER_HANDLE"] == "alice"
+
+    secret_prompt = next(p for p in prompts if p["text"] == "Twitter access token")
+    assert secret_prompt["hide_input"] is True
+    assert secret_prompt["show_default"] is False
+
+    handle_prompt = next(p for p in prompts if p["text"] == "Twitter handle to track")
+    assert handle_prompt["hide_input"] is False
+    assert handle_prompt["show_default"] is True

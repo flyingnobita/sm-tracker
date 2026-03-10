@@ -8,7 +8,7 @@ import urllib.request
 from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, urlencode, urlparse
 
 import typer
 from dotenv import load_dotenv
@@ -134,12 +134,11 @@ def _run_meta_auth(env_path: Path, platform: str) -> None:
             set_key(str(env_path), "META_USER_TOKEN_SHORT_LIVED", short_token)
 
         typer.echo("Exchanging for long-lived user token...")
-        url_exchange = (
-            f"https://graph.facebook.com/v19.0/oauth/access_token"
-            f"?grant_type=fb_exchange_token&client_id={app_id}"
-            f"&client_secret={app_secret}&fb_exchange_token={short_token}"
+        req_exchange = _build_meta_token_exchange_request(
+            app_id=app_id,
+            app_secret=app_secret,
+            short_token=short_token,
         )
-        req_exchange = urllib.request.Request(url_exchange)
 
         try:
             with urllib.request.urlopen(req_exchange) as response:
@@ -173,8 +172,7 @@ def _run_meta_auth(env_path: Path, platform: str) -> None:
 
     elif platform == "facebook":
         typer.echo("Fetching long-lived page tokens...")
-        url_pages = f"https://graph.facebook.com/v19.0/me/accounts?access_token={long_user_token}"
-        req_pages = urllib.request.Request(url_pages)
+        req_pages = _build_meta_accounts_request(long_user_token)
         try:
             with urllib.request.urlopen(req_pages) as response:
                 pages_data = json.loads(response.read().decode())
@@ -193,8 +191,6 @@ def _run_meta_auth(env_path: Path, platform: str) -> None:
                     raise typer.Exit(code=1)
         except Exception as e:
             typer.echo(f"Failed to get page tokens: {e}")
-            if hasattr(e, "read"):
-                typer.echo(e.read().decode())
             raise typer.Exit(code=1) from e
 
 
@@ -271,3 +267,32 @@ def _upsert_env_var(env_path: Path, key: str, value: str) -> None:
     if not updated:
         lines.append(f"{key}={value}")
     env_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _build_meta_token_exchange_request(
+    app_id: str, app_secret: str, short_token: str
+) -> urllib.request.Request:
+    data = urlencode(
+        {
+            "grant_type": "fb_exchange_token",
+            "client_id": app_id,
+            "client_secret": app_secret,
+            "fb_exchange_token": short_token,
+        }
+    ).encode("utf-8")
+    return urllib.request.Request(
+        "https://graph.facebook.com/v19.0/oauth/access_token",
+        data=data,
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+        method="POST",
+    )
+
+
+def _build_meta_accounts_request(access_token: str) -> urllib.request.Request:
+    return urllib.request.Request(
+        "https://graph.facebook.com/v19.0/me/accounts",
+        headers={
+            "Authorization": f"Bearer {access_token}",
+            "User-Agent": "sm-tracker",
+        },
+    )

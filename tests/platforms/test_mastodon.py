@@ -116,6 +116,7 @@ level = "INFO"
     assert "mastodon" in history_result.stdout
 
 
+@pytest.mark.integration
 def test_mastodon_live_credentials_fetch_counts() -> None:
     """Opt-in live test that validates Mastodon credentials against the real API."""
     access_token = os.getenv("MASTODON_ACCESS_TOKEN", "").strip()

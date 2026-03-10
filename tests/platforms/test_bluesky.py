@@ -123,6 +123,7 @@ level = "INFO"
     assert "bluesky" in history_result.stdout
 
 
+@pytest.mark.integration
 def test_bluesky_live_credentials_fetch_counts() -> None:
     """Opt-in live test that validates Bluesky credentials against the real API."""
     handle = os.getenv("BLUESKY_HANDLE", "").strip()

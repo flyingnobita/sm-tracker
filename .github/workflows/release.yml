@@ -1,0 +1,90 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Where to publish the built distributions"
+        required: true
+        default: "testpypi"
+        type: choice
+        options:
+          - testpypi
+          - pypi
+
+jobs:
+  build:
+    name: Build Distributions
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up mise tools
+        uses: jdx/mise-action@v2
+        with:
+          install: true
+
+      - name: Install dependencies
+        run: mise exec -- uv sync
+
+      - name: Verify release tree
+        run: mise run check
+
+      - name: Build distributions
+        run: uv build
+
+      - name: Validate distributions
+        run: uvx twine check dist/*
+
+      - name: Upload distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-dists
+          path: dist/*
+
+  publish-testpypi:
+    name: Publish To TestPyPI
+    needs: build
+    if: github.event_name == 'workflow_dispatch' && inputs.target == 'testpypi'
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/sm-tracker
+    permissions:
+      id-token: write
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: python-dists
+          path: dist
+
+      - name: Publish package distributions to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  publish-pypi:
+    name: Publish To PyPI
+    needs: build
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.target == 'pypi')
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/sm-tracker
+    permissions:
+      id-token: write
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: python-dists
+          path: dist
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

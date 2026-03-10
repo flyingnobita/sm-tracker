@@ -7,6 +7,7 @@ import urllib.error
 import urllib.request
 from collections.abc import Mapping
 from dataclasses import dataclass, field
+from urllib.parse import urlencode
 
 from sm_tracker.platforms import AdapterConfigError, BaseAdapter, PlatformCounts
 
@@ -24,8 +25,6 @@ class InstagramAdapter(BaseAdapter):
         return "instagram"
 
     def fetch_counts(self) -> PlatformCounts:
-        base_url = f"https://graph.facebook.com/v19.0/{self.account_id}"
-
         if self.username:
             # Business Discovery API for a specific username
             fields = (
@@ -35,15 +34,22 @@ class InstagramAdapter(BaseAdapter):
             # Own account insights
             fields = "followers_count,follows_count"
 
-        url = f"{base_url}?fields={fields}&access_token={self.access_token}"
+        url = f"https://graph.facebook.com/v19.0/{self.account_id}?{urlencode({'fields': fields})}"
 
         try:
-            req = urllib.request.Request(url)
+            req = urllib.request.Request(
+                url,
+                headers={
+                    "Authorization": f"Bearer {self.access_token}",
+                    "User-Agent": "sm-tracker",
+                },
+            )
             with urllib.request.urlopen(req) as response:
                 data = json.loads(response.read().decode("utf-8"))
         except urllib.error.HTTPError as exc:
             error_body = exc.read().decode("utf-8")
-            raise RuntimeError(f"Instagram API Error ({exc.code}): {error_body}") from exc
+            error_message = _extract_error_message(error_body)
+            raise RuntimeError(f"Instagram API Error ({exc.code}): {error_message}") from exc
         except Exception as exc:
             raise RuntimeError(f"Failed to fetch Instagram counts: {exc}") from exc
 
@@ -78,3 +84,19 @@ class InstagramAdapter(BaseAdapter):
             access_token=access_token,
             username=username,
         )
+
+
+def _extract_error_message(error_body: str) -> str:
+    try:
+        payload = json.loads(error_body)
+    except json.JSONDecodeError:
+        return "Request failed"
+
+    if isinstance(payload, Mapping):
+        error = payload.get("error")
+        if isinstance(error, Mapping):
+            message = error.get("message")
+            if isinstance(message, str) and message.strip():
+                return message.strip()
+
+    return "Request failed"

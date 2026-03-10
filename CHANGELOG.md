@@ -1,5 +1,15 @@
 # Changelog
 
+- Mar-10, 2026 - 04:02 PM +08 - Automated future releases with a GitHub Actions trusted-publishing workflow, local `mise` release tasks, and README release instructions for TestPyPI and PyPI.
+- Mar-10, 2026 - 03:41 PM +08 - Bumped the package version to `0.1.1` so the PyPI project page can pick up the README banner rendering fix and latest metadata updates.
+- Mar-10, 2026 - 03:25 PM +08 - Switched the README banner image to an absolute GitHub raw URL so PyPI can render it correctly.
+- Mar-10, 2026 - 03:03 PM +08 - Added PyPI-facing package metadata (author, license, classifiers, keywords, project URLs) and corrected stale Twitter credential docs in the README and config reference.
+- Mar-10, 2026 - 02:54 PM +08 - Aligned `show` with `history` so missing configuration prints guidance and exits cleanly instead of failing the command.
+- Mar-10, 2026 - 02:53 PM +08 - Cleared the remaining Ruff blockers by adding explicit exception chaining in CLI config-load failures and shortening the config file locator docstring.
+- Mar-10, 2026 - 02:47 PM +08 - Made the default pytest suite hermetic by excluding all `integration`-marked tests and marking live platform tests outside `tests/integration/` so `mise run test-real` remains opt-in.
+- Mar-10, 2026 - 02:39 PM +08 - Hardened secret handling by hiding sensitive config prompts, moving Meta and Instagram tokens out of query strings, and sanitizing Instagram API error output.
+- Mar-10, 2026 - 02:31 PM +08 - Hardened CLI startup to skip logging bootstrap on OS-level path errors and reset the committed `config.toml` to portable default paths.
+- Mar-10, 2026 - 02:27 PM +08 - Restricted Hatch build inputs so PyPI source distributions only ship publishable package files and exclude repo-local config, logs, tests, and dev-docs.
 - Feb-28, 2026 - 01:42 AM +08 - Added Instagram Graph API tracking support, migrating away from the rate-limited `instaloader` library.
 - Feb-27, 2026 - 07:45 PM +08 - Added YouTube support to the CLI config command.
 - Feb-27, 2026 - 04:18 PM +08 - Implemented Facebook Tracker support, updated `SUPPORTED_PLATFORM_NAMES`, fixed related tests, and added Facebook credentials to environment configuration.

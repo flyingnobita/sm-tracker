@@ -16,7 +16,10 @@
 
 > **Note:** The Twitter/X API requires a paid Basic tier subscription or higher. The Free tier is not sufficient.
 
-- `TWITTER_BEARER_TOKEN` (required)
+- `TWITTER_CONSUMER_KEY` (required)
+- `TWITTER_CONSUMER_SECRET` (required)
+- `TWITTER_ACCESS_TOKEN` (required)
+- `TWITTER_ACCESS_TOKEN_SECRET` (required)
 - `TWITTER_HANDLE` (required)
 
 ### Bluesky

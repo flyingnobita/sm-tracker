@@ -4,6 +4,7 @@ import json
 import urllib.error
 from io import BytesIO
 from unittest.mock import MagicMock, patch
+from urllib.parse import parse_qs, urlparse
 
 import pytest
 
@@ -65,10 +66,13 @@ def test_fetch_counts_success_own_account(mock_urlopen: MagicMock) -> None:
 
     assert mock_urlopen.called
     req = mock_urlopen.call_args[0][0]
-    assert (
-        req.full_url
-        == "https://graph.facebook.com/v19.0/123?fields=followers_count,follows_count&access_token=abc"
-    )
+    parsed = urlparse(req.full_url)
+    query = parse_qs(parsed.query)
+    assert parsed.scheme == "https"
+    assert parsed.netloc == "graph.facebook.com"
+    assert parsed.path == "/v19.0/123"
+    assert query == {"fields": ["followers_count,follows_count"]}
+    assert req.get_header("Authorization") == "Bearer abc"
 
     assert counts.platform == "instagram"
     assert counts.follower_count == 1500
@@ -93,11 +97,13 @@ def test_fetch_counts_success_with_username(mock_urlopen: MagicMock) -> None:
 
     assert mock_urlopen.called
     req = mock_urlopen.call_args[0][0]
-    expected_url = (
-        "https://graph.facebook.com/v19.0/123?"
-        "fields=business_discovery.username(target){followers_count,follows_count}&access_token=abc"
-    )
-    assert req.full_url == expected_url
+    parsed = urlparse(req.full_url)
+    query = parse_qs(parsed.query)
+    assert parsed.path == "/v19.0/123"
+    assert query == {
+        "fields": ["business_discovery.username(target){followers_count,follows_count}"]
+    }
+    assert req.get_header("Authorization") == "Bearer abc"
 
     assert counts.follower_count == 800
     assert counts.following_count == 100
@@ -116,7 +122,7 @@ def test_fetch_counts_http_error(mock_urlopen: MagicMock) -> None:
 
     adapter = InstagramAdapter(account_id="123", access_token="abc")
 
-    with pytest.raises(RuntimeError, match=r"Instagram API Error \(400\): .*Invalid token.*"):
+    with pytest.raises(RuntimeError, match=r"Instagram API Error \(400\): Invalid token"):
         adapter.fetch_counts()
 
 

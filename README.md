@@ -1,6 +1,6 @@
 # Social Media Tracker (sm-tracker)
 
-![sm-tracker banner](assets/sm-tracker-banner.jpeg)
+![sm-tracker banner](https://raw.githubusercontent.com/flyingnobita/sm-tracker/main/assets/sm-tracker-banner.jpeg)
 
 `sm-tracker` is a CLI that tracks follower and following counts across 🐦 Twitter/X, 🦋 Bluesky, 🛰️ Farcaster, 🐘 Mastodon, 🧵 Threads, 📘 Facebook, 📸 Instagram, and 📺 YouTube.
 
@@ -86,7 +86,10 @@ You can configure one or many platforms. Missing credentials skip only that plat
 
 > **Note:** The Twitter/X API requires a paid Basic tier subscription or higher. The Free tier is not sufficient.
 
-- `TWITTER_BEARER_TOKEN`
+- `TWITTER_CONSUMER_KEY`
+- `TWITTER_CONSUMER_SECRET`
+- `TWITTER_ACCESS_TOKEN`
+- `TWITTER_ACCESS_TOKEN_SECRET`
 - `TWITTER_HANDLE`
 
 #### Bluesky
@@ -235,3 +238,25 @@ Date | Platform | Followers | Following | Delta
 ## 📄 License
 
 MIT
+
+## 🚢 Release Process
+
+For local release verification:
+
+```bash
+mise run release-build
+mise run release-check
+```
+
+For automated publishing with GitHub Actions Trusted Publishing:
+
+1. Configure Trusted Publishers on PyPI and TestPyPI for this repo, workflow file `.github/workflows/release.yml`, and environments `pypi` / `testpypi`.
+2. Bump `version` in `pyproject.toml` and update `CHANGELOG.md`.
+3. Commit the release changes.
+4. For a TestPyPI dry run, trigger the `Release` workflow manually with target `testpypi`.
+5. For a real PyPI release, push a tag like `v0.1.1` to GitHub. The same workflow will build, validate, and publish to PyPI automatically.
+
+Trusted Publishing references:
+
+- PyPI docs: <https://docs.pypi.org/trusted-publishers/using-a-publisher/>
+- GitHub docs: <https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-pypi>

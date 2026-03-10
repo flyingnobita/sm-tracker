@@ -128,6 +128,7 @@ level = "INFO"
     assert "farcaster" in history_result.stdout
 
 
+@pytest.mark.integration
 def test_farcaster_live_credentials_fetch_counts() -> None:
     """Opt-in live test that validates Farcaster credentials against the real API."""
     api_key = os.getenv("FARCASTER_API_KEY", "").strip()

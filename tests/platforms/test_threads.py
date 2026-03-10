@@ -163,6 +163,7 @@ level = "INFO"
     assert "threads" in history_result.stdout
 
 
+@pytest.mark.integration
 def test_threads_live_credentials_fetch_counts() -> None:
     """Opt-in live test that validates Threads credentials against the real API."""
     access_token = os.getenv("THREADS_ACCESS_TOKEN", "").strip()

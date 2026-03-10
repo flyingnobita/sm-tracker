@@ -45,7 +45,7 @@ def track(
     except ConfigError as exc:
         LOGGER.error("track command failed to load config: %s", exc)
         typer.echo(f"Could not load config: {exc}", err=True)
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from exc
 
     warn_threads_token_expiry_if_needed(selected, env=config.env)
 

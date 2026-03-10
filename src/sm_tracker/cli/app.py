@@ -29,11 +29,14 @@ def _try_setup_logging() -> None:
     except ConfigError:
         return
 
-    setup_logging(
-        logs_path=config.logs_path,
-        level=config.log_level,
-        retention_days=config.log_retention_days,
-    )
+    try:
+        setup_logging(
+            logs_path=config.logs_path,
+            level=config.log_level,
+            retention_days=config.log_retention_days,
+        )
+    except OSError:
+        return
     LOGGER.info(
         "CLI logging initialized for profile=%s db_path=%s logs_path=%s",
         config.profile,

@@ -57,6 +57,24 @@ ENV_FIELD_SPECS: list[tuple[str, str, bool]] = [
     ("YOUTUBE_CHANNEL_ID", "YouTube channel ID (optional if handle provided)", False),
     ("YOUTUBE_HANDLE", "YouTube handle (optional if channel ID provided)", False),
 ]
+SENSITIVE_ENV_KEYS: frozenset[str] = frozenset(
+    {
+        "TWITTER_CONSUMER_SECRET",
+        "TWITTER_ACCESS_TOKEN",
+        "TWITTER_ACCESS_TOKEN_SECRET",
+        "BLUESKY_APP_PASSWORD",
+        "FARCASTER_API_KEY",
+        "MASTODON_ACCESS_TOKEN",
+        "THREADS_APP_SECRET",
+        "THREADS_ACCESS_TOKEN",
+        "LONG_LIVED_USER_TOKEN",
+        "FACEBOOK_ACCESS_TOKEN",
+        "FACEBOOK_PAGE_ACCESS_TOKEN",
+        "META_APP_SECRET",
+        "META_USER_TOKEN_SHORT_LIVED",
+        "YOUTUBE_API_KEY",
+    }
+)
 
 
 @app.command(name="config")
@@ -124,10 +142,12 @@ def _run_env_wizard(env_path: Path) -> dict[str, str]:
         default_value = current
         if key == "THREADS_REDIRECT_URI" and not default_value:
             default_value = "https://localhost/callback"
+        is_sensitive = key in SENSITIVE_ENV_KEYS
         value = typer.prompt(
             prompt,
             default=default_value,
-            show_default=bool(default_value),
+            show_default=bool(default_value) and not is_sensitive,
+            hide_input=is_sensitive,
         ).strip()
         if value:
             updated[key] = value

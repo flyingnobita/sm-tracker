@@ -4,10 +4,29 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sm-tracker"
-version = "0.1.0"
+version = "0.1.1"
 description = "CLI to track social media follower/following counts."
 readme = "README.md"
+authors = [{ name = "Flying Nobita" }]
+license = { text = "MIT" }
 requires-python = ">=3.12"
+keywords = [
+    "analytics",
+    "cli",
+    "followers",
+    "social-media",
+    "tracking",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet",
+    "Topic :: Utilities",
+]
 dependencies = [
     "atproto>=0.0.61",
     "libsql-client>=0.3.1",
@@ -18,8 +37,45 @@ dependencies = [
     "typer>=0.16.0",
 ]
 
+[project.urls]
+Homepage = "https://github.com/flyingnobita/sm-tracker"
+Repository = "https://github.com/flyingnobita/sm-tracker"
+Issues = "https://github.com/flyingnobita/sm-tracker/issues"
+Changelog = "https://github.com/flyingnobita/sm-tracker/blob/main/CHANGELOG.md"
+
 [project.scripts]
 sm-tracker = "sm_tracker.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sm_tracker"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/README.md",
+    "/LICENSE",
+    "/pyproject.toml",
+    "/.env.example",
+    "/config.toml.example",
+    "/docs",
+    "/assets",
+]
+exclude = [
+    "/.github",
+    "/.gitignore",
+    "/CHANGELOG.md",
+    "/config.toml",
+    "/dev-docs",
+    "/dist",
+    "/dist-clean",
+    "/logs-dev",
+    "/mise.toml",
+    "/package-lock.json",
+    "/package.json",
+    "/scripts",
+    "/tests",
+    "/uv.lock",
+]
 
 [dependency-groups]
 dev = [
@@ -45,7 +101,7 @@ packages = ["sm_tracker"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
-addopts = "--ignore=tests/integration"
+addopts = "-m 'not integration'"
 markers = [
-    "integration: live credential tests requiring real API access (run with: pytest tests/integration/)",
+    "integration: live credential tests requiring real API access (run with: pytest -m integration)",
 ]

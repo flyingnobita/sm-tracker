@@ -1,5 +1,6 @@
 """Phase 2 logging tests."""
 
+import importlib
 from logging import StreamHandler
 from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
@@ -62,7 +63,7 @@ def test_cli_bootstrap_creates_configured_log_file(monkeypatch: MonkeyPatch) -> 
         "sm_tracker.cli.track.resolve_adapters",
         lambda _platforms, env=None: (
             [],
-            ["Skipping twitter: missing TWITTER_BEARER_TOKEN in environment."],
+            ["Skipping twitter: missing TWITTER_CONSUMER_KEY in environment."],
         ),
     )
     runner = CliRunner()
@@ -93,3 +94,36 @@ def test_cli_bootstrap_creates_configured_log_file(monkeypatch: MonkeyPatch) -> 
         assert "track command finished with no adapters" in contents
 
     assert result.exit_code == 0
+
+
+def test_cli_help_survives_unwritable_configured_log_path(monkeypatch: MonkeyPatch) -> None:
+    runner = CliRunner()
+    import logging
+
+    cli_app_module = importlib.import_module("sm_tracker.cli.app")
+    logging.getLogger("sm_tracker").handlers.clear()
+    monkeypatch.setattr(
+        cli_app_module,
+        "setup_logging",
+        lambda **_kwargs: (_ for _ in ()).throw(OSError("permission denied")),
+    )
+    with runner.isolated_filesystem():
+        Path("config.toml").write_text(
+            (
+                'profile = "dev"\n'
+                "\n"
+                "[paths.dev]\n"
+                'db = "./data-dev.db"\n'
+                'logs = "./logs-dev"\n'
+                "\n"
+                "[logging.dev]\n"
+                "retention_days = 7\n"
+                'level = "INFO"\n'
+            ),
+            encoding="utf-8",
+        )
+
+        result = runner.invoke(app, ["help"])
+
+    assert result.exit_code == 0
+    assert "Usage:" in result.stdout
