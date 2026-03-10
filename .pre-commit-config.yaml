@@ -19,6 +19,12 @@ repos:
         language: system
         pass_filenames: false
         stages: [pre-commit, pre-push]
+      - id: gitleaks
+        name: gitleaks secret scan
+        entry: mise run secret-scan
+        language: system
+        pass_filenames: false
+        stages: [pre-commit, pre-push]
       - id: ruff-check
         name: ruff check
         entry: uv run ruff check --fix .

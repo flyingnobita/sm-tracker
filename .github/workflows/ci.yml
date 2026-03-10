@@ -67,3 +67,16 @@ jobs:
 
       - name: Run format checks
         run: mise run format-check
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up mise tools
+        uses: jdx/mise-action@v2
+        with:
+          install: true
+
+      - name: Run secret scan
+        run: mise run secret-scan

@@ -11,6 +11,7 @@ _.python.venv = { path = ".venv", create = true }
 python = "3.12"
 node = "lts"
 uv = "latest"
+gitleaks = "latest"
 
 [tasks]
 # Run before pushing to validate the full test suite.
@@ -36,10 +37,12 @@ markdownlint-check = "npx markdownlint-cli2 \"**/*.md\""
 format = "mise run prettier-fix && mise run markdownlint-fix"
 # Run before commit/push to validate docs/config formatting and markdown lint.
 format-check = "mise run prettier-check && mise run markdownlint-check"
+# Run before commit/push and in CI to catch committed secrets or leaked credentials.
+secret-scan = "gitleaks dir . --config .gitleaks.toml --redact --no-banner"
 # Run if pre-commit hooks are configured and you want hook parity locally.
 precommit = "uv run pre-commit run --all-files"
-# Run as the one-shot local CI gate (lint + types + docs format + tests).
-check = "mise run lint-check && mise run typecheck && mise run format-check && mise run test"
+# Run as the one-shot local CI gate (lint + types + docs format + secret scan + tests).
+check = "mise run lint-check && mise run typecheck && mise run format-check && mise run secret-scan && mise run test"
 # Run before cutting a release to rebuild fresh distributions from a green tree.
 release-build = "mise run check && rm -rf dist-release && uv build --out-dir dist-release"
 # Run after release-build to validate the release artifacts that will be uploaded.

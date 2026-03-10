@@ -1,0 +1,11 @@
+title = "sm-tracker gitleaks config"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Local-only environment files are gitignored and may contain developer secrets."
+paths = [
+  '''^\.env$''',
+  '''^\.env\..*$''',
+]
