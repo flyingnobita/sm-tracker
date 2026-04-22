@@ -1,5 +1,7 @@
 # Changelog
 
+- Apr-22, 2026 - 04:45 PM +08 - Added `sync-threads-token` mise task to automate refreshing Threads tokens and expiry dates from `.env` into 1Password items.
+
 - Mar-10, 2026 - 05:32 PM +08 - Updated the release workflow so tag-based PyPI publishes also create a GitHub Release with generated notes and uploaded distribution artifacts.
 - Mar-10, 2026 - 05:21 PM +08 - Added a build-artifact smoke test to CI and the release workflow to install the built wheel in a clean venv and verify both `sm-tracker help` and `python -m sm_tracker help`.
 - Mar-10, 2026 - 05:15 PM +08 - Added `gitleaks` secret scanning to the local `mise run check` gate, pre-commit/pre-push hooks, and the manual GitHub Actions CI workflow.

@@ -47,3 +47,12 @@ check = "mise run lint-check && mise run typecheck && mise run format-check && m
 release-build = "mise run check && rm -rf dist-release && uv build --out-dir dist-release"
 # Run after release-build to validate the release artifacts that will be uploaded.
 release-check = "uvx twine check ./dist-release/*"
+
+# Sync new Threads tokens from .env to 1Password items
+sync-threads-token = """
+  . ./.env && \
+  EXP_DATE=${THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC%%T*} && \
+  op item edit \"SM-TRACKER_THREADS_ACCESS_TOKEN\" \"credential=${THREADS_ACCESS_TOKEN}\" \"expires[date]=${EXP_DATE}\" && \
+  op item edit \"SM-TRACKER_THREADS_USER_ID\" \"credential=${THREADS_USER_ID}\" \"expires[date]=${EXP_DATE}\" && \
+  op item edit \"SM-TRACKER_THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC\" \"credential=${THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC}\" \"expires[date]=${EXP_DATE}\"
+"""
