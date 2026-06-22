@@ -103,6 +103,7 @@ def _run_threads_auth(env_path: Path) -> None:
         _upsert_env_var(env_path, "THREADS_USER_ID", str(short_token.user_id))
         _upsert_env_var(env_path, "THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC", expires_at_iso)
         typer.echo("Saved THREADS_ACCESS_TOKEN, THREADS_USER_ID, and expiry time to .env")
+        _echo_external_secret_sync_reminder("threads")
     finally:
         client.close()
 
@@ -169,6 +170,7 @@ def _run_meta_auth(env_path: Path, platform: str) -> None:
     if platform == "instagram":
         set_key(str(env_path), "LONG_LIVED_USER_TOKEN", long_user_token)
         typer.echo("Saved LONG_LIVED_USER_TOKEN to .env")
+        _echo_external_secret_sync_reminder(platform)
 
     elif platform == "facebook":
         typer.echo("Fetching long-lived page tokens...")
@@ -183,6 +185,7 @@ def _run_meta_auth(env_path: Path, platform: str) -> None:
                     typer.echo(f"Got long-lived page token for '{page_name}'.")
                     set_key(str(env_path), "FACEBOOK_PAGE_ACCESS_TOKEN", long_page_token)
                     typer.echo("Saved FACEBOOK_PAGE_ACCESS_TOKEN to .env")
+                    _echo_external_secret_sync_reminder(platform)
                 else:
                     typer.echo(
                         "No pages found for this user. "
@@ -192,6 +195,20 @@ def _run_meta_auth(env_path: Path, platform: str) -> None:
         except Exception as e:
             typer.echo(f"Failed to get page tokens: {e}")
             raise typer.Exit(code=1) from e
+
+
+def _echo_external_secret_sync_reminder(platform: str) -> None:
+    if platform == "threads":
+        typer.echo(
+            "If your shell or secrets manager injects Threads env vars, "
+            "run `mise run sync-threads-token` now so those values match .env."
+        )
+        return
+
+    typer.echo(
+        f"If your shell or secrets manager injects {platform} env vars, "
+        "update that external source now so those values match .env."
+    )
 
 
 def _extract_threads_code_from_callback_url(callback_url: str) -> str:

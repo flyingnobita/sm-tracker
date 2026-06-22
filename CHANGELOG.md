@@ -1,5 +1,7 @@
 # Changelog
 
+- Jun-22, 2026 - 02:07 PM +08 - Made `.env` override stale exported credential values, added auth-flow reminders for external secret sync, and added a `mise run auth-threads` refresh-and-sync task.
+
 - Apr-22, 2026 - 04:45 PM +08 - Added `sync-threads-token` mise task to automate refreshing Threads tokens and expiry dates from `.env` into 1Password items.
 
 - Mar-10, 2026 - 05:32 PM +08 - Updated the release workflow so tag-based PyPI publishes also create a GitHub Release with generated notes and uploaded distribution artifacts.

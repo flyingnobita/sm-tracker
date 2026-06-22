@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from sm_tracker.config import ConfigError, load_config, load_env_file, resolve_profile
+from sm_tracker.config import ConfigError, load_config, load_env_file, read_env_file, resolve_profile
 
 
 def test_load_env_file_reads_dotenv(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -16,6 +16,36 @@ def test_load_env_file_reads_dotenv(tmp_path: Path, monkeypatch: pytest.MonkeyPa
     load_env_file(env_file)
 
     assert "hello" == os.environ["SM_TRACKER_TEST_ENV"]
+
+
+def test_read_env_file_prefers_dotenv_over_existing_environment(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    env_file = tmp_path / ".env"
+    env_file.write_text(
+        "THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC=2026-08-20T01:20:16Z\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC", "2026-06-21T07:56:43Z")
+
+    env = read_env_file(env_file)
+
+    assert env["THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC"] == "2026-08-20T01:20:16Z"
+
+
+def test_load_env_file_overrides_stale_environment_value(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    env_file = tmp_path / ".env"
+    env_file.write_text(
+        "THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC=2026-08-20T01:20:16Z\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC", "2026-06-21T07:56:43Z")
+
+    load_env_file(env_file)
+
+    assert os.environ["THREADS_ACCESS_TOKEN_EXPIRES_AT_UTC"] == "2026-08-20T01:20:16Z"
 
 
 def test_resolve_profile_precedence(monkeypatch: pytest.MonkeyPatch) -> None:

@@ -37,15 +37,14 @@ class AppConfig:
 
 
 def read_env_file(env_path: Path | None = None) -> dict[str, str]:
-    """Read `.env` variables without mutating os.environ directly, but merge with it."""
+    """Read environment values, with project `.env` taking precedence when present."""
     from dotenv import dotenv_values
 
     path_to_read = env_path or Path.cwd() / ".env"
-    env_vars = {}
+    env_vars = dict(os.environ)
     if path_to_read.exists():
         env_vars.update({k: v for k, v in dotenv_values(path_to_read).items() if v is not None})
 
-    env_vars.update(dict(os.environ))
     return env_vars
 
 
@@ -53,7 +52,7 @@ def load_env_file(env_path: Path | None = None) -> None:
     """Load `.env` into process environment if present."""
     path_to_load = env_path or Path.cwd() / ".env"
     if path_to_load.exists():
-        load_dotenv(dotenv_path=path_to_load, override=False)
+        load_dotenv(dotenv_path=path_to_load, override=True)
 
 
 def resolve_profile(config_data: Mapping[str, Any], profile_override: str | None = None) -> str:

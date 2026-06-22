@@ -48,6 +48,9 @@ release-build = "mise run check && rm -rf dist-release && uv build --out-dir dis
 # Run after release-build to validate the release artifacts that will be uploaded.
 release-check = "uvx twine check ./dist-release/*"
 
+# Refresh Threads auth, then sync the new token metadata to 1Password.
+auth-threads = "uv run sm-tracker auth -p threads && mise run sync-threads-token"
+
 # Sync new Threads tokens from .env to 1Password items
 sync-threads-token = """
   . ./.env && \

@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from urllib.parse import parse_qs, urlparse
 
-from sm_tracker.cli.auth import _build_meta_accounts_request, _build_meta_token_exchange_request
+from sm_tracker.cli.auth import (
+    _build_meta_accounts_request,
+    _build_meta_token_exchange_request,
+    _echo_external_secret_sync_reminder,
+)
 
 
 def test_build_meta_token_exchange_request_uses_post_body() -> None:
@@ -35,3 +39,17 @@ def test_build_meta_accounts_request_uses_authorization_header() -> None:
     assert request.full_url == "https://graph.facebook.com/v19.0/me/accounts"
     assert parsed.query == ""
     assert request.get_header("Authorization") == "Bearer long-user-token"
+
+
+def test_threads_secret_sync_reminder_names_mise_task(capsys) -> None:
+    _echo_external_secret_sync_reminder("threads")
+
+    assert "mise run sync-threads-token" in capsys.readouterr().out
+
+
+def test_meta_secret_sync_reminder_mentions_external_source(capsys) -> None:
+    _echo_external_secret_sync_reminder("instagram")
+
+    output = capsys.readouterr().out
+    assert "instagram env vars" in output
+    assert "external source" in output
