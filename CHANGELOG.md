@@ -1,5 +1,7 @@
 # Changelog
 
+- Jun-23, 2026 - 11:40 AM +08 - Made explicit `SM_TRACKER_CONFIG` runs load the adjacent `.env`, fixing scheduled jobs that launch `sm-tracker` from another working directory.
+
 - Jun-22, 2026 - 02:07 PM +08 - Made `.env` override stale exported credential values, added auth-flow reminders for external secret sync, and added a `mise run auth-threads` refresh-and-sync task.
 
 - Apr-22, 2026 - 04:45 PM +08 - Added `sync-threads-token` mise task to automate refreshing Threads tokens and expiry dates from `.env` into 1Password items.

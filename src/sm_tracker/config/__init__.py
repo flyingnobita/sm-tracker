@@ -152,11 +152,20 @@ def load_config(
 ) -> AppConfig:
     """Load `.env`, parse `config.toml`, and return resolved app config."""
     load_env_file(env_path=env_path)
-    env_vars = read_env_file(env_path=env_path)
 
     resolved_config_path = config_path or find_config_file()
     if not resolved_config_path.exists():
         raise ConfigError(f"Config file not found: {resolved_config_path}")
+
+    resolved_env_path = env_path
+    if resolved_env_path is None:
+        config_env_path = resolved_config_path.parent / ".env"
+        if config_env_path.exists():
+            resolved_env_path = config_env_path
+
+    if resolved_env_path is not None:
+        load_env_file(env_path=resolved_env_path)
+    env_vars = read_env_file(env_path=resolved_env_path)
 
     try:
         raw_data = resolved_config_path.read_bytes()
