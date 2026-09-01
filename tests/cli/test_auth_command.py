@@ -4,11 +4,31 @@ from __future__ import annotations
 
 from urllib.parse import parse_qs, urlparse
 
+import pytest
+
 from sm_tracker.cli.auth import (
     _build_meta_accounts_request,
     _build_meta_token_exchange_request,
     _echo_external_secret_sync_reminder,
+    _extract_threads_code_from_callback_url,
 )
+
+
+@pytest.mark.parametrize(
+    "opening_marker,closing_marker",
+    [
+        ("\x1b[200~", "\x1b[201~"),
+        ("^[[200~", "^[[201~"),
+        ("[200~", "[201~"),
+    ],
+)
+def test_threads_callback_ignores_bracketed_paste_markers(
+    opening_marker: str,
+    closing_marker: str,
+) -> None:
+    callback_url = f"{opening_marker}https://localhost/callback?code=test-auth-code{closing_marker}"
+
+    assert _extract_threads_code_from_callback_url(callback_url) == "test-auth-code"
 
 
 def test_build_meta_token_exchange_request_uses_post_body() -> None:

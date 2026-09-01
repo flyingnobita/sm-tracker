@@ -18,6 +18,8 @@ from threads.constants import Scope
 from sm_tracker.cli.app import app
 
 _AUTH_SUPPORTED_PLATFORMS: frozenset[str] = frozenset({"threads", "instagram", "facebook"})
+_BRACKETED_PASTE_OPENERS: tuple[str, ...] = ("\x1b[200~", "^[[200~", "[200~")
+_BRACKETED_PASTE_CLOSERS: tuple[str, ...] = ("\x1b[201~", "^[[201~", "[201~")
 
 
 @app.command(name="auth")
@@ -212,7 +214,7 @@ def _echo_external_secret_sync_reminder(platform: str) -> None:
 
 
 def _extract_threads_code_from_callback_url(callback_url: str) -> str:
-    url = callback_url.strip()
+    url = _strip_bracketed_paste_markers(callback_url)
     if not url:
         return ""
     if url.endswith("#_"):
@@ -227,6 +229,20 @@ def _extract_threads_code_from_callback_url(callback_url: str) -> str:
     if code.endswith("#_"):
         code = code[:-2]
     return code
+
+
+def _strip_bracketed_paste_markers(value: str) -> str:
+    """Remove terminal paste delimiters that may leak through interactive prompts."""
+    cleaned = value.strip()
+    for marker in _BRACKETED_PASTE_OPENERS:
+        if cleaned.startswith(marker):
+            cleaned = cleaned[len(marker) :].lstrip()
+            break
+    for marker in _BRACKETED_PASTE_CLOSERS:
+        if cleaned.endswith(marker):
+            cleaned = cleaned[: -len(marker)].rstrip()
+            break
+    return cleaned
 
 
 def warn_threads_token_expiry_if_needed(
